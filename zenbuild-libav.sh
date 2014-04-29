@@ -46,11 +46,11 @@ if isMissing "wget"; then
   exit 1
 fi
 
-if isMissing "unzip"; then
-  echo "unzip not installed.  Please install with:"
-  echo "pacman -S msys/unzip"
+if isMissing "sed"; then
+  echo "sed not installed.  Please install with:"
+  echo "pacman -S msys/sed"
   echo "or"
-  echo "apt-get install unzip"
+  echo "apt-get install sed"
   exit 1
 fi
 
@@ -59,14 +59,6 @@ if isMissing "tar"; then
   echo "mingw-get install tar"
   echo "or"
   echo "apt-get install tar"
-  exit 1
-fi
-
-if isMissing "patch"; then
-  echo "patch not installed.  Please install with:"
-  echo "mingw-get install patch"
-  echo "or"
-  echo "apt-get install patch"
   exit 1
 fi
 
