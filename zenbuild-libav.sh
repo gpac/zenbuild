@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source abuild.sh
+source zenbuild.sh
 
 BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
 HOST=$BUILD
@@ -81,36 +81,19 @@ function build_runtime
   mkgit "mingw-w64-v3.0.0"
 }
 
-function lazy_git_clone {
-  local url="$1"
-  local to="$2"
-
-  if [ -d "$to" ] ;
-  then
-    pushd "$to"
-    git reset --hard
-    git clean -f
-    popd
-  else
-    git clone "$url" "$to"
-  fi
-}
-
 function build_jack {
   pushd $WORK/src
 
-  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64
-  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32
+  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64 f90f76f
+  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32 f90f76f
 
   pushd jack2_64
-  git checkout f90f76f
   CC=x86_64-w64-mingw32-gcc \
   CXX=x86_64-w64-mingw32-g++ \
   ./waf configure --dist-target mingw
   popd
 
   pushd jack2_32
-  git checkout f90f76f
   CC=i686-w64-mingw32-gcc \
   CXX=i686-w64-mingw32-g++ \
   ./waf configure --dist-target mingw
@@ -119,15 +102,15 @@ function build_jack {
   popd
 }
 
-function build_ffmpeg {
+function build_libav {
   pushd $WORK/src
 
-  lazy_git_clone git://git.libav.org/libav.git libav
+  lazy_git_clone git://git.libav.org/libav.git libav a61c2115fb936d50b8b0328d00562fe529a7c46a
 
-  pushd libav
-  CC=x86_64-w64-mingw32-gcc \
-  CXX=x86_64-w64-mingw32-g++ \
-  ./waf configure --dist-target mingw
+  mkdir -p libav/build
+  pushd libav/build
+  ../configure
+  $MAKE
   popd
 
   popd
@@ -147,6 +130,7 @@ function build_gdc_target {
   popd
 }
 
+build_libav
 build_jack
 
 uninstallErrorHandler

@@ -59,6 +59,26 @@ function lazy_extract
   fi
 }
 
+function lazy_git_clone {
+  local url="$1"
+  local to="$2"
+  local rev="$3"
+
+  if [ -d "$to" ] ;
+  then
+    pushd "$to"
+    git reset --hard
+    git clean -f
+    popd
+  else
+    git clone "$url" "$to"
+  fi
+
+  pushd "$to"
+  git checkout $rev
+  popd
+}
+
 # Create or restore a directory content
 function mkgit {
   dir="$1"
