@@ -33,6 +33,11 @@ fi
 
 export MAKE
 
+if isMissing "autoreconf"; then
+  echo "autoreconf not installed."
+  exit 1
+fi
+
 if isMissing "wget"; then
   echo "wget not installed.  Please install with:"
   echo "pacman -S msys-wget"
