@@ -121,6 +121,8 @@ function build_libsamplerate {
     ../../configure \
       --host=$host \
       --prefix=$PREFIX/$host \
+      --disable-static \
+      --enable-shared \
       --disable-sndfile \
       --disable-fftw
     $MAKE
@@ -147,7 +149,9 @@ function build_tre {
     printMsg "libtre: building..."
     ../../configure \
       --host=$host \
-      --prefix=$PREFIX/$host
+      --prefix=$PREFIX/$host \
+      --disable-static \
+      --enable-shared
     $MAKE
     $MAKE install
     touch .built
@@ -171,6 +175,8 @@ function build_libsndfile {
     ../../configure \
       --host=$host \
       --prefix=$PREFIX/$host \
+      --disable-static \
+      --enable-shared \
       --disable-external-libs
     $MAKE
     $MAKE install
@@ -193,7 +199,11 @@ function build_portaudio {
     printMsg "portaudio: already built"
   else
     printMsg "portaudio: building..."
-    ../../configure --host=$host --prefix=$PREFIX/$host
+    ../../configure \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      --disable-static \
+      --enable-shared
     $MAKE
     $MAKE install
     touch .built
@@ -216,7 +226,7 @@ function build_jack {
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
   PREFIX=$PREFIX/$host \
-  ./waf configure --destdir --winmme --dist-target mingw
+  ./waf configure --winmme --dist-target mingw
   ./waf build
   ./waf install
   popd
@@ -238,14 +248,19 @@ function build_libav {
   mkdir -p libav/build/$host
   pushd libav/build/$host
   ../../configure \
+    --arch=$ARCH \
+    --target-os=$OS \
+    --prefix=$PREFIX/$host \
     --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
-    --arch=$ARCH \
+    --disable-debug \
+    --disable-static \
+    --enable-shared \
     --enable-indev=jack \
-    --target-os=$OS \
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
+  $MAKE install
   popd
 
   popd
