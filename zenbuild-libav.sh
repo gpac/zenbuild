@@ -6,13 +6,20 @@ BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
 HOST=$BUILD
 printMsg "Build type: $BUILD"
 
-export CFLAGS="-O2"
-export CXXFLAGS="-O2"
-export LDFLAGS="-s"
+CFLAGS="-O2"
+CXXFLAGS="-O2"
+LDFLAGS="-s"
+
+CFLAGS+=" -w"
+CXXFLAGS+=" -w"
+
+export CFLAGS
+export CXXFLAGS
+export LDFLAGS
 
 installErrorHandler
 
-export GCC_PREFIX="$WORK/gdc-4.8/release"
+export PREFIX="$WORK/release"
 
 
 CACHE=$WORK/cache
@@ -73,20 +80,10 @@ if isMissing "git" ; then
   exit 1
 fi
 
-
-function build_libsndfile {
-  host=$1
-  pushd $WORK/src
-
-  lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
-  lazy_extract "libsndfile.tar.gz"
-
-  mkdir -p libsndfile/build/$host
-  pushd libsndfile/build/$host
-  ../../configure --host=$host
-  $MAKE
-  popd
-
+function run_autoreconf {
+  local dir="$1"
+  pushd "$dir"
+  autoreconf -fi
   popd
 }
 
@@ -96,11 +93,20 @@ function build_libsamplerate {
 
   lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
   lazy_extract "libsamplerate.tar.gz"
+  mkgit "libsamplerate"
+  run_autoreconf "libsamplerate"
 
   mkdir -p libsamplerate/build/$host
   pushd libsamplerate/build/$host
-  ../../configure --host=$host
-  $MAKE
+  if [ -f .built ] ; then
+    printMsg "libsamplerate: already built"
+  else
+    printMsg "libsamplerate: building..."
+    ../../configure --host=$host --disable-sndfile --disable-fftw --prefix=$PREFIX
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
   popd
 
   popd
@@ -112,15 +118,17 @@ function build_jack {
   lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64 f90f76f
   lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32 f90f76f
 
+  CFLAGS="-I$PREFIX/include"
+
   pushd jack2_64
-  CC=x86_64-w64-mingw32-gcc \
-  CXX=x86_64-w64-mingw32-g++ \
+  CC="x86_64-w64-mingw32-gcc $CFLAGS" \
+  CXX="x86_64-w64-mingw32-g++ $CFLAGS" \
   ./waf configure --dist-target mingw
   popd
 
   pushd jack2_32
-  CC=i686-w64-mingw32-gcc \
-  CXX=i686-w64-mingw32-g++ \
+  CC="i686-w64-mingw32-gcc $CFLAGS" \
+  CXX="i686-w64-mingw32-g++ $CFLAGS" \
   ./waf configure --dist-target mingw
   popd
 
@@ -142,13 +150,11 @@ function build_libav {
   popd
 }
 
-build_libsndfile i686-w64-mingw32
-build_libsndfile x86_64-w64-mingw32
 build_libsamplerate i686-w64-mingw32
 build_libsamplerate x86_64-w64-mingw32
 build_jack
-build_libav i686-w64-mingw32
-build_libav x86_64-w64-mingw32
+# build_libav i686-w64-mingw32
+# build_libav x86_64-w64-mingw32
 
 uninstallErrorHandler
 exit 0
