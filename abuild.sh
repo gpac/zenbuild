@@ -36,8 +36,8 @@ function lazy_download
   local url="$2"
 
   if [ ! -e "$file" ]; then
-    wget "$url" -c -O "${file}.tmp"
-    mv "${file}.tmp" "$file"
+    wget "$url" -c -O "$CACHE/${file}.tmp"
+    mv "$CACHE/${file}.tmp" "$CACHE/$file"
   fi
 }
 
