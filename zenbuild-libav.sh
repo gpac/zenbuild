@@ -229,6 +229,8 @@ function build_libav {
   mkdir -p libav/build/$host
   pushd libav/build/$host
   ../../configure \
+    --extra-cflags="-DWIN32=1" \
+    --extra-ldflags="-L$PREFIX/$host/lib" \
     --arch=$ARCH \
     --enable-indev=jack \
     --target-os=$OS \
