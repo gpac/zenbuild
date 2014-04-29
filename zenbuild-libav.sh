@@ -89,6 +89,16 @@ if isMissing "svn" ; then
   exit 1
 fi
 
+function get_arch {
+  host=$1
+  echo $host | sed "s/-.*//"
+}
+
+function get_os {
+  host=$1
+  echo $host | sed "s/.*-//"
+}
+
 function run_autoreconf {
   echo ""
   local dir="$1"
@@ -212,9 +222,16 @@ function build_libav {
 
   lazy_git_clone "git://git.libav.org/libav.git" libav a61c2115fb936d50b8b0328d00562fe529a7c46a
 
+  local ARCH=$(get_arch $host)
+  local OS=$(get_os $host)
+
   mkdir -p libav/build/$host
   pushd libav/build/$host
-  ../../configure
+  ../../configure \
+    --arch=$ARCH \
+    --enable-indev=jack \
+    --target-os=$OS \
+    --cross-prefix=$host-
   $MAKE
   popd
 
@@ -228,7 +245,7 @@ function build_all {
   build_libsndfile $host
   build_portaudio $host
   build_jack $host
-  # build_libav $host
+  build_libav $host
 }
 
 build_all x86_64-w64-mingw32
