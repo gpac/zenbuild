@@ -75,20 +75,15 @@ fi
 
 
 function build_libsndfile {
+  host=$1
   pushd $WORK/src
 
   lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
   lazy_extract "libsndfile.tar.gz"
 
-  mkdir -p libsndfile/build32
-  pushd libsndfile/build32
-  ../configure --host=i686-w64-mingw32
-  $MAKE
-  popd
-
-  mkdir -p libsndfile/build64
-  pushd libsndfile/build64
-  ../configure --host=x86_64-w64-mingw32
+  mkdir -p libsndfile/build/$host
+  pushd libsndfile/build/$host
+  ../../configure --host=$host
   $MAKE
   popd
 
@@ -96,20 +91,15 @@ function build_libsndfile {
 }
 
 function build_libsamplerate {
+  host=$1
   pushd $WORK/src
 
   lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
   lazy_extract "libsamplerate.tar.gz"
 
-  mkdir -p libsamplerate/build32
-  pushd libsamplerate/build32
-  ../configure --host=i686-w64-mingw32
-  $MAKE
-  popd
-
-  mkdir -p libsamplerate/build64
-  pushd libsamplerate/build64
-  ../configure --host=x86_64-w64-mingw32
+  mkdir -p libsamplerate/build/$host
+  pushd libsamplerate/build/$host
+  ../../configure --host=$host
   $MAKE
   popd
 
@@ -138,23 +128,27 @@ function build_jack {
 }
 
 function build_libav {
+  host=$1
   pushd $WORK/src
 
   lazy_git_clone git://git.libav.org/libav.git libav a61c2115fb936d50b8b0328d00562fe529a7c46a
 
-  mkdir -p libav/build
-  pushd libav/build
-  ../configure
+  mkdir -p libav/build/$host
+  pushd libav/build/$host
+  ../../configure
   $MAKE
   popd
 
   popd
 }
 
-build_libsndfile
-build_libsamplerate
+build_libsndfile i686-w64-mingw32
+build_libsndfile x86_64-w64-mingw32
+build_libsamplerate i686-w64-mingw32
+build_libsamplerate x86_64-w64-mingw32
 build_jack
-build_libav
+build_libav i686-w64-mingw32
+build_libav x86_64-w64-mingw32
 
 uninstallErrorHandler
 exit 0
