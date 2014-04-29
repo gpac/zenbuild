@@ -74,6 +74,27 @@ if isMissing "git" ; then
 fi
 
 
+function build_libsamplerate {
+  pushd $WORK/src
+
+  lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
+  lazy_extract "libsamplerate.tar.gz"
+
+  mkdir -p libsamplerate/build32
+  pushd libsamplerate/build32
+  ../configure --host=i686-w64-mingw32
+  $MAKE
+  popd
+
+  mkdir -p libsamplerate/build64
+  pushd libsamplerate/build64
+  ../configure --host=x86_64-w64-mingw32
+  $MAKE
+  popd
+
+  popd
+}
+
 function build_jack {
   pushd $WORK/src
 
@@ -109,8 +130,9 @@ function build_libav {
   popd
 }
 
-build_libav
+build_libsamplerate
 build_jack
+build_libav
 
 uninstallErrorHandler
 exit 0
