@@ -74,6 +74,27 @@ if isMissing "git" ; then
 fi
 
 
+function build_libsndfile {
+  pushd $WORK/src
+
+  lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
+  lazy_extract "libsndfile.tar.gz"
+
+  mkdir -p libsndfile/build32
+  pushd libsndfile/build32
+  ../configure --host=i686-w64-mingw32
+  $MAKE
+  popd
+
+  mkdir -p libsndfile/build64
+  pushd libsndfile/build64
+  ../configure --host=x86_64-w64-mingw32
+  $MAKE
+  popd
+
+  popd
+}
+
 function build_libsamplerate {
   pushd $WORK/src
 
@@ -130,6 +151,7 @@ function build_libav {
   popd
 }
 
+build_libsndfile
 build_libsamplerate
 build_jack
 build_libav
