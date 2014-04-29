@@ -233,6 +233,25 @@ function build_jack {
   popd
 }
 
+function build_librtmp {
+  host=$1
+  pushd $WORK/src
+  lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump
+
+
+  pushd rtmpdump/librtmp
+
+  sed -i "s/^SYS=posix/SYS=mingw/" Makefile
+  sed -i "s@^prefix=.*@prefix=$PREFIX@" Makefile
+  sed -i "s@^CRYPTO=.*@@" Makefile
+
+  $MAKE CROSS_COMPILE="$host-"
+
+  popd
+
+  popd
+}
+
 function build_libav {
   host=$1
   pushd $WORK/src
@@ -268,6 +287,7 @@ function build_libav {
 
 function build_all {
   host=$1
+  build_librtmp $host
   build_libsamplerate $host
   build_tre $host
   build_libsndfile $host
