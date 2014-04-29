@@ -242,10 +242,11 @@ function build_librtmp {
   pushd rtmpdump/librtmp
 
   sed -i "s/^SYS=posix/SYS=mingw/" Makefile
-  sed -i "s@^prefix=.*@prefix=$PREFIX@" Makefile
+  sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
   sed -i "s@^CRYPTO=.*@@" Makefile
 
   $MAKE CROSS_COMPILE="$host-"
+  $MAKE CROSS_COMPILE="$host-" install
 
   popd
 
@@ -287,12 +288,12 @@ function build_libav {
 
 function build_all {
   host=$1
-  build_librtmp $host
   build_libsamplerate $host
   build_tre $host
   build_libsndfile $host
   build_portaudio $host
   build_jack $host
+  build_librtmp $host
   build_libav $host
 }
 
