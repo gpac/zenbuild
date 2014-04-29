@@ -74,13 +74,6 @@ if isMissing "git" ; then
 fi
 
 
-function build_runtime
-{
-  lazy_download "mingw-w64-v3.0.0.tar.bz2" "http://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v3.0.0.tar.bz2/download"
-  lazy_extract "mingw-w64-v3.0.0.tar.bz2"
-  mkgit "mingw-w64-v3.0.0"
-}
-
 function build_jack {
   pushd $WORK/src
 
@@ -113,20 +106,6 @@ function build_libav {
   $MAKE
   popd
 
-  popd
-}
-
-function download_gcc {
-
-  lazy_download "$CACHE/gcc-4.8.2.tar.bz2" "http://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2"
-  lazy_extract "gcc-4.8.2.tar.bz2"
-  mkgit "gcc-4.8.2"
-}
-
-function build_gdc_target {
-  pushd gcc-4.8.2/build
-  $MAKE all-target
-  $MAKE install-target
   popd
 }
 
