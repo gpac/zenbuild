@@ -213,7 +213,7 @@ function build_jack {
   ./waf configure --destdir --winmme --dist-target mingw
   ./waf build
   ./waf install
-  popd 
+  popd
   popd
 }
 
@@ -226,14 +226,18 @@ function build_libav {
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
 
+  # remove stupid dependency
+  sed -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
+
   mkdir -p libav/build/$host
   pushd libav/build/$host
   ../../configure \
-    --extra-cflags="-DWIN32=1" \
+    --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --arch=$ARCH \
     --enable-indev=jack \
     --target-os=$OS \
+    --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
   popd
