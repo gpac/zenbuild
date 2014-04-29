@@ -81,7 +81,16 @@ if isMissing "git" ; then
   exit 1
 fi
 
+if isMissing "svn" ; then
+  echo "svn not installed.  Please install with:"
+  echo "pacman -S svn"
+  echo "or"
+  echo "apt-get install svn"
+  exit 1
+fi
+
 function run_autoreconf {
+  echo ""
   local dir="$1"
   pushd "$dir"
   autoreconf -fi
@@ -95,7 +104,6 @@ function build_libsamplerate {
   lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
   lazy_extract "libsamplerate.tar.gz"
   mkgit "libsamplerate"
-  run_autoreconf "libsamplerate"
 
   mkdir -p libsamplerate/build/$host
   pushd libsamplerate/build/$host
@@ -103,7 +111,7 @@ function build_libsamplerate {
     printMsg "libsamplerate: already built"
   else
     printMsg "libsamplerate: building..."
-    ../../configure --host=$host --disable-sndfile --disable-fftw --prefix=$PREFIX
+    ../../configure --host=$host --disable-sndfile --disable-fftw --prefix=$PREFIX/$host
     $MAKE
     $MAKE install
     touch .built
@@ -126,7 +134,50 @@ function build_tre {
     printMsg "libtre: already built"
   else
     printMsg "libtre: building..."
-    ../../configure --host=$host --prefix=$PREFIX
+    ../../configure --host=$host --prefix=$PREFIX/$host
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
+  popd
+
+  popd
+}
+
+function build_libsndfile {
+  host=$1
+  pushd $WORK/src
+
+  lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
+  lazy_extract "libsndfile.tar.gz"
+  mkgit "libsndfile"
+
+  mkdir -p libsndfile/build/$host
+  pushd libsndfile/build/$host
+  if [ ! -f .built ] ; then
+    ../../configure --host=$host --disable-external-libs --prefix=$PREFIX/$host
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
+  popd
+
+  popd
+}
+
+function build_portaudio {
+  host=$1
+  pushd $WORK/src
+  svn checkout -r 1928 "http://subversion.assembla.com/svn/portaudio/portaudio/trunk" "portaudio"
+  run_autoreconf "portaudio"
+
+  mkdir -p portaudio/build/$host
+  pushd portaudio/build/$host
+  if [ -f .built ] ; then
+    printMsg "portaudio: already built"
+  else
+    printMsg "portaudio: building..."
+    ../../configure --host=$host --prefix=$PREFIX/$host
     $MAKE
     $MAKE install
     touch .built
@@ -137,24 +188,19 @@ function build_tre {
 }
 
 function build_jack {
+  host=$1
   pushd $WORK/src
 
-  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64 f90f76f
-  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32 f90f76f
+  lazy_git_clone "git://github.com/jackaudio/jack2.git" jack2_$host f90f76f
 
-  CFLAGS="-I$PREFIX/include -L$PREFIX/lib"
-  CFLAGS+=" -I$PREFIX/include/tre"
+  CFLAGS="-I$PREFIX/$host/include -L$PREFIX/$host/lib"
+  CFLAGS+=" -I$PREFIX/$host/include/tre"
 
-  pushd jack2_64
-  CC="x86_64-w64-mingw32-gcc $CFLAGS" \
-  CXX="x86_64-w64-mingw32-g++ $CFLAGS" \
+  pushd jack2_$host
+  CC="$host-gcc $CFLAGS" \
+  CXX="$host-g++ $CFLAGS" \
   ./waf configure --winmme --dist-target mingw
-  popd
-
-  pushd jack2_32
-  CC="i686-w64-mingw32-gcc $CFLAGS" \
-  CXX="i686-w64-mingw32-g++ $CFLAGS" \
-  ./waf configure --winmme --dist-target mingw
+  ./waf build
   popd
 
   popd
@@ -164,7 +210,7 @@ function build_libav {
   host=$1
   pushd $WORK/src
 
-  lazy_git_clone git://git.libav.org/libav.git libav a61c2115fb936d50b8b0328d00562fe529a7c46a
+  lazy_git_clone "git://git.libav.org/libav.git" libav a61c2115fb936d50b8b0328d00562fe529a7c46a
 
   mkdir -p libav/build/$host
   pushd libav/build/$host
@@ -175,12 +221,18 @@ function build_libav {
   popd
 }
 
-build_libsamplerate i686-w64-mingw32
-build_libsamplerate x86_64-w64-mingw32
-build_tre x86_64-w64-mingw32
-build_jack
-# build_libav i686-w64-mingw32
-# build_libav x86_64-w64-mingw32
+function build_all {
+  host=$1
+  build_libsamplerate $host
+  build_tre $host
+  build_libsndfile $host
+  build_portaudio $host
+  build_jack $host
+  # build_libav $host
+}
+
+build_all x86_64-w64-mingw32
+build_all i686-w64-mingw32
 
 uninstallErrorHandler
 exit 0
