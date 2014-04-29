@@ -233,6 +233,32 @@ function build_jack {
   popd
 }
 
+function build_zlib {
+
+  host=$1
+  pushd $WORK/src
+  lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz" 
+
+  lazy_extract "zlib-$host.tar.gz"
+  mkgit "zlib-$host"
+
+  pushd zlib-$host
+  if [ ! -f .built ] ; then
+    CC=$host-gcc \
+    AR=$host-ar \
+    RANLIB=$host-ranlib \
+    ./configure \
+      --prefix=$PREFIX/$host \
+      --static
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
+  popd
+
+  popd
+}
+
 function build_librtmp {
   host=$1
   pushd $WORK/src
@@ -288,6 +314,7 @@ function build_libav {
 
 function build_all {
   host=$1
+  build_zlib $host
   build_libsamplerate $host
   build_tre $host
   build_libsndfile $host
