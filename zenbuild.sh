@@ -47,6 +47,7 @@ function lazy_extract
   echo -n "Extracting $archive ... "
   local name=$(basename $archive .tar.gz)
   name=$(basename $name .tar.bz2)
+  name=$(basename $name .tar.xz)
 
   if [ -d $name ]; then
     echo "already extracted"
