@@ -70,7 +70,6 @@ function mkgit {
     git clean -f
   else
     printMsg "Creating git for $dir"
-    # prune unnecessary folders.
     git init
     git config user.email "nobody@localhost"
     git config user.name "Nobody"
@@ -81,26 +80,30 @@ function mkgit {
   popd
 }
 
-scriptDir=$(pwd)
+function initBuild {
+  scriptDir=$(pwd)
 
-if echo $PATH | grep " " ; then
-  echo "Your PATH contain spaces, this may cause build issues."
-  echo "Please clean up your PATH and retry."
-  exit 3
-fi
+  if echo $PATH | grep " " ; then
+    echo "Your PATH contain spaces, this may cause build issues."
+    echo "Please clean up your PATH and retry."
+    exit 3
+  fi
 
-function applyPatch {
-  patchFile=$1
-  printMsg "Patching $patchFile"
-  patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  function applyPatch {
+    patchFile=$1
+    printMsg "Patching $patchFile"
+    patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  }
+
+  WORK=$1
+
+  if [ -z "$WORK" ] ; then
+    echo "Usage: $0 <prefix>"
+    exit 1
+  fi
+
+  printMsg "Building in: $WORK"
 }
 
-WORK=$1
-
-if [ -z "$WORK" ] ; then
-	echo "Usage: $0 <prefix>"
-  exit 1
-fi
-
-printMsg "Building in: $WORK"
+initBuild "$@"
 

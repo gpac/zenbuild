@@ -16,8 +16,8 @@ export GCC_PREFIX="$WORK/gdc-4.8/release"
 
 
 CACHE=$WORK/cache
-mkdir -p $WORK/gdc-4.8/src
 mkdir -p $CACHE
+mkdir -p $WORK/src
 
 if [ -z "$MAKE" ]; then
   MAKE="make"
@@ -81,20 +81,54 @@ function build_runtime
   mkgit "mingw-w64-v3.0.0"
 }
 
-function download_gdc {
+function lazy_git_clone {
+  local url="$1"
+  local to="$2"
 
-  if [ ! -d "$CACHE/GDC" ]; then
-    git clone https://github.com/Ace17/GDC.git "$CACHE/GDC" -b $GDC_BRANCH
+  if [ -d "$to" ] ;
+  then
+    pushd "$to"
+    git reset --hard
+    git clean -f
+    popd
+  else
+    git clone "$url" "$to"
   fi
+}
 
-  rm -rf GDC
-  git clone "$CACHE/GDC" -b $GDC_BRANCH
+function build_jack {
+  pushd $WORK/src
 
-  pushd GDC
+  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64
+  lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32
 
-  if [ "$GDC_VERSION" != "" ]; then
-    git checkout $GDC_VERSION
-  fi
+  pushd jack2_64
+  git checkout f90f76f
+  CC=x86_64-w64-mingw32-gcc \
+  CXX=x86_64-w64-mingw32-g++ \
+  ./waf configure --dist-target mingw
+  popd
+
+  pushd jack2_32
+  git checkout f90f76f
+  CC=i686-w64-mingw32-gcc \
+  CXX=i686-w64-mingw32-g++ \
+  ./waf configure --dist-target mingw
+  popd
+
+  popd
+}
+
+function build_ffmpeg {
+  pushd $WORK/src
+
+  lazy_git_clone git://git.libav.org/libav.git libav
+
+  pushd libav
+  CC=x86_64-w64-mingw32-gcc \
+  CXX=x86_64-w64-mingw32-g++ \
+  ./waf configure --dist-target mingw
+  popd
 
   popd
 }
@@ -113,9 +147,7 @@ function build_gdc_target {
   popd
 }
 
-build_gdc_host
-build_runtime
-build_gdc_target
+build_jack
 
 uninstallErrorHandler
 exit 0
