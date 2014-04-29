@@ -209,10 +209,11 @@ function build_jack {
   pushd jack2_$host
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
-  ./waf configure --winmme --dist-target mingw
+  PREFIX=$PREFIX/$host \
+  ./waf configure --destdir --winmme --dist-target mingw
   ./waf build
-  popd
-
+  ./waf install
+  popd 
   popd
 }
 
