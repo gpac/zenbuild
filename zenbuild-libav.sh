@@ -118,7 +118,11 @@ function build_libsamplerate {
     printMsg "libsamplerate: already built"
   else
     printMsg "libsamplerate: building..."
-    ../../configure --host=$host --disable-sndfile --disable-fftw --prefix=$PREFIX/$host
+    ../../configure \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      --disable-sndfile \
+      --disable-fftw
     $MAKE
     $MAKE install
     touch .built
@@ -141,7 +145,9 @@ function build_tre {
     printMsg "libtre: already built"
   else
     printMsg "libtre: building..."
-    ../../configure --host=$host --prefix=$PREFIX/$host
+    ../../configure \
+      --host=$host \
+      --prefix=$PREFIX/$host
     $MAKE
     $MAKE install
     touch .built
@@ -162,7 +168,10 @@ function build_libsndfile {
   mkdir -p libsndfile/build/$host
   pushd libsndfile/build/$host
   if [ ! -f .built ] ; then
-    ../../configure --host=$host --disable-external-libs --prefix=$PREFIX/$host
+    ../../configure \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      --disable-external-libs
     $MAKE
     $MAKE install
     touch .built
