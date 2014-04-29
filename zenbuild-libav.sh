@@ -20,7 +20,6 @@ export LDFLAGS
 installErrorHandler
 
 export PREFIX="$WORK/release"
-export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 
 
 CACHE=$WORK/cache
@@ -97,10 +96,9 @@ function get_os {
 }
 
 function run_autoreconf {
-  echo ""
   local dir="$1"
   pushd "$dir"
-  autoreconf -fi
+  autoreconf -i
   popd
 }
 
@@ -237,7 +235,7 @@ function build_zlib {
 
   host=$1
   pushd $WORK/src
-  lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz" 
+  lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz"
 
   lazy_extract "zlib-$host.tar.gz"
   mkgit "zlib-$host"
@@ -303,6 +301,9 @@ function build_libav {
     --disable-static \
     --enable-shared \
     --enable-indev=jack \
+    --enable-librtmp \
+    --disable-gnutls \
+    --disable-openssl \
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
@@ -314,6 +315,7 @@ function build_libav {
 
 function build_all {
   host=$1
+  export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build_zlib $host
   build_libsamplerate $host
   build_tre $host
