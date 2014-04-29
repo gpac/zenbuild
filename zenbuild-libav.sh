@@ -20,6 +20,7 @@ export LDFLAGS
 installErrorHandler
 
 export PREFIX="$WORK/release"
+export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
 
 
 CACHE=$WORK/cache
@@ -112,24 +113,48 @@ function build_libsamplerate {
   popd
 }
 
+function build_tre {
+  host=$1
+  pushd $WORK/src
+
+  lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre
+  run_autoreconf "libtre"
+
+  mkdir -p libtre/build/$host
+  pushd libtre/build/$host
+  if [ -f .built ] ; then
+    printMsg "libtre: already built"
+  else
+    printMsg "libtre: building..."
+    ../../configure --host=$host --prefix=$PREFIX
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
+  popd
+
+  popd
+}
+
 function build_jack {
   pushd $WORK/src
 
   lazy_git_clone git://github.com/jackaudio/jack2.git jack2_64 f90f76f
   lazy_git_clone git://github.com/jackaudio/jack2.git jack2_32 f90f76f
 
-  CFLAGS="-I$PREFIX/include"
+  CFLAGS="-I$PREFIX/include -L$PREFIX/lib"
+  CFLAGS+=" -I$PREFIX/include/tre"
 
   pushd jack2_64
   CC="x86_64-w64-mingw32-gcc $CFLAGS" \
   CXX="x86_64-w64-mingw32-g++ $CFLAGS" \
-  ./waf configure --dist-target mingw
+  ./waf configure --winmme --dist-target mingw
   popd
 
   pushd jack2_32
   CC="i686-w64-mingw32-gcc $CFLAGS" \
   CXX="i686-w64-mingw32-g++ $CFLAGS" \
-  ./waf configure --dist-target mingw
+  ./waf configure --winmme --dist-target mingw
   popd
 
   popd
@@ -152,6 +177,7 @@ function build_libav {
 
 build_libsamplerate i686-w64-mingw32
 build_libsamplerate x86_64-w64-mingw32
+build_tre x86_64-w64-mingw32
 build_jack
 # build_libav i686-w64-mingw32
 # build_libav x86_64-w64-mingw32
