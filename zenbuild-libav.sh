@@ -259,6 +259,16 @@ function build_x264 {
 
   autoconf_build $host "x264" \
     --enable-shared \
+    --disable-gpl \
+    --disable-cli \
+    --enable-win32thread \
+    --enable-strip \
+    --disable-avs \
+    --disable-swscale \
+    --disable-lavf \
+    --disable-ffms \
+    --disable-gpac \
+    --disable-opencl \
     --cross-prefix="$host-"
 
   popd
