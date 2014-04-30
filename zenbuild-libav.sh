@@ -102,6 +102,30 @@ function run_autoreconf {
   popd
 }
 
+function autoconf_build {
+  host=$1
+  shift
+  name=$1
+  shift
+
+  printMsg "******************************"
+  mkdir -p $name/build/$host
+  pushd $name/build/$host
+  if [ -f .built ] ; then
+    printMsg "$name: already built"
+  else
+    printMsg "$name: building..."
+    ../../configure \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      "$@"
+    $MAKE
+    $MAKE install
+    touch .built
+  fi
+  popd
+}
+
 function build_libsamplerate {
   host=$1
   pushd $WORK/src
@@ -110,24 +134,11 @@ function build_libsamplerate {
   lazy_extract "libsamplerate.tar.gz"
   mkgit "libsamplerate"
 
-  mkdir -p libsamplerate/build/$host
-  pushd libsamplerate/build/$host
-  if [ -f .built ] ; then
-    printMsg "libsamplerate: already built"
-  else
-    printMsg "libsamplerate: building..."
-    ../../configure \
-      --host=$host \
-      --prefix=$PREFIX/$host \
+  autoconf_build $host "libsamplerate" \
       --disable-static \
       --enable-shared \
       --disable-sndfile \
       --disable-fftw
-    $MAKE
-    $MAKE install
-    touch .built
-  fi
-  popd
 
   popd
 }
@@ -139,22 +150,9 @@ function build_tre {
   lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre
   run_autoreconf "libtre"
 
-  mkdir -p libtre/build/$host
-  pushd libtre/build/$host
-  if [ -f .built ] ; then
-    printMsg "libtre: already built"
-  else
-    printMsg "libtre: building..."
-    ../../configure \
-      --host=$host \
-      --prefix=$PREFIX/$host \
+  autoconf_build $host "libtre" \
       --disable-static \
       --enable-shared
-    $MAKE
-    $MAKE install
-    touch .built
-  fi
-  popd
 
   popd
 }
@@ -167,20 +165,10 @@ function build_libsndfile {
   lazy_extract "libsndfile.tar.gz"
   mkgit "libsndfile"
 
-  mkdir -p libsndfile/build/$host
-  pushd libsndfile/build/$host
-  if [ ! -f .built ] ; then
-    ../../configure \
-      --host=$host \
-      --prefix=$PREFIX/$host \
+  autoconf_build $host "libsndfile" \
       --disable-static \
       --enable-shared \
       --disable-external-libs
-    $MAKE
-    $MAKE install
-    touch .built
-  fi
-  popd
 
   popd
 }
@@ -191,22 +179,9 @@ function build_portaudio {
   svn checkout -r 1928 "http://subversion.assembla.com/svn/portaudio/portaudio/trunk" "portaudio"
   run_autoreconf "portaudio"
 
-  mkdir -p portaudio/build/$host
-  pushd portaudio/build/$host
-  if [ -f .built ] ; then
-    printMsg "portaudio: already built"
-  else
-    printMsg "portaudio: building..."
-    ../../configure \
-      --host=$host \
-      --prefix=$PREFIX/$host \
+  autoconf_build $host "portaudio" \
       --disable-static \
       --enable-shared
-    $MAKE
-    $MAKE install
-    touch .built
-  fi
-  popd
 
   popd
 }
@@ -260,7 +235,7 @@ function build_zlib {
 function build_librtmp {
   host=$1
   pushd $WORK/src
-  lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump
+  lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
 
 
   pushd rtmpdump/librtmp
