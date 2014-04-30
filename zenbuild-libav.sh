@@ -276,6 +276,9 @@ function build_libav {
   # remove stupid dependency
   sed -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
 
+  # remove GPL checking for x264
+  sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' libav/configure
+
   mkdir -p libav/build/$host
   pushd libav/build/$host
   ../../configure \
@@ -289,6 +292,8 @@ function build_libav {
     --enable-shared \
     --enable-indev=jack \
     --enable-librtmp \
+    --disable-gpl \
+    --enable-libx264 \
     --disable-gnutls \
     --disable-openssl \
     --pkg-config=pkg-config \
