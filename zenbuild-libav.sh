@@ -252,6 +252,18 @@ function build_librtmp {
   popd
 }
 
+function build_x264 {
+  host=$1
+  pushd $WORK/src
+  lazy_git_clone "git://git.videolan.org/x264.git" x264
+
+  autoconf_build $host "x264" \
+    --enable-shared \
+    --cross-prefix="$host-"
+
+  popd
+}
+
 function build_libav {
   host=$1
   pushd $WORK/src
@@ -291,6 +303,7 @@ function build_libav {
 function build_all {
   host=$1
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
+  build_x264 $host
   build_zlib $host
   build_libsamplerate $host
   build_tre $host
