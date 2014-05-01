@@ -32,6 +32,14 @@ fi
 
 export MAKE
 
+if isMissing "pkgconfig"; then
+  echo "pkgconfig not installed.  Please install with:"
+  echo "pacman -S pkgconfig"
+  echo "or"
+  echo "apt-get install pkgconfig"
+  exit 1
+fi
+
 if isMissing "python2"; then
   echo "python2 not installed.  Please install with:"
   echo "pacman -S python2"
