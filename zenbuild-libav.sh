@@ -32,11 +32,11 @@ fi
 
 export MAKE
 
-if isMissing "python"; then
-  echo "python not installed.  Please install with:"
-  echo "pacman -S python"
+if isMissing "python2"; then
+  echo "python2 not installed.  Please install with:"
+  echo "pacman -S python2"
   echo "or"
-  echo "apt-get install python"
+  echo "apt-get install python2"
   exit 1
 fi
 
