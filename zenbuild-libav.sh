@@ -182,8 +182,9 @@ function build_libsndfile {
 function build_portaudio {
   host=$1
   pushd $WORK/src
-  svn checkout -r 1928 "http://subversion.assembla.com/svn/portaudio/portaudio/trunk" "portaudio"
-  run_autoreconf "portaudio"
+  lazy_download "portaudio.tar.gz" "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz"
+  lazy_extract "portaudio.tar.gz"
+  mkgit "portaudio"
 
   autoconf_build $host "portaudio" \
       --disable-static \
