@@ -32,6 +32,14 @@ fi
 
 export MAKE
 
+if isMissing "python"; then
+  echo "python not installed.  Please install with:"
+  echo "pacman -S python"
+  echo "or"
+  echo "apt-get install python"
+  exit 1
+fi
+
 if isMissing "autoreconf"; then
   echo "autoreconf not installed."
   exit 1
