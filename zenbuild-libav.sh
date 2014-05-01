@@ -32,8 +32,8 @@ fi
 
 export MAKE
 
-if isMissing "pkgconfig"; then
-  echo "pkgconfig not installed.  Please install with:"
+if isMissing "pkg-config"; then
+  echo "pkg-config not installed.  Please install with:"
   echo "pacman -S pkgconfig"
   echo "or"
   echo "apt-get install pkgconfig"
