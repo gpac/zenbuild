@@ -39,7 +39,7 @@ fi
 
 if isMissing "autopoint"; then
   echo "autopoint not installed.  Please install with:"
-  echo "pacman -S gettext"
+  echo "pacman -S gettext-devel"
   exit 1
 fi
 
