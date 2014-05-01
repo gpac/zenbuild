@@ -37,6 +37,12 @@ if isMissing "autoreconf"; then
   exit 1
 fi
 
+if isMissing "autopoint"; then
+  echo "autopoint not installed.  Please install with:"
+  echo "pacman -S gettext"
+  exit 1
+fi
+
 if isMissing "wget"; then
   echo "wget not installed.  Please install with:"
   echo "pacman -S msys-wget"
