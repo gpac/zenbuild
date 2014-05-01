@@ -214,9 +214,9 @@ function build_jack {
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
   PREFIX=$PREFIX/$host \
-  ./waf configure --winmme --dist-target mingw
-  ./waf build
-  ./waf install
+  python2 ./waf configure --winmme --dist-target mingw
+  python2 ./waf build
+  python2 ./waf install
   popd
   popd
 }
