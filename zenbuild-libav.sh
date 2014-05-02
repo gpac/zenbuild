@@ -107,14 +107,6 @@ if isMissing "git" ; then
   exit 1
 fi
 
-if isMissing "svn" ; then
-  echo "svn not installed.  Please install with:"
-  echo "pacman -S svn"
-  echo "or"
-  echo "apt-get install svn"
-  exit 1
-fi
-
 function get_arch {
   host=$1
   echo $host | sed "s/-.*//"
