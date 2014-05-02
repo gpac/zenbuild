@@ -53,15 +53,23 @@ if isMissing "autoreconf"; then
   exit 1
 fi
 
+if isMissing "make"; then
+  echo "make not installed.  Please install with:"
+  echo "pacman -S make"
+  echo "or"
+  echo "apt-get install make"
+  exit 1
+fi
+
 if isMissing "autopoint"; then
   echo "autopoint not installed.  Please install with:"
-  echo "pacman -S gettext-devel"
+  echo "pacman -S gettext gettext-devel"
   exit 1
 fi
 
 if isMissing "wget"; then
   echo "wget not installed.  Please install with:"
-  echo "pacman -S msys-wget"
+  echo "pacman -S msys/wget"
   echo "or"
   echo "apt-get install wget"
   exit 1
@@ -138,6 +146,7 @@ function autoconf_build {
   else
     printMsg "$name: building..."
     ../../configure \
+      --build=$BUILD \
       --host=$host \
       --prefix=$PREFIX/$host \
       "$@"

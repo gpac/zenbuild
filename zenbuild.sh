@@ -22,7 +22,7 @@ function isMissing
 
 function installErrorHandler
 {
-  trap "printMsg 'Spawning a rescue shell in current build directory'; bash" EXIT
+  trap "printMsg 'Spawning a rescue shell in current build directory'; PS1='\\w: rescue$ ' bash --norc" EXIT
 }
 
 function uninstallErrorHandler
