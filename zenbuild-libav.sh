@@ -220,6 +220,9 @@ function build_jack {
   CFLAGS+=" -I$PREFIX/$host/include/tre"
 
   pushd jack2_$host
+
+  applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
+
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
   PREFIX=$PREFIX/$host \
@@ -395,7 +398,6 @@ function build_all {
   build_libsamplerate $host
   build_tre $host
   build_libsndfile $host
-  build_portaudio $host
   build_jack $host
   build_librtmp $host
   build_libav $host
