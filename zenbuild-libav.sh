@@ -53,6 +53,14 @@ if isMissing "autoreconf"; then
   exit 1
 fi
 
+if isMissing "libtool"; then
+  echo "libtool not installed.  Please install with:"
+  echo "pacman -S msys/libtool"
+  echo "or"
+  echo "apt-get install libtool"
+  exit 1
+fi
+
 if isMissing "make"; then
   echo "make not installed.  Please install with:"
   echo "pacman -S make"
@@ -88,14 +96,6 @@ if isMissing "tar"; then
   echo "mingw-get install tar"
   echo "or"
   echo "apt-get install tar"
-  exit 1
-fi
-
-if isMissing "gcc" ; then
-  echo "gcc not installed.  Please install with:"
-  echo "pacman -S mingw-gcc"
-  echo "or"
-  echo "apt-get install gcc"
   exit 1
 fi
 
@@ -339,8 +339,50 @@ function build_libav {
   popd
 }
 
+function check_for_crosschain {
+  host=$1
+
+  if isMissing "$host-g++" ; then
+    echo "No $host-g++ was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-gcc" ; then
+    echo "No $host-gcc was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-nm" ; then
+    echo "No $host-nm was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-ar" ; then
+    echo "No $host-ar was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-strings" ; then
+    echo "No $host-strings was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-dlltool" ; then
+    echo "No $host-dlltool was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-as" ; then
+    echo "No $host-as was found in the PATH."
+    exit 1
+  fi
+}
+
 function build_all {
   host=$1
+
+  check_for_crosschain $host
+
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build_x264 $host
   build_zlib $host
