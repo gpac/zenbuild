@@ -101,6 +101,12 @@ function mkgit {
   popd
 }
 
+function applyPatch {
+  patchFile=$1
+  printMsg "Patching $patchFile"
+  patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+}
+
 function initBuild {
   scriptDir=$(pwd)
 
@@ -109,12 +115,6 @@ function initBuild {
     echo "Please clean up your PATH and retry."
     exit 3
   fi
-
-  function applyPatch {
-    patchFile=$1
-    printMsg "Patching $patchFile"
-    patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
-  }
 
   WORK=$1
 
