@@ -117,13 +117,6 @@ function get_os {
   echo $host | sed "s/.*-//"
 }
 
-function run_autoreconf {
-  local dir="$1"
-  pushd "$dir"
-  autoreconf -i
-  popd
-}
-
 function autoconf_build {
   host=$1
   shift
@@ -131,6 +124,14 @@ function autoconf_build {
   shift
 
   printMsg "******************************"
+
+  if [ ! -f $name/configure ] ; then
+    printMsg "WARNING: package '$name' has no configure script, running autoreconf"
+    pushd $name
+    autoreconf -i
+    popd
+  fi
+
   mkdir -p $name/build/$host
   pushd $name/build/$host
   if [ -f .built ] ; then
@@ -171,7 +172,6 @@ function build_tre {
   pushd $WORK/src
 
   lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre
-  run_autoreconf "libtre"
 
   autoconf_build $host "libtre" \
       --disable-static \
