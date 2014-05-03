@@ -13,6 +13,9 @@ LDFLAGS="-s"
 CFLAGS+=" -w"
 CXXFLAGS+=" -w"
 
+LDFLAGS+=" -static-libgcc"
+LDFLAGS+=" -static-libstdc++"
+
 export CFLAGS
 export CXXFLAGS
 export LDFLAGS
