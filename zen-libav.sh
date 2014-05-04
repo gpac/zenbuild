@@ -137,13 +137,15 @@ function get_os {
 }
 
 function is_built {
-  host=$1
-  name=$2
+  local host=$1
+  local name=$2
 
-  if [ -f "$WORK/flags/$host/${name}.built" ] ;
+  local flagfile="$WORK/flags/$host/${name}.built"
+  if [ -f "$flagfile" ] ;
   then
     return 0
   else
+    echo "$flagfile does not exist\!"
     return 1
   fi
 }
@@ -158,9 +160,9 @@ function mark_as_built {
 }
 
 function autoconf_build {
-  host=$1
+  local host=$1
   shift
-  name=$1
+  local name=$1
   shift
 
   printMsg "******************************"
@@ -174,19 +176,13 @@ function autoconf_build {
 
   mkdir -p $name/build/$host
   pushd $name/build/$host
-  if is_built $host $name ; then
-    printMsg "$name: already built"
-  else
-    printMsg "$name: building..."
-    ../../configure \
-      --build=$BUILD \
-      --host=$host \
-      --prefix=$PREFIX/$host \
-      "$@"
-    $MAKE
-    $MAKE install
-    mark_as_built $host $name
-  fi
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    "$@"
+  $MAKE
+  $MAKE install
   popd
 }
 
@@ -254,20 +250,14 @@ function build_zlib {
   mkgit "zlib-$host"
 
   pushd zlib-$host
-  if is_built $host zlib ; then
-    printMsg "zlib: already built"
-  else
-    printMsg "zlib: building..."
-    CC=$host-gcc \
+  CC=$host-gcc \
     AR=$host-ar \
     RANLIB=$host-ranlib \
     ./configure \
-      --prefix=$PREFIX/$host \
-      --static
-    $MAKE
-    $MAKE install
-    mark_as_built $host zlib
-  fi
+    --prefix=$PREFIX/$host \
+    --static
+  $MAKE
+  $MAKE install
   popd
 
   popd
@@ -401,19 +391,34 @@ function check_for_crosschain {
 
 }
 
+function build {
+  local host=$1
+  local name=$2
+
+  if is_built $host $name ; then
+    printMsg "$name: already built"
+    return
+  fi
+
+  printMsg "$name: building..."
+  build_${name} $host
+  printMsg "$name: build OK"
+  mark_as_built $host $name
+}
+
 function build_all {
   host=$1
 
   check_for_crosschain $host
 
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
-  build_x264 $host
-  build_zlib $host
-  build_tre $host
-  build_libsndfile $host
-  build_jack $host
-  build_librtmp $host
-  build_libav $host
+  build $host x264
+  build $host zlib
+  build $host tre
+  build $host libsndfile
+  build $host jack
+  build $host librtmp
+  build $host libav
 }
 
 build_all x86_64-w64-mingw32
