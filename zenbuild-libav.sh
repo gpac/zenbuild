@@ -43,6 +43,14 @@ if isMissing "pkg-config"; then
   exit 1
 fi
 
+if isMissing "patch"; then
+  echo "patch not installed.  Please install with:"
+  echo "pacman -S patch"
+  echo "or"
+  echo "apt-get install patch"
+  exit 1
+fi
+
 if isMissing "python2"; then
   echo "python2 not installed.  Please install with:"
   echo "pacman -S python2"
