@@ -39,7 +39,7 @@ if isMissing "pkg-config"; then
   echo "pkg-config not installed.  Please install with:"
   echo "pacman -S pkgconfig"
   echo "or"
-  echo "apt-get install pkgconfig"
+  echo "apt-get install pkg-config"
   exit 1
 fi
 
@@ -83,6 +83,14 @@ fi
 if isMissing "autopoint"; then
   echo "autopoint not installed.  Please install with:"
   echo "pacman -S gettext gettext-devel"
+  echo "or"
+  echo "apt-get install autopoint"
+  exit 1
+fi
+
+if isMissing "yasm"; then
+  echo "yasm not installed.  Please install with:"
+  echo "apt-get install yasm"
   exit 1
 fi
 
