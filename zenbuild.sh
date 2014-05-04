@@ -68,15 +68,15 @@ function lazy_git_clone {
   if [ -d "$to" ] ;
   then
     pushd "$to"
-    git reset --hard
-    git clean -f
+    git reset -q --hard
+    git clean -q -f
     popd
   else
     git clone "$url" "$to"
   fi
 
   pushd "$to"
-  git checkout $rev
+  git checkout -q $rev
   popd
 }
 
@@ -87,8 +87,8 @@ function mkgit {
   pushd "$dir"
   if [ -d ".git" ]; then
     printMsg "Restoring $dir from git restore point"
-    git reset --hard
-    git clean -f
+    git reset -q --hard
+    git clean -q -f
   else
     printMsg "Creating git for $dir"
     git init
