@@ -136,6 +136,27 @@ function get_os {
   echo $host | sed "s/.*-//"
 }
 
+function is_built {
+  host=$1
+  name=$2
+
+  if [ -f "$WORK/flags/$host/${name}.built" ] ;
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function mark_as_built {
+  local host=$1
+  local name=$2
+
+  local flagfile="$WORK/flags/$host/${name}.built"
+  mkdir -p $(dirname $flagfile)
+  touch $flagfile
+}
+
 function autoconf_build {
   host=$1
   shift
@@ -153,7 +174,7 @@ function autoconf_build {
 
   mkdir -p $name/build/$host
   pushd $name/build/$host
-  if [ -f .built ] ; then
+  if is_built $host $name ; then
     printMsg "$name: already built"
   else
     printMsg "$name: building..."
@@ -164,7 +185,7 @@ function autoconf_build {
       "$@"
     $MAKE
     $MAKE install
-    touch .built
+    mark_as_built $host $name
   fi
   popd
 }
@@ -233,7 +254,7 @@ function build_zlib {
   mkgit "zlib-$host"
 
   pushd zlib-$host
-  if [ -f build/.built ] ; then
+  if is_built $host zlib ; then
     printMsg "zlib: already built"
   else
     printMsg "zlib: building..."
@@ -245,8 +266,7 @@ function build_zlib {
       --static
     $MAKE
     $MAKE install
-    mkdir -p build
-    touch build/.built
+    mark_as_built $host zlib
   fi
   popd
 
