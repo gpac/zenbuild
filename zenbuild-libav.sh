@@ -169,23 +169,6 @@ function autoconf_build {
   popd
 }
 
-function build_libsamplerate {
-  host=$1
-  pushd $WORK/src
-
-  lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
-  lazy_extract "libsamplerate.tar.gz"
-  mkgit "libsamplerate"
-
-  autoconf_build $host "libsamplerate" \
-      --disable-static \
-      --enable-shared \
-      --disable-sndfile \
-      --disable-fftw
-
-  popd
-}
-
 function build_tre {
   host=$1
   pushd $WORK/src
@@ -211,20 +194,6 @@ function build_libsndfile {
       --disable-static \
       --enable-shared \
       --disable-external-libs
-
-  popd
-}
-
-function build_portaudio {
-  host=$1
-  pushd $WORK/src
-  lazy_download "portaudio.tar.gz" "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz"
-  lazy_extract "portaudio.tar.gz"
-  mkgit "portaudio"
-
-  autoconf_build $host "portaudio" \
-      --disable-static \
-      --enable-shared
 
   popd
 }
