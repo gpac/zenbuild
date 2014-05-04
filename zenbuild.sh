@@ -1,11 +1,17 @@
 #!/bin/bash
 set -e
 
+function prefixLog {
+  pfx=$1
+  shift
+  "$@" 2>&1 | sed -u "s/^.*$/$pfx&/"
+}
+
 function printMsg
 {
-  echo -n "[32m"
+#  echo -n "[32m"
   echo $*
-  echo -n "[0m"
+#  echo -n "[0m"
 }
 
 function isMissing

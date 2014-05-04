@@ -390,19 +390,25 @@ function check_for_crosschain {
 
 }
 
-function build {
+function lazy_build {
   local host=$1
   local name=$2
 
   if is_built $host $name ; then
-    printMsg "$name: already built"
+    printMsg "already built"
     return
   fi
 
-  printMsg "$name: building..."
+  printMsg "building..."
   build_${name} $host
-  printMsg "$name: build OK"
+  printMsg "build OK"
   mark_as_built $host $name
+}
+
+function build {
+  local host=$1
+  local name=$2
+  prefixLog "[$host] $name: " lazy_build $host $name
 }
 
 function build_all {
