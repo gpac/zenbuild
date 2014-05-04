@@ -233,7 +233,10 @@ function build_zlib {
   mkgit "zlib-$host"
 
   pushd zlib-$host
-  if [ ! -f .built ] ; then
+  if [ -f build/.built ] ; then
+    printMsg "zlib: already built"
+  else
+    printMsg "zlib: building..."
     CC=$host-gcc \
     AR=$host-ar \
     RANLIB=$host-ranlib \
@@ -242,7 +245,8 @@ function build_zlib {
       --static
     $MAKE
     $MAKE install
-    touch .built
+    mkdir -p build
+    touch build/.built
   fi
   popd
 
