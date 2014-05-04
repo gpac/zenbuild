@@ -67,24 +67,24 @@ function lazy_git_clone {
 
   if [ -d "$to" ] ;
   then
-    pushd "$to"
+    pushDir "$to"
     git reset -q --hard
     git clean -q -f
-    popd
+    popDir
   else
     git clone "$url" "$to"
   fi
 
-  pushd "$to"
+  pushDir "$to"
   git checkout -q $rev
-  popd
+  popDir
 }
 
 # Create or restore a directory content
 function mkgit {
   dir="$1"
 
-  pushd "$dir"
+  pushDir "$dir"
   if [ -d ".git" ]; then
     printMsg "Restoring $dir from git restore point"
     git reset -q --hard
@@ -98,7 +98,7 @@ function mkgit {
     git add -f *
     git commit -m "MinGW/GDC restore point"
   fi
-  popd
+  popDir
 }
 
 function applyPatch {
@@ -124,6 +124,15 @@ function initBuild {
   fi
 
   printMsg "Building in: $WORK"
+}
+
+function pushDir {
+  local dir="$1"
+  pushd "$dir" 1>/dev/null 2>/dev/null
+}
+
+function popDir {
+  popd 1>/dev/null 2>/dev/null
 }
 
 initBuild "$@"

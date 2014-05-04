@@ -145,7 +145,6 @@ function is_built {
   then
     return 0
   else
-    echo "$flagfile does not exist\!"
     return 1
   fi
 }
@@ -169,13 +168,13 @@ function autoconf_build {
 
   if [ ! -f $name/configure ] ; then
     printMsg "WARNING: package '$name' has no configure script, running autoreconf"
-    pushd $name
+    pushDir $name
     autoreconf -i
-    popd
+    popDir
   fi
 
   mkdir -p $name/build/$host
-  pushd $name/build/$host
+  pushDir $name/build/$host
   ../../configure \
     --build=$BUILD \
     --host=$host \
@@ -183,12 +182,12 @@ function autoconf_build {
     "$@"
   $MAKE
   $MAKE install
-  popd
+  popDir
 }
 
 function build_tre {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
   lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre 7365bba77910775047c2b349a6533e0da5e5bd80
 
@@ -196,12 +195,12 @@ function build_tre {
       --disable-static \
       --enable-shared
 
-  popd
+  popDir
 }
 
 function build_libsndfile {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
   lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
   lazy_extract "libsndfile.tar.gz"
@@ -212,19 +211,19 @@ function build_libsndfile {
       --enable-shared \
       --disable-external-libs
 
-  popd
+  popDir
 }
 
 function build_jack {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
   lazy_git_clone "git://github.com/jackaudio/jack2.git" jack2_$host f90f76f
 
   CFLAGS="-I$PREFIX/$host/include -L$PREFIX/$host/lib"
   CFLAGS+=" -I$PREFIX/$host/include/tre"
 
-  pushd jack2_$host
+  pushDir jack2_$host
 
   applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
   applyPatch $scriptDir/patches/jack_03_NoExamples.diff
@@ -236,20 +235,20 @@ function build_jack {
   python2 ./waf configure --winmme --dist-target mingw
   python2 ./waf build
   python2 ./waf install
-  popd
-  popd
+  popDir
+  popDir
 }
 
 function build_zlib {
 
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
   lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz"
 
   lazy_extract "zlib-$host.tar.gz"
   mkgit "zlib-$host"
 
-  pushd zlib-$host
+  pushDir zlib-$host
   CC=$host-gcc \
     AR=$host-ar \
     RANLIB=$host-ranlib \
@@ -258,18 +257,18 @@ function build_zlib {
     --static
   $MAKE
   $MAKE install
-  popd
+  popDir
 
-  popd
+  popDir
 }
 
 function build_librtmp {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
   lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
 
 
-  pushd rtmpdump/librtmp
+  pushDir rtmpdump/librtmp
 
   sed -i "s/^SYS=posix/SYS=mingw/" Makefile
   sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
@@ -278,14 +277,14 @@ function build_librtmp {
   $MAKE CROSS_COMPILE="$host-"
   $MAKE CROSS_COMPILE="$host-" install
 
-  popd
+  popDir
 
-  popd
+  popDir
 }
 
 function build_x264 {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
   lazy_git_clone "git://git.videolan.org/x264.git" x264
 
   autoconf_build $host "x264" \
@@ -302,12 +301,12 @@ function build_x264 {
     --disable-opencl \
     --cross-prefix="$host-"
 
-  popd
+  popDir
 }
 
 function build_libav {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
   lazy_git_clone "git://git.libav.org/libav.git" libav a61c2115fb936d50b8b0328d00562fe529a7c46a
 
@@ -321,7 +320,7 @@ function build_libav {
   sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' libav/configure
 
   mkdir -p libav/build/$host
-  pushd libav/build/$host
+  pushDir libav/build/$host
   ../../configure \
     --arch=$ARCH \
     --target-os=$OS \
@@ -341,9 +340,9 @@ function build_libav {
     --cross-prefix=$host-
   $MAKE
   $MAKE install
-  popd
+  popDir
 
-  popd
+  popDir
 }
 
 function check_for_crosschain {
