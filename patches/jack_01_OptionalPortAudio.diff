@@ -1,8 +1,8 @@
 diff --git a/common/wscript b/common/wscript
-index 4302b1e..375ca9c 100644
+index 4302b1e..53d453d 100644
 --- a/common/wscript
 +++ b/common/wscript
-@@ -380,7 +380,7 @@ def build(bld):
+@@ -380,7 +381,7 @@ def build(bld):
           process = create_jack_process_obj(bld, 'audioadapter', audio_adapter_sources, serverlib)
           process.use = 'SAMPLERATE'
  
