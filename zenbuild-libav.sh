@@ -241,6 +241,8 @@ function build_jack {
   pushd jack2_$host
 
   applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
+  applyPatch $scriptDir/patches/jack_03_NoExamples.diff
+  applyPatch $scriptDir/patches/jack_04_OptionalSampleRate.diff
 
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
@@ -414,7 +416,6 @@ function build_all {
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build_x264 $host
   build_zlib $host
-  build_libsamplerate $host
   build_tre $host
   build_libsndfile $host
   build_jack $host
