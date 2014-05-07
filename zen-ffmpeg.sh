@@ -17,23 +17,23 @@
 
 source zen-ffmpeg_libav-common.sh
 
-function build_libav {
+function build_ffmpeg {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "git://git.libav.org/libav.git" libav a61c2115fb936d50b8b0328d00562fe529a7c46a
+  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg c2eb668617555cb8b8bcfb9796241ada9471ac65
 
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
 
   # remove stupid dependency
-  sed -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
+  sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
 
   # remove GPL checking for x264
-  sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' libav/configure
+  sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' ffmpeg/configure
 
-  mkdir -p libav/build/$host
-  pushDir libav/build/$host
+  mkdir -p ffmpeg/build/$host
+  pushDir ffmpeg/build/$host
   ../../configure \
     --arch=$ARCH \
     --target-os=$OS \
@@ -49,6 +49,7 @@ function build_libav {
     --enable-libx264 \
     --disable-gnutls \
     --disable-openssl \
+    --enable-avresample \
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
@@ -70,7 +71,7 @@ function build_all {
   build $host libsndfile
   build $host jack
   build $host librtmp
-  build $host libav
+  build $host ffmpeg
 }
 
 build_all x86_64-w64-mingw32
