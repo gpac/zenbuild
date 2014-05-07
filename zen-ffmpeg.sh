@@ -77,6 +77,4 @@ function build_all {
 build_all x86_64-w64-mingw32
 build_all i686-w64-mingw32
 
-uninstallErrorHandler
-exit 0
-
+endBuild

@@ -17,39 +17,6 @@
 
 source zenbuild.sh
 
-BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
-HOST=$BUILD
-printMsg "Build type: $BUILD"
-
-CFLAGS="-O2"
-CXXFLAGS="-O2"
-LDFLAGS="-s"
-
-CFLAGS+=" -w"
-CXXFLAGS+=" -w"
-
-LDFLAGS+=" -static-libgcc"
-LDFLAGS+=" -static-libstdc++"
-
-export CFLAGS
-export CXXFLAGS
-export LDFLAGS
-
-installErrorHandler
-
-export PREFIX="$WORK/release"
-
-
-CACHE=$WORK/cache
-mkdir -p $CACHE
-mkdir -p $WORK/src
-
-if [ -z "$MAKE" ]; then
-  MAKE="make"
-fi
-
-export MAKE
-
 if isMissing "pkg-config"; then
   echo "pkg-config not installed.  Please install with:"
   echo "pacman -S pkgconfig"
@@ -452,23 +419,3 @@ function check_for_crosschain {
 
 }
 
-function lazy_build {
-  local host=$1
-  local name=$2
-
-  if is_built $host $name ; then
-    printMsg "already built"
-    return
-  fi
-
-  printMsg "building..."
-  build_${name} $host
-  printMsg "build OK"
-  mark_as_built $host $name
-}
-
-function build {
-  local host=$1
-  local name=$2
-  prefixLog "[$host] $name: " lazy_build $host $name
-}

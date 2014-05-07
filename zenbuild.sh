@@ -146,6 +146,66 @@ function initBuild {
   fi
 
   printMsg "Building in: $WORK"
+
+  BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
+  HOST=$BUILD
+  printMsg "Build type: $BUILD"
+
+  CACHE=$WORK/cache
+  mkdir -p $CACHE
+  mkdir -p $WORK/src
+
+  export PREFIX="$WORK/release"
+
+  initCflags
+  installErrorHandler
+}
+
+function endBuild {
+  uninstallErrorHandler
+}
+
+function initCflags {
+  CFLAGS="-O2"
+  CXXFLAGS="-O2"
+  LDFLAGS="-s"
+
+  CFLAGS+=" -w"
+  CXXFLAGS+=" -w"
+
+  LDFLAGS+=" -static-libgcc"
+  LDFLAGS+=" -static-libstdc++"
+
+  export CFLAGS
+  export CXXFLAGS
+  export LDFLAGS
+
+  if [ -z "$MAKE" ]; then
+    MAKE="make"
+  fi
+
+  export MAKE
+}
+
+function lazy_build {
+  local host=$1
+  local name=$2
+
+  if is_built $host $name ; then
+    printMsg "already built"
+    return
+  fi
+
+  printMsg "building..."
+  build_${name} $host
+  printMsg "build OK"
+  mark_as_built $host $name
+}
+
+function build {
+  local host=$1
+  local name=$2
+  prefixLog "[$host] $name: " lazy_build $host $name
 }
 
 function pushDir {
