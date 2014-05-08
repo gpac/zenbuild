@@ -63,11 +63,9 @@ function build_libav_deps {
 
   check_for_crosschain $host
 
-  export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build $host x264
   build $host zlib
   build $host tre
-  build $host libsndfile
   build $host jack
   build $host librtmp
 }

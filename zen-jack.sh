@@ -17,7 +17,8 @@
 
 
 function build_jack_deps {
-  local a=0
+  build $host libsndfile
+  build $host tre
 }
 
 function build_jack {

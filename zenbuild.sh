@@ -16,6 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 set -e
+set -o pipefail
 
 function prefixLog {
   pfx=$1
@@ -194,6 +195,8 @@ function initCflags {
 function lazy_build {
   local host=$1
   local name=$2
+
+  export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
 
   if is_built $host $name ; then
     printMsg "already built"
