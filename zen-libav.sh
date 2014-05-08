@@ -58,7 +58,7 @@ function build_libav {
   popDir
 }
 
-function build_all {
+function build_libav_deps {
   host=$1
 
   check_for_crosschain $host
@@ -70,10 +70,5 @@ function build_all {
   build $host libsndfile
   build $host jack
   build $host librtmp
-  build $host libav
 }
 
-build_all x86_64-w64-mingw32
-build_all i686-w64-mingw32
-
-endBuild

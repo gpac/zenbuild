@@ -15,8 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-source zenbuild.sh
-
 if isMissing "pkg-config"; then
   echo "pkg-config not installed.  Please install with:"
   echo "pacman -S pkgconfig"
@@ -129,42 +127,6 @@ function is_built {
   else
     return 1
   fi
-}
-
-function mark_as_built {
-  local host=$1
-  local name=$2
-
-  local flagfile="$WORK/flags/$host/${name}.built"
-  mkdir -p $(dirname $flagfile)
-  touch $flagfile
-}
-
-function autoconf_build {
-  local host=$1
-  shift
-  local name=$1
-  shift
-
-  printMsg "******************************"
-
-  if [ ! -f $name/configure ] ; then
-    printMsg "WARNING: package '$name' has no configure script, running autoreconf"
-    pushDir $name
-    autoreconf -i
-    popDir
-  fi
-
-  mkdir -p $name/build/$host
-  pushDir $name/build/$host
-  ../../configure \
-    --build=$BUILD \
-    --host=$host \
-    --prefix=$PREFIX/$host \
-    "$@"
-  $MAKE
-  $MAKE install
-  popDir
 }
 
 function build_tre {
@@ -367,55 +329,5 @@ function build_ffmpeg {
   popDir
 
   popDir
-}
-
-function check_for_crosschain {
-  host=$1
-
-  if isMissing "$host-g++" ; then
-    echo "No $host-g++ was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-gcc" ; then
-    echo "No $host-gcc was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-nm" ; then
-    echo "No $host-nm was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-ar" ; then
-    echo "No $host-ar was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-strip" ; then
-    echo "No $host-strings was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-strings" ; then
-    echo "No $host-strings was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-dlltool" ; then
-    echo "No $host-dlltool was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-as" ; then
-    echo "No $host-as was found in the PATH."
-    exit 1
-  fi
-
-  if isMissing "$host-windres" ; then
-    echo "No $host-windres was found in the PATH."
-    exit 1
-  fi
-
 }
 

@@ -59,7 +59,7 @@ function build_ffmpeg {
   popDir
 }
 
-function build_all {
+function build_ffmpeg_deps {
   host=$1
 
   check_for_crosschain $host
@@ -74,7 +74,3 @@ function build_all {
   build $host ffmpeg
 }
 
-build_all x86_64-w64-mingw32
-build_all i686-w64-mingw32
-
-endBuild

@@ -129,8 +129,11 @@ function applyPatch {
   patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
 }
 
-function initBuild {
+function main {
   scriptDir=$(pwd)
+
+  BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
+  HOST=$BUILD
 
   if echo $PATH | grep " " ; then
     echo "Your PATH contain spaces, this may cause build issues."
@@ -139,6 +142,8 @@ function initBuild {
   fi
 
   WORK=$1
+  local TARGET=$2
+  local HOST=$3
 
   if [ -z "$WORK" ] ; then
     echo "Usage: $0 <prefix>"
@@ -147,9 +152,8 @@ function initBuild {
 
   printMsg "Building in: $WORK"
 
-  BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
-  HOST=$BUILD
   printMsg "Build type: $BUILD"
+  printMsg "Target type: $HOST"
 
   CACHE=$WORK/cache
   mkdir -p $CACHE
@@ -159,9 +163,11 @@ function initBuild {
 
   initCflags
   installErrorHandler
-}
 
-function endBuild {
+  source zen-${TARGET}.sh
+  build_${TARGET}_deps "$HOST"
+  build_${TARGET}      "$HOST"
+
   uninstallErrorHandler
 }
 
@@ -202,6 +208,40 @@ function lazy_build {
   mark_as_built $host $name
 }
 
+function mark_as_built {
+  local host=$1
+  local name=$2
+
+  local flagfile="$WORK/flags/$host/${name}.built"
+  mkdir -p $(dirname $flagfile)
+  touch $flagfile
+}
+
+function autoconf_build {
+  local host=$1
+  shift
+  local name=$1
+  shift
+
+  if [ ! -f $name/configure ] ; then
+    printMsg "WARNING: package '$name' has no configure script, running autoreconf"
+    pushDir $name
+    autoreconf -i
+    popDir
+  fi
+
+  mkdir -p $name/build/$host
+  pushDir $name/build/$host
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    "$@"
+  $MAKE
+  $MAKE install
+  popDir
+}
+
 function build {
   local host=$1
   local name=$2
@@ -217,5 +257,54 @@ function popDir {
   popd 1>/dev/null 2>/dev/null
 }
 
-initBuild "$@"
+function check_for_crosschain {
+  host=$1
+
+  if isMissing "$host-g++" ; then
+    echo "No $host-g++ was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-gcc" ; then
+    echo "No $host-gcc was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-nm" ; then
+    echo "No $host-nm was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-ar" ; then
+    echo "No $host-ar was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-strip" ; then
+    echo "No $host-strings was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-strings" ; then
+    echo "No $host-strings was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-dlltool" ; then
+    echo "No $host-dlltool was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-as" ; then
+    echo "No $host-as was found in the PATH."
+    exit 1
+  fi
+
+  if isMissing "$host-windres" ; then
+    echo "No $host-windres was found in the PATH."
+    exit 1
+  fi
+}
+
+main "$@"
 
