@@ -156,6 +156,7 @@ function main {
   printMsg "Target type: $HOST"
 
   check_for_crosschain $HOST
+  checkForCommonBuildTools
 
   CACHE=$WORK/cache
   mkdir -p $CACHE
