@@ -61,8 +61,6 @@ function build_libav {
 function build_libav_deps {
   host=$1
 
-  check_for_crosschain $host
-
   build $host x264
   build $host zlib
   build $host jack

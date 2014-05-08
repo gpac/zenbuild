@@ -155,6 +155,8 @@ function main {
   printMsg "Build type: $BUILD"
   printMsg "Target type: $HOST"
 
+  check_for_crosschain $HOST
+
   CACHE=$WORK/cache
   mkdir -p $CACHE
   mkdir -p $WORK/src

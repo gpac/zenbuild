@@ -62,9 +62,6 @@ function build_ffmpeg {
 function build_ffmpeg_deps {
   host=$1
 
-  check_for_crosschain $host
-
-  export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build $host x264
   build $host zlib
   build $host jack
