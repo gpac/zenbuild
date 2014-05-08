@@ -16,7 +16,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 set -e
-set -o pipefail
 
 function prefixLog {
   pfx=$1
@@ -26,9 +25,9 @@ function prefixLog {
 
 function printMsg
 {
-#  echo -n "[32m"
+  echo -n "[32m"
   echo $*
-#  echo -n "[0m"
+  echo -n "[0m"
 }
 
 function isMissing
@@ -198,17 +197,21 @@ function lazy_build {
 
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
 
+  if ! test -f zen-${name}.sh; then
+    echo "Package $name does not have a zenbuild script"
+    exit 1
+  fi
+
   if is_built $host $name ; then
-    printMsg "already built"
+    printMsg "$name: already built"
     return
   fi
 
-  printMsg "building..."
-  test -f zen-${name}.sh
+  printMsg "$name: building ..."
   source zen-${name}.sh
   build_${name}_deps $host
   build_${name} $host
-  printMsg "build OK"
+  printMsg "$name: build OK"
   mark_as_built $host $name
 }
 
@@ -262,7 +265,8 @@ function autoconf_build {
 function build {
   local host=$1
   local name=$2
-  prefixLog "[$name] " lazy_build $host $name
+#  prefixLog "[$name] " \
+    lazy_build $host $name
 }
 
 function pushDir {
