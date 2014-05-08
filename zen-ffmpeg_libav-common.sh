@@ -15,96 +15,98 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-if isMissing "pkg-config"; then
-  echo "pkg-config not installed.  Please install with:"
-  echo "pacman -S pkgconfig"
-  echo "or"
-  echo "apt-get install pkg-config"
-  exit 1
-fi
+function checkForCommonBuildTools {
+  if isMissing "pkg-config"; then
+    echo "pkg-config not installed.  Please install with:"
+    echo "pacman -S pkgconfig"
+    echo "or"
+    echo "apt-get install pkg-config"
+    exit 1
+  fi
 
-if isMissing "patch"; then
-  echo "patch not installed.  Please install with:"
-  echo "pacman -S patch"
-  echo "or"
-  echo "apt-get install patch"
-  exit 1
-fi
+  if isMissing "patch"; then
+    echo "patch not installed.  Please install with:"
+    echo "pacman -S patch"
+    echo "or"
+    echo "apt-get install patch"
+    exit 1
+  fi
 
-if isMissing "python2"; then
-  echo "python2 not installed.  Please install with:"
-  echo "pacman -S python2"
-  echo "or"
-  echo "apt-get install python2"
-  exit 1
-fi
+  if isMissing "python2"; then
+    echo "python2 not installed.  Please install with:"
+    echo "pacman -S python2"
+    echo "or"
+    echo "apt-get install python2"
+    exit 1
+  fi
 
-if isMissing "autoreconf"; then
-  echo "autoreconf not installed."
-  exit 1
-fi
+  if isMissing "autoreconf"; then
+    echo "autoreconf not installed."
+    exit 1
+  fi
 
-if isMissing "libtool"; then
-  echo "libtool not installed.  Please install with:"
-  echo "pacman -S msys/libtool"
-  echo "or"
-  echo "apt-get install libtool"
-  exit 1
-fi
+  if isMissing "libtool"; then
+    echo "libtool not installed.  Please install with:"
+    echo "pacman -S msys/libtool"
+    echo "or"
+    echo "apt-get install libtool"
+    exit 1
+  fi
 
-if isMissing "make"; then
-  echo "make not installed.  Please install with:"
-  echo "pacman -S make"
-  echo "or"
-  echo "apt-get install make"
-  exit 1
-fi
+  if isMissing "make"; then
+    echo "make not installed.  Please install with:"
+    echo "pacman -S make"
+    echo "or"
+    echo "apt-get install make"
+    exit 1
+  fi
 
-if isMissing "autopoint"; then
-  echo "autopoint not installed.  Please install with:"
-  echo "pacman -S gettext gettext-devel"
-  echo "or"
-  echo "apt-get install autopoint"
-  exit 1
-fi
+  if isMissing "autopoint"; then
+    echo "autopoint not installed.  Please install with:"
+    echo "pacman -S gettext gettext-devel"
+    echo "or"
+    echo "apt-get install autopoint"
+    exit 1
+  fi
 
-if isMissing "yasm"; then
-  echo "yasm not installed.  Please install with:"
-  echo "apt-get install yasm"
-  exit 1
-fi
+  if isMissing "yasm"; then
+    echo "yasm not installed.  Please install with:"
+    echo "apt-get install yasm"
+    exit 1
+  fi
 
-if isMissing "wget"; then
-  echo "wget not installed.  Please install with:"
-  echo "pacman -S msys/wget"
-  echo "or"
-  echo "apt-get install wget"
-  exit 1
-fi
+  if isMissing "wget"; then
+    echo "wget not installed.  Please install with:"
+    echo "pacman -S msys/wget"
+    echo "or"
+    echo "apt-get install wget"
+    exit 1
+  fi
 
-if isMissing "sed"; then
-  echo "sed not installed.  Please install with:"
-  echo "pacman -S msys/sed"
-  echo "or"
-  echo "apt-get install sed"
-  exit 1
-fi
+  if isMissing "sed"; then
+    echo "sed not installed.  Please install with:"
+    echo "pacman -S msys/sed"
+    echo "or"
+    echo "apt-get install sed"
+    exit 1
+  fi
 
-if isMissing "tar"; then
-  echo "tar not installed.  Please install with:"
-  echo "mingw-get install tar"
-  echo "or"
-  echo "apt-get install tar"
-  exit 1
-fi
+  if isMissing "tar"; then
+    echo "tar not installed.  Please install with:"
+    echo "mingw-get install tar"
+    echo "or"
+    echo "apt-get install tar"
+    exit 1
+  fi
 
-if isMissing "git" ; then
-  echo "git not installed.  Please install with:"
-  echo "pacman -S mingw-git"
-  echo "or"
-  echo "apt-get install git"
-  exit 1
-fi
+  if isMissing "git" ; then
+    echo "git not installed.  Please install with:"
+    echo "pacman -S mingw-git"
+    echo "or"
+    echo "apt-get install git"
+    exit 1
+  fi
+}
 
 function get_arch {
   host=$1
@@ -116,135 +118,6 @@ function get_os {
   echo $host | sed "s/.*-//"
 }
 
-function is_built {
-  local host=$1
-  local name=$2
+checkForCommonBuildTools
 
-  local flagfile="$WORK/flags/$host/${name}.built"
-  if [ -f "$flagfile" ] ;
-  then
-    return 0
-  else
-    return 1
-  fi
-}
-
-function build_tre {
-  host=$1
-  pushDir $WORK/src
-
-  lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre 7365bba77910775047c2b349a6533e0da5e5bd80
-
-  autoconf_build $host "libtre" \
-      --disable-static \
-      --enable-shared
-
-  popDir
-}
-
-function build_libsndfile {
-  host=$1
-  pushDir $WORK/src
-
-  lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
-  lazy_extract "libsndfile.tar.gz"
-  mkgit "libsndfile"
-
-  autoconf_build $host "libsndfile" \
-      --disable-static \
-      --enable-shared \
-      --disable-external-libs
-
-  popDir
-}
-
-function build_jack {
-  host=$1
-  pushDir $WORK/src
-
-  lazy_git_clone "git://github.com/jackaudio/jack2.git" jack2_$host f90f76f
-
-  CFLAGS="-I$PREFIX/$host/include -L$PREFIX/$host/lib"
-  CFLAGS+=" -I$PREFIX/$host/include/tre"
-
-  pushDir jack2_$host
-
-  applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
-  applyPatch $scriptDir/patches/jack_03_NoExamples.diff
-  applyPatch $scriptDir/patches/jack_04_OptionalSampleRate.diff
-
-  CC="$host-gcc $CFLAGS" \
-  CXX="$host-g++ $CFLAGS" \
-  PREFIX=$PREFIX/$host \
-  python2 ./waf configure --winmme --dist-target mingw
-  python2 ./waf build
-  python2 ./waf install
-  popDir
-  popDir
-}
-
-function build_zlib {
-
-  host=$1
-  pushDir $WORK/src
-  lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz"
-
-  lazy_extract "zlib-$host.tar.gz"
-  mkgit "zlib-$host"
-
-  pushDir zlib-$host
-  CC=$host-gcc \
-    AR=$host-ar \
-    RANLIB=$host-ranlib \
-    ./configure \
-    --prefix=$PREFIX/$host \
-    --static
-  $MAKE
-  $MAKE install
-  popDir
-
-  popDir
-}
-
-function build_librtmp {
-  host=$1
-  pushDir $WORK/src
-  lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
-
-
-  pushDir rtmpdump/librtmp
-
-  sed -i "s/^SYS=posix/SYS=mingw/" Makefile
-  sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
-  sed -i "s@^CRYPTO=.*@@" Makefile
-
-  $MAKE CROSS_COMPILE="$host-"
-  $MAKE CROSS_COMPILE="$host-" install
-
-  popDir
-
-  popDir
-}
-
-function build_x264 {
-  host=$1
-  pushDir $WORK/src
-  lazy_git_clone "git://git.videolan.org/x264.git" x264
-
-  autoconf_build $host "x264" \
-    --enable-shared \
-    --disable-gpl \
-    --disable-cli \
-    --enable-win32thread \
-    --enable-strip \
-    --disable-avs \
-    --disable-swscale \
-    --disable-lavf \
-    --disable-ffms \
-    --disable-gpac \
-    --disable-opencl \
-    --cross-prefix="$host-"
-
-  popDir
-}
 

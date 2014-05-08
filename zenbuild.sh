@@ -164,9 +164,7 @@ function main {
   initCflags
   installErrorHandler
 
-  source zen-${TARGET}.sh
-  build_${TARGET}_deps "$HOST"
-  build_${TARGET}      "$HOST"
+  build ${HOST} ${TARGET}
 
   uninstallErrorHandler
 }
@@ -203,6 +201,9 @@ function lazy_build {
   fi
 
   printMsg "building..."
+  test -f zen-${name}.sh
+  source zen-${name}.sh
+  build_${name}_deps $host
   build_${name} $host
   printMsg "build OK"
   mark_as_built $host $name
@@ -215,6 +216,19 @@ function mark_as_built {
   local flagfile="$WORK/flags/$host/${name}.built"
   mkdir -p $(dirname $flagfile)
   touch $flagfile
+}
+
+function is_built {
+  local host=$1
+  local name=$2
+
+  local flagfile="$WORK/flags/$host/${name}.built"
+  if [ -f "$flagfile" ] ;
+  then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function autoconf_build {
@@ -245,7 +259,7 @@ function autoconf_build {
 function build {
   local host=$1
   local name=$2
-  prefixLog "[$host] $name: " lazy_build $host $name
+  prefixLog "[$name] " lazy_build $host $name
 }
 
 function pushDir {

@@ -71,6 +71,5 @@ function build_ffmpeg_deps {
   build $host libsndfile
   build $host jack
   build $host librtmp
-  build $host ffmpeg
 }
 
