@@ -65,7 +65,6 @@ function build_libav_deps {
 
   build $host x264
   build $host zlib
-  build $host tre
   build $host jack
   build $host librtmp
 }

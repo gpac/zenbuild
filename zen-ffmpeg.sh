@@ -67,8 +67,6 @@ function build_ffmpeg_deps {
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
   build $host x264
   build $host zlib
-  build $host tre
-  build $host libsndfile
   build $host jack
   build $host librtmp
 }
