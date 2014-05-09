@@ -139,7 +139,7 @@ function main {
   local target=$2
   local host=$3
 
-  if [ -z "$WORK" ] || [ -z "$target" || [ -z "$host" ] ; then
+  if [ -z "$WORK" ] || [ -z "$target" ] || [ -z "$host" ] ; then
     echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
     echo "Example: $0 /tmp/work libav i686-w64-mingw32"
     exit 1
