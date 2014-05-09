@@ -356,7 +356,10 @@ function checkForCommonBuildTools {
   fi
 
   if isMissing "autoreconf"; then
-    echo "autoreconf not installed."
+    echo "autoreconf not installed. Please install with:"
+    echo "pacman -S autoconf"
+    echo "or"
+    echo "apt-get install autoconf"
     exit 1
   fi
 
