@@ -26,6 +26,7 @@ function build_gpac {
 
 # local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
+  local crossPrefix=$(get_cross_prefix $BUILD $host)
 
   # GPAC needs uppercase os name, e.g "MINGW32".
   OS=${OS^^}
@@ -35,10 +36,10 @@ function build_gpac {
   ../../configure \
     --target-os=$OS \
     --prefix=$PREFIX/$host \
-    --extra-cflags="-I$PREFIX/$host/include" \
+    --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-jack \
-    --cross-prefix="$host-"
+    --cross-prefix="$crossPrefix"
 
 
   $MAKE

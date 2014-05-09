@@ -124,7 +124,7 @@ function mkgit {
 }
 
 function applyPatch {
-  patchFile=$1
+  local patchFile=$1
   printMsg "Patching $patchFile"
   patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
 }
@@ -132,14 +132,14 @@ function applyPatch {
 function main {
   scriptDir=$(pwd)
 
-  BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
+  BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
   HOST=$BUILD
 
   WORK=$1
-  local target=$2
-  local host=$3
+  local packageName=$2
+  local hostPlatform=$3
 
-  if [ -z "$WORK" ] || [ -z "$target" ] || [ -z "$host" ] ; then
+  if [ -z "$WORK" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
     echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
     echo "Example: $0 /tmp/work libav i686-w64-mingw32"
     exit 1
@@ -155,10 +155,10 @@ function main {
 
   printMsg "Building in: $WORK"
 
-  printMsg "Build type: $BUILD"
-  printMsg "Target type: $host"
+  printMsg "Build platform: $BUILD"
+  printMsg "Target platform: $hostPlatform"
 
-  check_for_crosschain $host
+  check_for_crosschain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
   CACHE=$WORK/cache
@@ -170,7 +170,7 @@ function main {
   initCflags
   installErrorHandler
 
-  build ${host} ${target}
+  build ${hostPlatform} ${packageName}
 
   uninstallErrorHandler
 }
@@ -284,52 +284,68 @@ function popDir {
   popd 1>/dev/null 2>/dev/null
 }
 
+function get_cross_prefix {
+  local build=$1
+  local host=$2
+  if [ ! $build = $host ] ; then
+    echo "$host-"
+  fi
+}
+
 function check_for_crosschain {
-  host=$1
+  local build=$1
+  local host=$2
 
-  if isMissing "$host-g++" ; then
-    echo "No $host-g++ was found in the PATH."
+  local cross_prefix=$(get_cross_prefix $build $host)
+
+  # ------------- GCC -------------
+  if isMissing "${cross_prefix}g++" ; then
+    echo "No ${cross_prefix}g++ was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-gcc" ; then
-    echo "No $host-gcc was found in the PATH."
+  if isMissing "${cross_prefix}gcc" ; then
+    echo "No ${cross_prefix}gcc was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-nm" ; then
-    echo "No $host-nm was found in the PATH."
+  # ------------- Binutils -------------
+  if isMissing "${cross_prefix}nm" ; then
+    echo "No ${cross_prefix}nm was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-ar" ; then
-    echo "No $host-ar was found in the PATH."
+  if isMissing "${cross_prefix}ar" ; then
+    echo "No ${cross_prefix}ar was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-strip" ; then
-    echo "No $host-strings was found in the PATH."
+  if isMissing "${cross_prefix}strip" ; then
+    echo "No ${cross_prefix}strip was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-strings" ; then
-    echo "No $host-strings was found in the PATH."
+  if isMissing "${cross_prefix}strings" ; then
+    echo "No ${cross_prefix}strings was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-dlltool" ; then
-    echo "No $host-dlltool was found in the PATH."
+  if isMissing "${cross_prefix}as" ; then
+    echo "No ${cross_prefix}as was found in the PATH."
     exit 1
   fi
 
-  if isMissing "$host-as" ; then
-    echo "No $host-as was found in the PATH."
-    exit 1
-  fi
+  local os=$(get_os "$host")
+  if [ $os = "mingw32" ] ; then
+    if isMissing "${cross_prefix}dlltool" ; then
+      echo "No ${cross_prefix}dlltool was found in the PATH."
+      exit 1
+    fi
 
-  if isMissing "$host-windres" ; then
-    echo "No $host-windres was found in the PATH."
-    exit 1
+    if isMissing "${cross_prefix}windres" ; then
+      echo "No ${cross_prefix}windres was found in the PATH."
+      exit 1
+    fi
   fi
 }
 
