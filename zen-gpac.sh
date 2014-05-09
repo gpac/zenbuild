@@ -37,11 +37,12 @@ function build_gpac {
     --prefix=$PREFIX/$host \
     --extra-cflags="-I$PREFIX/$host/include" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
+    --disable-jack \
     --cross-prefix="$host-"
 
 
   $MAKE
-  $MAKE install
+  $MAKE install-lib
   popDir
 
   popDir
