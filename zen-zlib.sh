@@ -33,7 +33,7 @@ function build_zlib {
 
   applyPatch $scriptDir/patches/zlib_01_nobypass.diff
   chmod +x ./configure
-  CFLAGS=-fPIC \
+  CFLAGS="-w -fPIC" \
   CHOST=$host \
     ./configure \
     --prefix=$PREFIX/$host \
