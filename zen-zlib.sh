@@ -32,6 +32,7 @@ function build_zlib {
   pushDir zlib-$host
 
   applyPatch $scriptDir/patches/zlib_01_nobypass.diff
+  chmod +x ./configure
   CHOST=$host \
     ./configure \
     --prefix=$PREFIX/$host \
