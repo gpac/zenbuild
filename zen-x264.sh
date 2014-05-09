@@ -21,7 +21,9 @@ function build_x264_deps {
 }
 
 function build_x264 {
-  host=$1
+  local host=$1
+  local crossPrefix=$(get_cross_prefix $BUILD $host)
+
   pushDir $WORK/src
   lazy_git_clone "git://git.videolan.org/x264.git" x264
 
@@ -37,7 +39,7 @@ function build_x264 {
     --disable-ffms \
     --disable-gpac \
     --disable-opencl \
-    --cross-prefix="$host-"
+    --cross-prefix="$crossPrefix"
 
   popDir
 }
