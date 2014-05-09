@@ -30,6 +30,8 @@ function build_zlib {
   mkgit "zlib-$host"
 
   pushDir zlib-$host
+
+  applyPatch $scriptDir/patches/zlib_01_nobypass.diff
   CHOST=$host \
     ./configure \
     --prefix=$PREFIX/$host \
