@@ -135,27 +135,30 @@ function main {
   BUILD=$($scriptDir/config.guess | sed 's/-unknown-msys$/-pc-mingw32/')
   HOST=$BUILD
 
-  if echo $PATH | grep " " ; then
-    echo "Your PATH contain spaces, this may cause build issues."
-    echo "Please clean up your PATH and retry."
-    exit 3
+  WORK=$1
+  local target=$2
+  local host=$3
+
+  if [ -z "$WORK" ] || [ -z "$target" || [ -z "$host" ] ; then
+    echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
+    echo "Example: $0 /tmp/work libav i686-w64-mingw32"
+    exit 1
   fi
 
-  WORK=$1
-  local TARGET=$2
-  local HOST=$3
-
-  if [ -z "$WORK" ] ; then
-    echo "Usage: $0 <prefix>"
-    exit 1
+  if echo $PATH | grep " " ; then
+    echo "Your PATH contain spaces, this may cause build issues."
+    echo "Please clean-up your PATH and retry."
+    echo "Example:"
+    echo "$ PATH=/mingw32/bin:/bin:/usr/bin ./zenbuild.sh <options>"
+    exit 3
   fi
 
   printMsg "Building in: $WORK"
 
   printMsg "Build type: $BUILD"
-  printMsg "Target type: $HOST"
+  printMsg "Target type: $host"
 
-  check_for_crosschain $HOST
+  check_for_crosschain $host
   checkForCommonBuildTools
 
   CACHE=$WORK/cache
@@ -167,7 +170,7 @@ function main {
   initCflags
   installErrorHandler
 
-  build ${HOST} ${TARGET}
+  build ${host} ${target}
 
   uninstallErrorHandler
 }
