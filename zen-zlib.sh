@@ -30,9 +30,7 @@ function build_zlib {
   mkgit "zlib-$host"
 
   pushDir zlib-$host
-  CC=$host-gcc \
-    AR=$host-ar \
-    RANLIB=$host-ranlib \
+  CHOST=$host \
     ./configure \
     --prefix=$PREFIX/$host \
     --static
