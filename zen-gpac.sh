@@ -27,6 +27,9 @@ function build_gpac {
 # local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
 
+  # GPAC needs uppercase os name, e.g "MINGW32".
+  OS=${OS^^}
+
   mkdir -p gpac/build/$host
   pushDir gpac/build/$host
   ../../configure \
