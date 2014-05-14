@@ -13,6 +13,6 @@ function build_portaudio {
   popd
 }
 
-function build_portaudio_deps {
+function portaudio_get_deps {
   local a=1;
 }

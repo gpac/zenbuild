@@ -56,12 +56,10 @@ function build_libav {
   popDir
 }
 
-function build_libav_deps {
-  host=$1
-
-  build $host x264
-  build $host zlib
-  build $host jack
-  build $host librtmp
+function libav_get_deps {
+  echo x264
+  echo zlib
+  echo jack
+  echo librtmp
 }
 

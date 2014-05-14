@@ -16,9 +16,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-function build_jack_deps {
-  build $host libsndfile
-  build $host tre
+function jack_get_deps {
+  echo libsndfile
+  echo tre
 }
 
 function build_jack {

@@ -57,12 +57,10 @@ function build_ffmpeg {
   popDir
 }
 
-function build_ffmpeg_deps {
-  host=$1
-
-  build $host x264
-  build $host zlib
-  build $host jack
-  build $host librtmp
+function ffmpeg_get_deps {
+  echo x264
+  echo zlib
+  echo jack
+  echo librtmp
 }
 

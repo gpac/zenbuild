@@ -49,9 +49,7 @@ function build_gpac {
   popDir
 }
 
-function build_gpac_deps {
-  host=$1
-
-  build $host zlib
+function gpac_get_deps {
+  echo zlib
 }
 

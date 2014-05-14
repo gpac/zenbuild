@@ -215,8 +215,14 @@ function lazy_build {
 
   printMsg "$name: building ..."
   source zen-${name}.sh
-  build_${name}_deps $host
+
+  local deps=$(${name}_get_deps)
+  for depName in $deps ; do
+    build $host $depName
+  done
+
   build_${name} $host
+
   printMsg "$name: build OK"
   mark_as_built $host $name
 }

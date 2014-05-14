@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-function build_x264_deps {
+function x264_get_deps {
   local a=0
 }
 
