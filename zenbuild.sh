@@ -130,11 +130,9 @@ function applyPatch {
 }
 
 function main {
-  scriptDir=$(pwd)
-
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
 
-  WORK=$1
+  WORK=$(get_abs_dir "$1")
   local packageName=$2
   local hostPlatform=$3
 
@@ -196,24 +194,30 @@ function initCflags {
   export MAKE
 }
 
+function importPkgScript {
+  local name=$1
+  if ! test -f zen-${name}.sh; then
+    echo "Package $name does not have a zenbuild script"
+    exit 1
+  fi
+
+  source zen-${name}.sh
+}
+
 function lazy_build {
   local host=$1
   local name=$2
 
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
 
-  if ! test -f zen-${name}.sh; then
-    echo "Package $name does not have a zenbuild script"
-    exit 1
-  fi
-
   if is_built $host $name ; then
     printMsg "$name: already built"
     return
   fi
 
+  importPkgScript $name
+
   printMsg "$name: building ..."
-  source zen-${name}.sh
 
   local deps=$(${name}_get_deps)
   for depName in $deps ; do
@@ -459,6 +463,16 @@ function get_os {
   host=$1
   echo $host | sed "s/.*-//"
 }
+
+function get_abs_dir {
+  local relDir="$1"
+  pushDir $relDir
+  pwd
+  popDir
+}
+
+# get absolute script dir
+scriptDir=$(get_abs_dir $(dirname $0))
 
 main "$@"
 
