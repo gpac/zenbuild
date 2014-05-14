@@ -133,7 +133,6 @@ function main {
   scriptDir=$(pwd)
 
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
-  HOST=$BUILD
 
   WORK=$1
   local packageName=$2
@@ -158,7 +157,7 @@ function main {
   printMsg "Build platform: $BUILD"
   printMsg "Target platform: $hostPlatform"
 
-  check_for_crosschain "$BUILD" "$hostPlatform"
+  checkForCrossChain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
   CACHE=$WORK/cache
@@ -293,12 +292,12 @@ function popDir {
 function get_cross_prefix {
   local build=$1
   local host=$2
-  if [ ! $build = $host ] ; then
+  if [ ! "$build" = "$host" ] ; then
     echo "$host-"
   fi
 }
 
-function check_for_crosschain {
+function checkForCrossChain {
   local build=$1
   local host=$2
 
