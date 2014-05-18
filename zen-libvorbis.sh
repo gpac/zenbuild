@@ -28,6 +28,6 @@ function build_libvorbis {
 }
 
 function libvorbis_get_deps {
-  echo ""
+  echo "libogg"
 }
 
