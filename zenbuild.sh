@@ -132,6 +132,7 @@ function applyPatch {
 function main {
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
 
+  mkdir -p "$1"
   WORK=$(get_abs_dir "$1")
   local packageName=$2
   local hostPlatform=$3
