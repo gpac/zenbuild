@@ -28,6 +28,6 @@ function build_freetype2 {
 }
 
 function freetype2_get_deps {
-  echo ""
+  echo "zlib"
 }
 
