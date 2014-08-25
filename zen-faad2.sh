@@ -15,44 +15,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_gpac {
+function build_faad2 {
   host=$1
   pushDir $WORK/src
 
-  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5244
-  pushDir gpac
-  svn revert -R .
-  popDir
+  lazy_download "faad2.tar.bz2" "http://downloads.sourceforge.net/faac/faad2-2.7.tar.bz2"
+  lazy_extract "faad2.tar.bz2"
+  mkgit "faad2"
 
-# local ARCH=$(get_arch $host)
-  local OS=$(get_os $host)
-  local crossPrefix=$(get_cross_prefix $BUILD $host)
-
-  # GPAC needs uppercase os name, e.g "MINGW32".
-  OS=${OS^^}
-
-  mkdir -p gpac/build/$host
-  pushDir gpac/build/$host
-  ../../configure \
-    --target-os=$OS \
-    --prefix=$PREFIX/$host \
-    --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
-    --disable-jack \
-    --cross-prefix="$crossPrefix"
-
-
-  $MAKE
-  $MAKE install-lib
-  popDir
-
+  autoconf_build $host "faad2"
   popDir
 }
 
-function gpac_get_deps {
-  echo zlib
-  #echo freetype2
-  echo libvorbis
-  echo libogg
+function faad2_get_deps {
+  echo ""
 }
 
