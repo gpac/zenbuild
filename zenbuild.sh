@@ -101,7 +101,6 @@ function lazy_git_clone {
   git checkout -q $rev
   popDir
 }
-
 # Create or restore a directory content
 function mkgit {
   dir="$1"
@@ -132,16 +131,17 @@ function applyPatch {
 function main {
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
 
-  mkdir -p "$1"
-  WORK=$(get_abs_dir "$1")
   local packageName=$2
   local hostPlatform=$3
 
-  if [ -z "$WORK" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
+  if [ -z "$1" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
     echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
     echo "Example: $0 /tmp/work libav i686-w64-mingw32"
     exit 1
   fi
+
+  mkdir -p "$1"
+  WORK=$(get_abs_dir "$1")
 
   if echo $PATH | grep " " ; then
     echo "Your PATH contain spaces, this may cause build issues."
