@@ -19,10 +19,10 @@ function build_sodium {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libsodium.tar.gz" "https://github.com/jedisct1/libsodium/releases/download/0.7.0/libsodium-0.7.0.tar.gz"
-  lazy_extract "libsodium.tar.gz"
+  lazy_download "sodium.tar.gz" "https://github.com/jedisct1/libsodium/releases/download/0.7.0/libsodium-0.7.0.tar.gz"
+  lazy_extract "sodium.tar.gz"
 
-  mkgit "libsodium"
+  mkgit "sodium"
 
   mkdir -p sodium/build/$host
   pushDir sodium

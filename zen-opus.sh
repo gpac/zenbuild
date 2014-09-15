@@ -15,21 +15,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_toxcore {
+function build_opus {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "https://github.com/irungentoo/toxcore.git" toxcore
+  lazy_git_clone "https://github.com/xiph/opus.git" opus
 
-  mkdir -p toxcore/build/$host
-  pushDir toxcore
+  mkdir -p opus/build/$host
+  pushDir opus
   ./autogen.sh
   popDir
 
-  mkdir -p toxcore/build/$host
-  pushDir toxcore/build/$host
+  mkdir -p opus/build/$host
+  pushDir opus/build/$host
   ../../configure \
-    --enable-av \
     --host=$HOST \
     --prefix=$PREFIX/$host
   $MAKE
@@ -39,8 +38,7 @@ function build_toxcore {
   popDir
 }
 
-function toxcore_get_deps {
+function opus_get_deps {
   echo sodium
-  echo opus
 }
 

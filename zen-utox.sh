@@ -15,23 +15,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_toxcore {
+function build_utox {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "https://github.com/irungentoo/toxcore.git" toxcore
+  lazy_git_clone https://github.com/notsecure/uTox.git utox-$host
 
-  mkdir -p toxcore/build/$host
-  pushDir toxcore
-  ./autogen.sh
-  popDir
-
-  mkdir -p toxcore/build/$host
-  pushDir toxcore/build/$host
-  ../../configure \
-    --enable-av \
-    --host=$HOST \
-    --prefix=$PREFIX/$host
+  mkdir -p utox-$host
+  pushDir utox-$host
   $MAKE
   $MAKE install
   popDir
@@ -39,8 +30,7 @@ function build_toxcore {
   popDir
 }
 
-function toxcore_get_deps {
-  echo sodium
-  echo opus
+function utox_get_deps {
+  echo toxcore
 }
 
