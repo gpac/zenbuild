@@ -29,6 +29,8 @@ function build_opus {
   mkdir -p opus/build/$host
   pushDir opus/build/$host
   ../../configure \
+    --enable-static \
+    --disable-shared \
     --host=$HOST \
     --prefix=$PREFIX/$host
   $MAKE

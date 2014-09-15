@@ -31,7 +31,9 @@ function build_sodium {
 
   pushDir sodium/build/$host
   ../../configure \
-    --host=$HOST \
+    --enable-static \
+    --disable-shared \
+    --host=$host \
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install

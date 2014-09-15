@@ -29,8 +29,10 @@ function build_toxcore {
   mkdir -p toxcore/build/$host
   pushDir toxcore/build/$host
   ../../configure \
+    --enable-static \
+    --disable-shared \
     --enable-av \
-    --host=$HOST \
+    --host=$host \
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
