@@ -210,6 +210,7 @@ function lazy_build {
   local name=$2
 
   export PKG_CONFIG_PATH=$PREFIX/$host/lib/pkgconfig
+  export PKG_CONFIG_LIBDIR=$PREFIX/$host/lib/pkgconfig
 
   if is_built $host $name ; then
     printMsg "$name: already built"
