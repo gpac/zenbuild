@@ -1,4 +1,4 @@
-ZenBuild is a component-level build-system, aimed at easing the build of free software projets.
+ZenBuild is a one-shot component-level build-system, aimed at easing the build of free software projets.
 It also aims at making cross-building seamless.
 
 Authors:
@@ -6,14 +6,17 @@ Authors:
 - Romain Bouqueau <romain.bouqueau.pro@gmail.com>
 
 The general syntax is:
-
-./zenbuild.sh <workingDirectory> <targetArchitecture> <packageName>
+$ ./zenbuild.sh <workingDirectory> <targetArchitecture> <packageName>
 
 Example command:
-
-./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
+$ ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
 
 The environment variable MAKE is influential, you can achieve parallel builds this way:
+$ MAKE='make -j8' ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
 
-MAKE='make -j8' ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
+You can also create a standalone build script for a particular package (and
+its dependencies) to integrate in your project:
+$ ./make-extra.sh libav > build_libav.sh
 
+You can now integrate build_libav.sh in your project, and invoke it this way:
+$ ./build_libav.sh <targetArchitecture>

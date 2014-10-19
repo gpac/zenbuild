@@ -14,21 +14,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-function build_libsamplerate {
+function build_vlc {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
-  lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
-  lazy_extract "libsamplerate.tar.gz"
-  mkgit "libsamplerate"
+  lazy_download "vlc.tar.xz" "http://download.videolan.org/pub/videolan/vlc/2.1.5/vlc-2.1.5.tar.xz"
+  lazy_extract "vlc.tar.xz"
 
-  autoconf_build $host "libsamplerate" \
-      --disable-static \
-      --enable-shared \
-      --disable-sndfile \
-      --disable-fftw
+  mkdir -p vlc/build/$host
+  pushDir vlc/build/$host
+  CFLAGS+=" -I$PREFIX/$host/include " \
+  LDFLAGS+=" -L$PREFIX/$host/lib " \
+  ../../configure \
+    --host=$host \
+    --disable-mad \
+    --disable-lua \
+    --disable-libgcrypt \
+    --prefix=$PREFIX/$host
+  $MAKE
+  $MAKE install
+  popDir
 
-  popd
+  popDir
+}
+
+function vlc_get_deps {
+  echo "ffmpeg"
+  echo "liba52"
 }
 

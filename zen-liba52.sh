@@ -14,21 +14,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-function build_libsamplerate {
+function build_liba52 {
   host=$1
-  pushd $WORK/src
+  pushDir $WORK/src
 
-  lazy_download "libsamplerate.tar.gz" "http://www.mega-nerd.com/SRC/libsamplerate-0.1.8.tar.gz"
-  lazy_extract "libsamplerate.tar.gz"
-  mkgit "libsamplerate"
+  lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
+  lazy_extract "liba52.tar.xz"
 
-  autoconf_build $host "libsamplerate" \
-      --disable-static \
-      --enable-shared \
-      --disable-sndfile \
-      --disable-fftw
+  mkdir -p liba52/build/$host
+  pushDir liba52/build/$host
+  ../../configure \
+    --host=$host \
+    --prefix=$PREFIX/$host
+  $MAKE
+  $MAKE install
+  popDir
 
-  popd
+  popDir
+}
+
+function liba52_get_deps {
+  local a=0
 }
 
