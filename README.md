@@ -14,6 +14,9 @@ $ ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
 The environment variable MAKE is influential, you can achieve parallel builds this way:
 $ MAKE='make -j8' ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
 
+If your environment variable PATH also contains other Unix-like environments such as Cygwin, you may want to restrict the environment PATH this way:
+PATH='/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory x86_64-w64-mingw32 libav
+
 You can also create a standalone build script for a particular package (and
 its dependencies) to integrate in your project:
 $ ./make-extra.sh libav > build_libav.sh
