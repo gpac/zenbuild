@@ -43,10 +43,17 @@ function build_ffmpeg {
     --enable-shared \
     --enable-indev=jack \
     --enable-librtmp \
-    --disable-gpl \
+    --enable-gpl \
     --enable-libx264 \
+    --enable-libx265 \
     --disable-gnutls \
     --disable-openssl \
+    --disable-iconv \
+    --disable-bzlib \
+    --disable-gnutls \
+    --disable-openssl \
+    --disable-iconv \
+    --disable-bzlib \
     --enable-avresample \
     --pkg-config=pkg-config \
     --cross-prefix=$host-
@@ -59,6 +66,7 @@ function build_ffmpeg {
 
 function ffmpeg_get_deps {
   echo x264
+  echo x265
   echo zlib
   echo jack
   echo librtmp

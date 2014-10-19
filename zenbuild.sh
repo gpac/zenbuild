@@ -408,6 +408,14 @@ function checkForCommonBuildTools {
     echo "apt-get install make"
     exit 1
   fi
+  
+  if isMissing "cmake"; then
+    echo "make not installed.  Please install with:"
+    echo "pacman -S mingw-cmake"
+    echo "or"
+    echo "apt-get install cmake"
+    exit 1
+  fi
 
   if isMissing "autopoint"; then
     echo "autopoint not installed.  Please install with:"
@@ -452,6 +460,14 @@ function checkForCommonBuildTools {
     echo "pacman -S mingw-git"
     echo "or"
     echo "apt-get install git"
+    exit 1
+  fi
+  
+  if isMissing "hg" ; then
+    echo "git not installed.  Please install with:"
+    echo "pacman -S msys/mercurial"
+    echo "or"
+    echo "apt-get install mercurial"
     exit 1
   fi
 }
