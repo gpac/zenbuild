@@ -470,6 +470,14 @@ function checkForCommonBuildTools {
     echo "apt-get install mercurial"
     exit 1
   fi
+  
+  if isMissing "gperf" ; then
+    echo "gperf not installed.  Please install with:"
+    echo "pacman -S msys/gperf"
+    echo "or"
+    echo "apt-get install gperf"
+    exit 1
+  fi
 }
 
 function get_arch {

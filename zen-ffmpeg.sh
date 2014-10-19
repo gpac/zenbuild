@@ -41,8 +41,8 @@ function build_ffmpeg {
     --disable-debug \
     --disable-static \
     --enable-shared \
-    --enable-indev=jack \
     --enable-librtmp \
+	--enable-libass \
     --enable-gpl \
     --enable-libx264 \
     --enable-libx265 \
@@ -68,7 +68,7 @@ function ffmpeg_get_deps {
   echo x264
   echo x265
   echo zlib
-  echo jack
   echo librtmp
+  echo libass
 }
 
