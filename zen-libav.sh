@@ -43,10 +43,17 @@ function build_libav {
     --enable-shared \
     --enable-indev=jack \
     --enable-librtmp \
-    --disable-gpl \
+    --enable-gpl \
     --enable-libx264 \
+    --enable-libx265 \
     --disable-gnutls \
     --disable-openssl \
+    --disable-iconv \
+    --disable-bzlib \
+    --disable-gnutls \
+    --disable-openssl \
+    --disable-iconv \
+    --disable-bzlib \
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
@@ -58,6 +65,7 @@ function build_libav {
 
 function libav_get_deps {
   echo x264
+  echo x265
   echo zlib
   echo jack
   echo librtmp
