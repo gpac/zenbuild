@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Sebastien Alaiwan
+# Copyright (C) 2014 - Badr BADRI 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -21,13 +21,15 @@ function libjpeg_get_deps {
 }
 
 function build_libjpeg {
-
   local host=$1
 
   pushDir $WORK/src
-  lazy_git_clone "https://github.com/LuaDist/libjpeg.git" libjpeg
+  lazy_download "libjpeg-$host.tar.gz" "http://www.ijg.org/files/jpegsrc.v9a.tar.gz"
 
-  autoconf_build $host "libjpeg" 
+  lazy_extract "libjpeg-$host.tar.gz"
+
+  autoconf_build $host "libjpeg-$host" \
+    --enable-dependency-tracking
 
   popDir
 }
