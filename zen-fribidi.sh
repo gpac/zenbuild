@@ -30,4 +30,5 @@ function build_fribidi {
 }
 
 function fribidi_get_deps {
+  local a=0;
 }
