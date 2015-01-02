@@ -41,7 +41,6 @@ function build_gpac {
     --disable-jack \
     --cross-prefix="$crossPrefix"
 
-
   $MAKE
   $MAKE install-lib
   popDir

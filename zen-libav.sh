@@ -39,12 +39,14 @@ function build_libav {
     --disable-static \
     --enable-shared \
     --enable-indev=jack \
+    --enable-libfontconfig \
     --enable-librtmp \
     --enable-gpl \
     --enable-nonfree \
     --enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
+    --enable-zlib \
     --disable-gnutls \
     --disable-openssl \
     --disable-gnutls \
@@ -53,18 +55,19 @@ function build_libav {
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
-  $MAKE install
+  #$MAKE install
   popDir
 
   popDir
 }
 
 function libav_get_deps {
-  echo x264
-  echo x265
-  echo zlib
+  echo fontconfig
   echo jack
   echo librtmp
   echo libfdk-aac
+  echo x264
+  echo x265
+  echo zlib
 }
 
