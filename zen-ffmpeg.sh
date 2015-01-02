@@ -40,13 +40,15 @@ function build_ffmpeg {
     --disable-debug \
     --disable-static \
     --enable-shared \
-    --enable-librtmp \
     --enable-libass \
+    --enable-fontconfig \
+    --enable-librtmp \
     --enable-gpl \
     --enable-nonfree \
     --enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
+    --enable-zlib \
     --disable-gnutls \
     --disable-openssl \
     --disable-gnutls \
@@ -64,11 +66,12 @@ function build_ffmpeg {
 }
 
 function ffmpeg_get_deps {
-  echo x264
-  echo x265
-  echo zlib
+  echo fontconfig
   echo librtmp
   echo libass
   echo libfdk-aac
+  echo x264
+  echo x265
+  echo zlib
 }
 
