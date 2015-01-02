@@ -28,7 +28,6 @@ function build_x265 {
   hg clone -r 6879 https://bitbucket.org/multicoreware/x265 x265
   
   pushDir x265/
-  #applyPatch $scriptDir/patches/x265_01_version.diff
   applyPatch $scriptDir/patches/x265_02_version.diff
   
   mkdir -p build/$host
@@ -47,7 +46,6 @@ function build_x265 {
   echo "SET(CMAKE_SHARED_LINKER_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
   
   cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
-  #cmake -G "Visual Studio 10" -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
   $MAKE x265-shared
   $MAKE install
   
