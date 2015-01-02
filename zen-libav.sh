@@ -27,9 +27,6 @@ function build_libav {
   # remove stupid dependency
   sed -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
 
-  # remove GPL checking for x264
-  sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' libav/configure
-
   mkdir -p libav/build/$host
   pushDir libav/build/$host
   ../../configure \
@@ -44,6 +41,8 @@ function build_libav {
     --enable-indev=jack \
     --enable-librtmp \
     --enable-gpl \
+	--enable-nonfree \
+	--enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
     --disable-gnutls \
@@ -69,5 +68,6 @@ function libav_get_deps {
   echo zlib
   echo jack
   echo librtmp
+  echo libfdk-aac
 }
 
