@@ -49,7 +49,6 @@ function build_ffmpeg {
     --enable-libx265 \
     --disable-gnutls \
     --disable-openssl \
-    --disable-bzlib \
     --disable-gnutls \
     --disable-openssl \
     --disable-iconv \
