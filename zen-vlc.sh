@@ -27,7 +27,7 @@ function build_vlc {
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   ../../configure \
     --host=$host \
-	--enable-fribidi \
+    --enable-fribidi \
     --disable-mad \
     --disable-lua \
     --disable-libgcrypt \

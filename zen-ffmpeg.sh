@@ -34,14 +34,14 @@ function build_ffmpeg {
     --target-os=$OS \
     --prefix=$PREFIX/$host \
     --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
-	--enable-pthreads \
-	--disable-w32threads \
+    --enable-pthreads \
+    --disable-w32threads \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-debug \
     --disable-static \
     --enable-shared \
     --enable-librtmp \
-	--enable-libass \
+    --enable-libass \
     --enable-gpl \
     --enable-nonfree \
     --enable-libfdk_aac \

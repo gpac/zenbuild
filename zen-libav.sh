@@ -41,8 +41,8 @@ function build_libav {
     --enable-indev=jack \
     --enable-librtmp \
     --enable-gpl \
-	--enable-nonfree \
-	--enable-libfdk_aac \
+    --enable-nonfree \
+    --enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
     --disable-gnutls \
