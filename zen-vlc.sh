@@ -30,7 +30,6 @@ function build_vlc {
 	--enable-fribidi \
     --disable-mad \
     --disable-lua \
-    --disable-libgcrypt \
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
@@ -43,5 +42,7 @@ function vlc_get_deps {
   echo "ffmpeg"
   echo "liba52"
   echo "fribidi"
+  echo "libgcrypt"
+  echo "libxcb"
 }
 
