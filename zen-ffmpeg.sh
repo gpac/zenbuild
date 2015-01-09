@@ -27,9 +27,6 @@ function build_ffmpeg {
   # remove stupid dependency
   sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
 
-  # remove GPL checking for x264
-  sed -i 's/die_license_disabled gpl libx264/#die_license_disabled gpl libx264/' ffmpeg/configure
-
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
   ../../configure \
@@ -37,19 +34,23 @@ function build_ffmpeg {
     --target-os=$OS \
     --prefix=$PREFIX/$host \
     --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
+    --enable-pthreads \
+    --disable-w32threads \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-debug \
     --disable-static \
     --enable-shared \
+    --enable-libass \
+    --enable-fontconfig \
     --enable-librtmp \
-	--enable-libass \
     --enable-gpl \
+    --enable-nonfree \
+    --enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
+    --enable-zlib \
     --disable-gnutls \
     --disable-openssl \
-    --disable-iconv \
-    --disable-bzlib \
     --disable-gnutls \
     --disable-openssl \
     --disable-iconv \
@@ -65,10 +66,12 @@ function build_ffmpeg {
 }
 
 function ffmpeg_get_deps {
+  echo fontconfig
+  echo librtmp
+  echo libass
+  echo libfdk-aac
   echo x264
   echo x265
   echo zlib
-  echo librtmp
-  echo libass
 }
 
