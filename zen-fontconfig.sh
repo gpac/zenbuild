@@ -25,3 +25,6 @@ function build_fontconfig {
   autoconf_build $host "fontconfig"
   popDir
 }
+ function fontconfig_get_deps {
+  local a=0
+}
