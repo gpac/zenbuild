@@ -21,9 +21,14 @@ function build_liba52 {
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
   lazy_extract "liba52.tar.xz"
 
-  autoconf_build $host "liba52"
-
+  pushDir liba52
+  ./configure \
+     --host=$host \
+     --prefix=$PREFIX/$host
+      
   popDir
+  popDir
+
 }
 
 function liba52_get_deps {
