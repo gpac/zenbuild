@@ -66,9 +66,9 @@ function build_ffmpeg {
 }
 
 function ffmpeg_get_deps {
+  echo libass
   echo fontconfig
   echo librtmp
-  echo libass
   echo libfdk-aac
   echo x264
   echo x265

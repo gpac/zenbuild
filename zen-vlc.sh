@@ -44,5 +44,6 @@ function vlc_get_deps {
   echo "fribidi"
   echo "libgcrypt"
   echo "libxcb"
+  echo "alsa-lib"
 }
 
