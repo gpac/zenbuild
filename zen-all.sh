@@ -24,7 +24,7 @@ function all_get_deps {
 # echo "ffmpeg"
 # echo "fontconfig"
 # echo "freetype2"
-# echo "fribidi"
+  echo "fribidi"
 # echo "gmplib"
 # echo "gnutls"
 # #echo "gpac" requires ffmpeg -fPIC

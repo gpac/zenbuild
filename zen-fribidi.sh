@@ -18,14 +18,14 @@
 
 function fribidi_build {
   host=$1
-  pushDir $WORK/src  
+  pushDir $WORK/src
 
   lazy_download "fribidi.tar.xz" "http://fribidi.org/download/fribidi-0.19.6.tar.bz2"
   lazy_extract "fribidi.tar.xz"
 
   mkgit "fribidi"
 
-  autoconf_build $host "fribidi" 
+  autoconf_build $host "fribidi" --disable-shared
   popDir
 }
 
