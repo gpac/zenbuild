@@ -33,7 +33,7 @@ function all_get_deps {
 # echo "libalsa"
   echo "libass"
 # echo "libav"
-# echo "libfdk-aac"
+  echo "libfdk-aac"
 # echo "libgcrypt"
 # echo "libgpg-error"
   echo "libjpeg"
@@ -57,11 +57,11 @@ function all_get_deps {
 # echo "openh264"
 # echo "openhevc"
 # echo "opus"
-# echo "portaudio"
+  echo "portaudio"
 # #echo "pthreads" can only be built for windows
-# echo "sodium"
-# echo "toxcore"
-# echo "tre"
+  echo "sodium"
+  echo "toxcore"
+  echo "tre"
 # #echo "utox" depends on xrender and other missing stuff, causing pkg-config to return nothing
 # #echo "vlc" requires ffmpeg -fPIC
 # echo "x264"
