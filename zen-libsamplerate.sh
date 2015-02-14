@@ -32,3 +32,6 @@ function libsamplerate_build {
   popd
 }
 
+function libsamplerate_get_deps {
+  local a=0
+}

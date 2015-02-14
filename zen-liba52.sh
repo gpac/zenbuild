@@ -21,11 +21,14 @@ function liba52_build {
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
   lazy_extract "liba52.tar.xz"
 
-  pushDir liba52
-  ./configure \
-     --host=$host \
-     --prefix=$PREFIX/$host
-      
+  mkdir -p liba52/build/$host
+  pushDir liba52/build/$host
+
+  ../../configure \
+    --host=$host \
+    --prefix=$PREFIX/$host
+  $MAKE
+  $MAKE install
   popDir
   popDir
 
