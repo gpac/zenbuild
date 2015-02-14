@@ -174,6 +174,14 @@ function main {
 }
 
 function initCflags {
+
+  # avoid interferences from environment
+  unset CC
+  unset CXX
+  unset CFLAGS
+  unset CXXFLAGS
+  unset LDFLAGS
+
   CFLAGS="-O2"
   CXXFLAGS="-O2"
   LDFLAGS="-s"
@@ -408,7 +416,7 @@ function checkForCommonBuildTools {
     echo "apt-get install make"
     exit 1
   fi
-  
+
   if isMissing "cmake"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S mingw-cmake"
@@ -462,7 +470,7 @@ function checkForCommonBuildTools {
     echo "apt-get install git"
     exit 1
   fi
-  
+
   if isMissing "hg" ; then
     echo "git not installed.  Please install with:"
     echo "pacman -S msys/mercurial"
@@ -470,7 +478,7 @@ function checkForCommonBuildTools {
     echo "apt-get install mercurial"
     exit 1
   fi
-  
+
   if isMissing "gperf" ; then
     echo "gperf not installed.  Please install with:"
     echo "pacman -S msys/gperf"
