@@ -70,6 +70,6 @@ function all_get_deps {
 # echo "xcbproto"
 # echo "xcbpthreadstubs"
 # echo "xproto"
-# echo "zlib"
+  echo "zlib"
 }
 
