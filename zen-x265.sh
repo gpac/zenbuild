@@ -20,7 +20,7 @@ function x265_get_deps {
   local a=0
 }
 
-function build_x265 {
+function x265_build {
   local host=$1
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 

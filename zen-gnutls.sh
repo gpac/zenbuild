@@ -21,7 +21,7 @@ function gnutls_get_deps {
   echo "libnettle"
 }
 
-function build_gnutls {
+function gnutls_build {
 
   local host=$1
   pushDir $WORK/src

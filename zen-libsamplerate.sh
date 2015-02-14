@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-function build_libsamplerate {
+function libsamplerate_build {
   host=$1
   pushd $WORK/src
 

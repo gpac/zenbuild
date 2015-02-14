@@ -19,7 +19,7 @@ function libsdl_get_deps {
   local a=0
 }
 
-function build_libsdl {
+function libsdl_build {
   
   local host=$1
   pushDir $WORK/src

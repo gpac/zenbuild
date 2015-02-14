@@ -18,7 +18,7 @@ function alsa-lib_get_deps {
   local a=0
 }
 
-function build_alsa-lib {
+function alsa-lib_build {
  
   host=$1
   pushDir $WORK/src

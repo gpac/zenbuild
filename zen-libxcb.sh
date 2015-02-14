@@ -21,7 +21,7 @@ function libxcb_get_deps {
   echo libxau
 }
 
-function build_libxcb {
+function libxcb_build {
 
   local host=$1
   pushDir $WORK/src

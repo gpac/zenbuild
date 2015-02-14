@@ -19,7 +19,7 @@ function librtmp_get_deps {
   local a=0
 }
 
-function build_librtmp {
+function librtmp_build {
   host=$1
   pushDir $WORK/src
   lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497

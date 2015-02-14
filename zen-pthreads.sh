@@ -1,5 +1,5 @@
 
-build_pthreads() {
+pthreads()_build {
   host=$1
   pushd $WORK/src
 

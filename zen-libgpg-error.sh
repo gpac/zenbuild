@@ -19,7 +19,7 @@ function libgpg-error_get_deps {
   local a=0
 }
 
-function build_libgpg-error {
+function libgpg-error_build {
   local host=$1
   pushDir $WORK/src
 

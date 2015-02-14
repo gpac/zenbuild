@@ -226,7 +226,7 @@ function lazy_build {
     build $host $depName
   done
 
-  build_${name} $host
+  ${name}_build $host
 
   printMsg "$name: build OK"
   mark_as_built $host $name
