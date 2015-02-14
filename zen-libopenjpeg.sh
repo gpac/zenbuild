@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Sebastien Alaiwan
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -15,43 +15,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_gpac {
-  host=$1
-  pushDir $WORK/src
+function build_libopenjpeg {
 
-  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5244
-  pushDir gpac
+  local host=$1
+  pushDir $WORK/src
+  
+  svn co http://openjpeg.googlecode.com/svn/trunk/ libopenjpeg -r 2989
+  pushDir libopenjpeg
   svn revert -R .
   popDir
 
-# local ARCH=$(get_arch $host)
-  local OS=$(get_os $host)
-  local crossPrefix=$(get_cross_prefix $BUILD $host)
-
-  # GPAC needs uppercase os name, e.g "MINGW32".
-  OS=${OS^^}
-
-  mkdir -p gpac/build/$host
-  pushDir gpac/build/$host
-  ../../configure \
-    --target-os=$OS \
-    --prefix=$PREFIX/$host \
-    --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
-    --disable-jack \
-    --cross-prefix="$crossPrefix"
-
+  mkdir -p libopenjpeg/build/$host
+  pushDir libopenjpeg/build/$host
+  cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
   $MAKE
-  $MAKE install-lib
+  $MAKE install
   popDir
 
   popDir
+
 }
 
-function gpac_get_deps {
-  echo zlib
-  #echo freetype2
-  echo libvorbis
-  echo libogg
+function libopenjpeg_get_deps {
+ local a=0
 }
-

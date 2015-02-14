@@ -21,14 +21,7 @@ function build_liba52 {
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
   lazy_extract "liba52.tar.xz"
 
-  mkdir -p liba52/build/$host
-  pushDir liba52/build/$host
-  ../../configure \
-    --host=$host \
-    --prefix=$PREFIX/$host
-  $MAKE
-  $MAKE install
-  popDir
+  autoconf_build $host "liba52"
 
   popDir
 }
