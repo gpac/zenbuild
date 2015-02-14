@@ -23,7 +23,7 @@ function all_get_deps {
 # echo "faad2"
 # echo "ffmpeg"
 # echo "fontconfig"
-# echo "freetype2"
+  echo "freetype2"
   echo "fribidi"
 # echo "gmplib"
 # echo "gnutls"
