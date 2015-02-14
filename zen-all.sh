@@ -41,7 +41,7 @@ function all_get_deps {
 # echo "libnettle"
 # echo "libogg"
 # echo "libopenjpeg"
-# echo "libpng"
+  echo "libpng"
 # echo "libpthread"
 # echo "librtmp"
 # echo "libsamplerate"
