@@ -14,20 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function alsa-lib_get_deps {
+function libalsa_get_deps {
   local a=0
 }
 
-function alsa-lib_build {
- 
+function libalsa_build {
+
   host=$1
   pushDir $WORK/src
 
-  lazy_download "alsa-lib.tar.gz" "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.0.28.tar.bz2"
+  lazy_download "libalsa.tar.gz" "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.0.28.tar.bz2"
 
-  lazy_extract "alsa-lib.tar.gz" 
+  lazy_extract "libalsa.tar.gz"
 
-  autoconf_build $host "alsa-lib"
+  autoconf_build $host "libalsa"
 
   popDir
 
