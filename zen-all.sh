@@ -25,7 +25,7 @@ function all_get_deps {
   echo "fontconfig"
   echo "freetype2"
   echo "fribidi"
-# echo "gmplib"
+  echo "gmplib"
 # echo "gnutls"
 # #echo "gpac" requires ffmpeg -fPIC
 # echo "jack"
@@ -36,7 +36,7 @@ function all_get_deps {
 # echo "libfdk-aac"
 # echo "libgcrypt"
 # echo "libgpg-error"
-# echo "libjpeg"
+  echo "libjpeg"
 # echo "libmad"
 # echo "libnettle"
 # echo "libogg"
