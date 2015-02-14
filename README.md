@@ -48,3 +48,9 @@ Authors
 
 - Sebastien Alaiwan <sebastien.alaiwan@gmail.com>
 - Romain Bouqueau <romain.bouqueau.pro@gmail.com>
+
+Contributors
+------------
+
+- badr-badri ( https://github.com/badr-badri )
+
