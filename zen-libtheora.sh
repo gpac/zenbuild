@@ -23,7 +23,10 @@ function libtheora_build {
   lazy_extract "libtheora.tar.bz2"
   mkgit "libtheora"
 
-  autoconf_build $host "libtheora"
+  autoconf_build $host "libtheora" \
+    --enable-static \
+    --disable-shared \
+    --disable-examples
   popDir
 }
 
