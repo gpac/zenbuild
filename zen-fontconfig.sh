@@ -18,13 +18,22 @@
 
 function fontconfig_build {
   host=$1
-  pushDir $WORK/src  
+  pushDir $WORK/src
 
-  lazy_git_clone "git://anongit.freedesktop.org/fontconfig" fontconfig "tags/2.11.1"
+  lazy_download "fontconfig.tar.bz2" "http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.92.tar.bz2"
+  lazy_extract "fontconfig.tar.bz2"
+  mkgit "fontconfig"
 
-  autoconf_build $host "fontconfig"
+  LDFLAGS+=" -L$WORK/release/$host/lib" \
+  autoconf_build $host "fontconfig" \
+    --enable-static \
+    --disable-shared
   popDir
 }
- function fontconfig_get_deps {
-  local a=0
+
+function fontconfig_get_deps {
+  echo "expat"
+  echo "freetype2"
+  echo "libpng"
 }
+

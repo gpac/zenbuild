@@ -19,7 +19,7 @@ function libpng_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.6.10.tar.xz?download"
+  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.2.52.tar.xz?download"
   lazy_extract "libpng.tar.xz"
   mkgit "libpng"
 
