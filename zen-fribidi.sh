@@ -25,10 +25,10 @@ function build_fribidi {
 
   mkgit "fribidi"
 
-  autoconf_build $host "fribidi" --disable-shared
+  autoconf_build $host "fribidi" 
   popDir
 }
 
 function fribidi_get_deps {
-  local a=0;
+  local a=0
 }

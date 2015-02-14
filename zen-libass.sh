@@ -23,7 +23,7 @@ function build_libass {
 
   mkgit "libass"
 
-  autoconf_build $host "libass" --disable-shared
+  autoconf_build $host "libass" 
   popDir
 }
 

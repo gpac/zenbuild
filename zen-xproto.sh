@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Romain Bouqueau
+# Copyright (C) 2014 - Badr BADRI 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -13,18 +13,23 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
-
-function build_fontconfig {
-  host=$1
-  pushDir $WORK/src  
-
-  lazy_git_clone "git://anongit.freedesktop.org/fontconfig" fontconfig "tags/2.11.1"
-
-  autoconf_build $host "fontconfig"
-  popDir
+function xproto-get_deps {
+  local a=0 
 }
- function fontconfig_get_deps {
-  local a=0
+
+function build_xproto {
+
+  local host=$1
+  pushDir $WORK/src
+
+  lazy_download "xproto.tar.gz" "http://xorg.freedesktop.org/releases/individual/proto/xproto-7.0.27.tar.gz"
+
+  lazy_extract "xproto.tar.gz"
+
+  autoconf_build $host "xproto"
+
+  popDir
+
 }

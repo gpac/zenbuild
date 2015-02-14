@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Romain Bouqueau
+# Copyright (C) 2014 - Badr BADRI 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -16,15 +16,24 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-function build_fontconfig {
-  host=$1
-  pushDir $WORK/src  
+function gnutls_get_deps {
+  echo "gmplib"
+  echo "libnettle"
+}
 
-  lazy_git_clone "git://anongit.freedesktop.org/fontconfig" fontconfig "tags/2.11.1"
+function build_gnutls {
 
-  autoconf_build $host "fontconfig"
+  local host=$1
+  pushDir $WORK/src
+
+  lazy_download "gnutls.tar.lz" "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/gnutls-3.3.12.tar.lz"
+  
+  lazy_extract "gnutls.tar.lz"
+
+  autoconf_build $host "gnutls.tar.lz"
+
   popDir
-}
- function fontconfig_get_deps {
-  local a=0
-}
+
+}  
+
+

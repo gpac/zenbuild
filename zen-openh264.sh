@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Romain Bouqueau
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -15,16 +15,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
-function build_fontconfig {
-  host=$1
-  pushDir $WORK/src  
-
-  lazy_git_clone "git://anongit.freedesktop.org/fontconfig" fontconfig "tags/2.11.1"
-
-  autoconf_build $host "fontconfig"
-  popDir
-}
- function fontconfig_get_deps {
+function openh264_get_deps {
   local a=0
+}
+
+function build_openh264 {
+
+  host=$1
+  pushDir $WORK/src
+  local ARCH=$(get_arch $host)
+  local OS=$(get_os $host)
+ 
+  lazy_git_clone "https://github.com/cisco/openh264" "openh264" 7f967f6fc46290794da02319470afe27e7ed7a6e
+  
+  pushDir openh264
+  
+  sed -i "s@^PREFIX=.*@PREFIX=$PREFIX/$host@" Makefile
+  sed -i "s@^ARCH=.*@ARCH=$ARCH@" Makefile
+  sed -i "s@^OS=.*@OS=$OS@" Makefile
+  sed -i "s/gnu/linux/" Makefile
+  sed -i "s/mingw32/msvc/" Makefile
+
+  $MAKE
+  $MAKE install
+  
+  popDir
+  popDir
 }
