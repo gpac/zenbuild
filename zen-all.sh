@@ -49,7 +49,7 @@ function all_get_deps {
 # echo "libsndfile"
 # echo "libtheora"
 # echo "libvorbis"
-# echo "libvpx"
+  echo "libvpx"
 # echo "libxau"
 # echo "libxcb"
 # echo "libxvidcore"
