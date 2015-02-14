@@ -20,7 +20,7 @@ function all_build {
 function all_get_deps {
 # echo "dbus"
   echo "expat"
-# echo "faad2"
+# echo "faad2" # error: "two or more data types in declaration specifiers"
 # echo "ffmpeg"
   echo "fontconfig"
   echo "freetype2"
@@ -45,7 +45,7 @@ function all_get_deps {
 # echo "libpthread"
 # echo "librtmp"
   echo "libsamplerate"
-# echo "libsdl"
+  echo "libsdl"
 # echo "libsndfile"
 # echo "libtheora"
 # echo "libvorbis"
