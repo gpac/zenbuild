@@ -27,6 +27,13 @@ function librtmp_build {
 
   pushDir rtmpdump/librtmp
 
+  case $host in
+    *mingw*)
+      sed -i "s/^SYS=posix/SYS=mingw/" Makefile
+      echo "# YO" >> Makefile
+      ;;
+  esac
+
   sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
   sed -i "s@^CRYPTO=.*@@" Makefile
 

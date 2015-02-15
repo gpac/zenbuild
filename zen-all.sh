@@ -43,7 +43,7 @@ function all_get_deps {
   echo "libopenjpeg"
   echo "libpng"
 # echo "libpthread"
-# echo "librtmp" # link errors: "undefined reference to `__imp_htons'"
+  echo "librtmp"
   echo "libsamplerate"
   echo "libsdl"
   echo "libsndfile"
