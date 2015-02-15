@@ -53,10 +53,10 @@ function all_get_deps {
 # echo "libxau"
 # echo "libxcb"
 # echo "libxvidcore"
-# echo "opencore-amr"
+  echo "opencore-amr"
 # echo "openh264"
 # echo "openhevc"
-# echo "opus"
+  echo "opus"
   echo "portaudio"
 # #echo "pthreads" can only be built for windows
   echo "sodium"
@@ -64,8 +64,8 @@ function all_get_deps {
   echo "tre"
 # #echo "utox" depends on xrender and other missing stuff, causing pkg-config to return nothing
 # #echo "vlc" requires ffmpeg -fPIC
-# echo "x264"
-# echo "x265"
+  echo "x264"
+  echo "x265"
 # echo "xcb-proto"
 # echo "xcbproto"
 # echo "xcbpthreadstubs"

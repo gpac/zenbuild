@@ -16,24 +16,34 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-function x265_get_deps {
-  local a=0
-}
-
 function x265_build {
   local host=$1
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 
   pushDir $WORK/src
-  hg clone -r 6879 https://bitbucket.org/multicoreware/x265 x265
-  
+  if [ ! -d "x264/.hg" ] ; then
+    rm -rf x265
+    hg clone -r 6879 https://bitbucket.org/multicoreware/x265 x265
+  else
+    pushDir x265
+    hg revert
+    popDir
+  fi
+
   pushDir x265/
   applyPatch $scriptDir/patches/x265_02_version.diff
-  
-  mkdir -p build/$host
-  pushDir build/$host
 
-  echo "SET(CMAKE_C_COMPILER $host-gcc)" > config.cmake
+  mkdir -p bin/$host
+  pushDir bin/$host
+
+  echo "" > config.cmake
+  case $host in
+    *mingw*)
+      echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
+      ;;
+  esac
+
+  echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
   echo "SET(CMAKE_CXX_COMPILER $host-g++)" >> config.cmake
   echo "SET(CMAKE_RC_COMPILER $host-windres)" >> config.cmake
   echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
@@ -44,13 +54,17 @@ function x265_build {
   echo "SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
   echo "SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
   echo "SET(CMAKE_SHARED_LINKER_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
-  
+
   cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
   $MAKE x265-shared
   $MAKE install
-  
+
   popDir
   popDir
   popDir
+}
+
+function x265_get_deps {
+  local a=0
 }
 
