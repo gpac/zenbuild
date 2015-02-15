@@ -34,7 +34,7 @@ function openh264_build {
   sed -i "s@^ARCH=.*@ARCH=$ARCH@" Makefile
   sed -i "s@^OS=.*@OS=$OS@" Makefile
   sed -i "s/gnu/linux/" Makefile
-  sed -i "s/mingw32/msvc/" Makefile
+  sed -i "s/mingw32/mingw_nt/" Makefile
 
   $MAKE
   $MAKE install
