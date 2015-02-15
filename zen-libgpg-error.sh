@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Badr BADRI 
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -15,20 +15,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function libgpg-error_get_deps {
-  local a=0
-}
-
 function libgpg-error_build {
   local host=$1
   pushDir $WORK/src
 
-
-  lazy_download "libgpg-erro.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.0.tar.gz"
-
-  lazy_extract "libgpg-erro.tar.gz"
-
-  autoconf_build $host "libgpg-erro"
+  lazy_download "libgpg-error.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.18.tar.bz2"
+  lazy_extract "libgpg-error.tar.gz"
+  autoconf_build $host "libgpg-error"
 
   popDir
 }
+
+function libgpg-error_get_deps {
+  local a=0
+}
+
