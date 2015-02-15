@@ -19,7 +19,7 @@ function libxau_get_deps {
   echo "xproto"
 }
 
-function build_libxau {
+function libxau_build {
 
   local host=$1
   pushDir $WORK/src

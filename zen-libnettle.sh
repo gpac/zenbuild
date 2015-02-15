@@ -19,7 +19,7 @@ function libnettle_get_deps {
    local a=0
 }
 
-function build_libnettle {
+function libnettle_build {
 
   local host=$1
   pushDir $WORK/src

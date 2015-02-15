@@ -19,7 +19,7 @@ function xcb-proto_get_deps {
   local a=0
 }
 
-function build_xcb-proto {
+function xcb-proto_build {
   
   local host=$1
   pushDir $WORK/src

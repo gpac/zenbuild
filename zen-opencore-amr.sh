@@ -19,7 +19,7 @@ function opencore-amr_get_deps {
   local a=0
 }
 
-function build_opencore-amr {
+function opencore-amr_build {
 
   local host=$1
   pushDir $WORK/src

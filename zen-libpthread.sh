@@ -19,7 +19,7 @@ function libpthread_get_deps {
   local a=0
 }
 
-function build_libpthread {
+function libpthread_build {
 
   local host=$1
   pushDir $WORK/src

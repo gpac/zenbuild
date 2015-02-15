@@ -1,5 +1,5 @@
 
-function build_portaudio {
+function portaudio_build {
   host=$1
   pushd $WORK/src
   lazy_download "portaudio.tar.gz" "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz"

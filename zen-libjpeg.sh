@@ -20,7 +20,7 @@ function libjpeg_get_deps {
   local a=0
 }
 
-function build_libjpeg {
+function libjpeg_build {
   local host=$1
 
   pushDir $WORK/src

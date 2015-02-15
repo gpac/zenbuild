@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_vlc {
+function vlc_build {
   host=$1
   pushDir $WORK/src
 
@@ -44,6 +44,6 @@ function vlc_get_deps {
   echo "fribidi"
   echo "libgcrypt"
   echo "libxcb"
-  echo "alsa-lib"
+  echo "libalsa"
 }
 
