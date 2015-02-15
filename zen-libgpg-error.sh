@@ -24,11 +24,11 @@ function build_libgpg-error {
   pushDir $WORK/src
 
 
-  lazy_download "libgpg-erro.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.0.tar.gz"
+  lazy_download "libgpg-error.tar.gz"  "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.15.tar.gz"
 
-  lazy_extract "libgpg-erro.tar.gz"
+  lazy_extract "libgpg-error.tar.gz"
 
-  autoconf_build $host "libgpg-erro"
+  autoconf_build $host "libgpg-error"
 
   popDir
 }
