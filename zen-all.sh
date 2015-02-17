@@ -54,7 +54,7 @@ function all_get_deps {
 # echo "libxcb"
 # echo "libxvidcore"
   echo "opencore-amr"
-# echo "openh264"
+  echo "openh264"
 # echo "openhevc"
   echo "opus"
   echo "portaudio"
