@@ -58,7 +58,8 @@ function lazy_download
   local url="$2"
 
   if [ ! -e "$CACHE/$file" ]; then
-    wget "$url" -c -O "$CACHE/${file}.tmp"
+    echo "Downloading: $file"
+    wget "$url" -c -O "$CACHE/${file}.tmp" --no-verbose
     mv "$CACHE/${file}.tmp" "$CACHE/$file"
   fi
 }
@@ -196,8 +197,10 @@ function initCflags {
   export CXXFLAGS
   export LDFLAGS
 
+  local cores=$(nproc)
+
   if [ -z "$MAKE" ]; then
-    MAKE="make"
+    MAKE="make -j$cores"
   fi
 
   export MAKE
@@ -275,6 +278,7 @@ function autoconf_build {
     popDir
   fi
 
+  rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
   ../../configure \
