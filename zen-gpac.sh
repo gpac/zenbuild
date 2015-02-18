@@ -35,15 +35,20 @@ function gpac_build {
   pushDir gpac/build/$host
   ../../configure \
     --target-os=$OS \
-    --prefix=$PREFIX/$host \
+    --cross-prefix="$crossPrefix" \
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-jack \
     --enable-amr \
-    --cross-prefix="$crossPrefix"
+    --prefix=$PREFIX/$host
 
   $MAKE
-  $MAKE install
+
+  # 'make install' is broken, ignore the following error.
+  # install: cannot stat ‘bin/gcc/libgpac.dll.a’: No such file or directory
+  # Makefile:174: recipe for target 'installdylib' failed
+  $MAKE install-lib -k || true
+
   popDir
 
   popDir

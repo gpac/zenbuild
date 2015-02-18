@@ -27,7 +27,7 @@ function all_get_deps {
   echo "fribidi"
   echo "gmplib"
 # echo "gnutls"
-# #echo "gpac" requires ffmpeg -fPIC
+  echo "gpac"
 # echo "jack"
   echo "liba52"
 # echo "libalsa"
