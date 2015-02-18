@@ -21,7 +21,7 @@ function libvpx_build {
   lazy_git_clone https://chromium.googlesource.com/webm/libvpx libvpx c5718a7aa3b5490fbfbc47d6f82e7cb3eed46a1e
 
   local host2=$(echo $host | sed "s/x86_64-w64-mingw32/x86_64-win64-gcc/")
-  host2=$(echo $host2 | sed "s/i686-w64-mingw32/i686-win32-gcc/")
+  host2=$(echo $host2 | sed "s/i686-w64-mingw32/x86-win32-gcc/")
   host2=$(echo $host2 | sed "s/x86_64-linux-gnu/x86_64-linux-gcc/")
   mkdir -p libvpx/build/$host
   pushDir libvpx/build/$host
@@ -30,6 +30,7 @@ function libvpx_build {
   ../../configure \
    --target=$host2 \
    --disable-examples \
+   --disable-unit-tests \
    --disable-docs \
   --prefix=$PREFIX/$host
   $MAKE
