@@ -28,7 +28,7 @@ function all_get_deps {
   echo "gmplib"
 # echo "gnutls"
   echo "gpac"
-# echo "jack"
+  echo "jack"
   echo "liba52"
 # echo "libalsa"
   echo "libass"
@@ -69,7 +69,7 @@ function all_get_deps {
 # echo "xcb-proto"
 # echo "xcbproto"
 # echo "xcbpthreadstubs"
-# echo "xproto"
+  echo "xproto"
   echo "zlib"
 }
 

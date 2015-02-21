@@ -1,35 +1,30 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Badr BADRI 
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 3
-# of the License, or (at your option) any later version.
+# Copyright (C) 2014 - Sebastien Alaiwan
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-
-function xproto-get_deps {
-  local a=0 
-}
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function xproto_build {
-
-  local host=$1
+  host=$1
   pushDir $WORK/src
 
-  lazy_download "xproto.tar.gz" "http://xorg.freedesktop.org/releases/individual/proto/xproto-7.0.27.tar.gz"
-
-  lazy_extract "xproto.tar.gz"
+  lazy_git_clone "git://anongit.freedesktop.org/xorg/proto/xproto" xproto
 
   autoconf_build $host "xproto"
-
   popDir
-
 }
+
+function xproto_get_deps {
+  local a=0
+}
+
