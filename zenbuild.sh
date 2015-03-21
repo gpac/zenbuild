@@ -343,6 +343,11 @@ function checkForCrossChain {
     exit 1
   fi
 
+  if isMissing "${cross_prefix}ranlib" ; then
+    echo "No ${cross_prefix}ranlib was found in the PATH."
+    exit 1
+  fi
+
   if isMissing "${cross_prefix}strip" ; then
     echo "No ${cross_prefix}strip was found in the PATH."
     exit 1
