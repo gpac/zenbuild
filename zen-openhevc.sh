@@ -15,32 +15,36 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
-function openhevc_get_deps {
-  local a=0
-}
-
 function openhevc_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "https://github.com/OpenHEVC/openHEVC" openhevc
+  lazy_git_clone "https://github.com/rbouqueau/openHEVC" openhevc 8807ac40
   
-  pushDir openhevc
-  mkdir build
-  pushDir build
+  mkdir -p openhevc/build/$host
+  pushDir openhevc/build/$host
   
-  echo "SET(CMAKE_C_COMPILER $host-gcc)" > config.cmake
+  echo "" > config.cmake
+  case $host in
+    *mingw*)
+      echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
+      ;;
+  esac
+  
+  echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
   echo "SET(CMAKE_CXX_COMPILER $host-g++)" >> config.cmake
   echo "SET(CMAKE_RC_COMPILER $host-windres)" >> config.cmake
-  echo "" >> config.cmake
+  echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
+  echo "SET(CMAKE_ASM_YASM_COMPILER yasm)" >> config.cmake
 
-  cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ..
-  $MAKE 
+  cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
+  $MAKE
   $MAKE install 
   
   popDir
-  popDir
-  popDir
- 
+  popDir 
+}
+
+function openhevc_get_deps {
+  echo "libpthread"
 }
