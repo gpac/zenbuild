@@ -45,7 +45,7 @@ function all_get_deps {
 # echo "libpthread"
   echo "librtmp"
   echo "libsamplerate"
-  echo "libsdl"
+  echo "libsdl2"
   echo "libsndfile"
   echo "libtheora"
   echo "libvorbis"

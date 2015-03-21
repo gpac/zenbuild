@@ -15,20 +15,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function libsdl_get_deps {
+function libsdl2_get_deps {
   local a=0
 }
 
-function libsdl_build {
+function libsdl2_build {
   
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "libsdl.tar.gz" "https://www.libsdl.org/release/SDL2-2.0.3.tar.gz"
-  lazy_extract "libsdl.tar.gz" 
+  lazy_download "libsdl2.tar.gz" "https://www.libsdl.org/release/SDL2-2.0.3.tar.gz"
+  lazy_extract "libsdl2.tar.gz" 
 
- autoconf_build $host "libsdl" 
+ autoconf_build $host "libsdl2" 
 
  popDir
-
 }  
