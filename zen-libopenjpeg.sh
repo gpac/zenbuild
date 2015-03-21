@@ -27,7 +27,21 @@ function libopenjpeg_build {
 
   mkdir -p libopenjpeg/build/$host
   pushDir libopenjpeg/build/$host
-  cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
+  
+  echo "" > config.cmake
+  case $host in
+    *mingw*)
+      echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
+      ;;
+  esac
+
+  echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
+  echo "SET(CMAKE_CXX_COMPILER $host-g++)" >> config.cmake
+  echo "SET(CMAKE_RC_COMPILER $host-windres)" >> config.cmake
+  echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
+  echo "SET(CMAKE_ASM_YASM_COMPILER yasm)" >> config.cmake
+
+  cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
   $MAKE
   $MAKE install
   popDir
