@@ -37,6 +37,6 @@ function libgcrypt_build {
 }
 
 function libgcrypt_get_deps {
-  echo "libgpg-error"
+  local a=0
 }
 
