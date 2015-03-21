@@ -19,7 +19,7 @@ function libsndfile_get_deps {
   local a=0
 }
 
-function build_libsndfile {
+function libsndfile_build {
   host=$1
   pushDir $WORK/src
 

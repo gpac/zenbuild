@@ -1,8 +1,8 @@
 diff --git a/common/wscript b/common/wscript
-index 4302b1e..53d453d 100644
+index 4302b1e..c39aec1 100644
 --- a/common/wscript
 +++ b/common/wscript
-@@ -380,7 +381,7 @@ def build(bld):
+@@ -380,7 +380,7 @@ def build(bld):
           process = create_jack_process_obj(bld, 'audioadapter', audio_adapter_sources, serverlib)
           process.use = 'SAMPLERATE'
  
@@ -12,15 +12,15 @@ index 4302b1e..53d453d 100644
           process = create_jack_process_obj(bld, 'audioadapter', audio_adapter_sources, serverlib)
           process.use += ['SAMPLERATE', 'PORTAUDIO']
 diff --git a/windows/wscript b/windows/wscript
-index fdae9bb..069fd53 100644
+index ea4dd3d..f00d66e 100644
 --- a/windows/wscript
 +++ b/windows/wscript
-@@ -6,7 +6,7 @@ import re
- import os
+@@ -2,7 +2,7 @@
+ # encoding: utf-8
  
  def configure(conf):
--    conf.check_cc(function_name='Pa_GetVersion', header_name='portaudio.h', lib='portaudio', uselib_store="PORTAUDIO", define_name='HAVE_PORTAUDIO')
-+    conf.check_cc(function_name='Pa_GetVersion', header_name='portaudio.h', lib='portaudio', uselib_store="PORTAUDIO", define_name='HAVE_PORTAUDIO', mandatory=False)
+-    conf.check_cfg(package='portaudio-2.0', uselib_store='PORTAUDIO', atleast_version='19', args='--cflags --libs')
++    conf.check_cfg(package='portaudio-2.0', uselib_store='PORTAUDIO', atleast_version='19', args='--cflags --libs', mandatory=False)
      conf.env['BUILD_DRIVER_PORTAUDIO'] = conf.is_defined('HAVE_PORTAUDIO')
  
- def build(bld):
+ def create_jack_driver_obj(bld, target, sources, uselib = None):

@@ -21,25 +21,35 @@ function jack_get_deps {
   echo tre
 }
 
-function build_jack {
+function jack_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "git://github.com/jackaudio/jack2.git" jack2_$host f90f76f
+  lazy_git_clone "git://github.com/jackaudio/jack2.git" jack2_$host 9159e9f85f1b85df525c3bc95260e51c72ef9d65 --depth=100
 
   CFLAGS="-I$PREFIX/$host/include -L$PREFIX/$host/lib"
-  CFLAGS+=" -I$PREFIX/$host/include/tre"
 
   pushDir jack2_$host
 
   applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
   applyPatch $scriptDir/patches/jack_03_NoExamples.diff
   applyPatch $scriptDir/patches/jack_04_OptionalSampleRate.diff
+  sed -i "s/.*tests.*//" wscript
+  sed -i "s/.*example-clients.*//" wscript
+
+  local options=""
+
+  case $host in
+    *mingw*)
+      CFLAGS+=" -I$PREFIX/$host/include/tre"
+      options+=" --winmme --dist-target mingw"
+      ;;
+  esac
 
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
   PREFIX=$PREFIX/$host \
-  python2 ./waf configure --winmme --dist-target mingw
+  python2 ./waf configure $options
   python2 ./waf build
   python2 ./waf install
   popDir

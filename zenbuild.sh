@@ -58,7 +58,8 @@ function lazy_download
   local url="$2"
 
   if [ ! -e "$CACHE/$file" ]; then
-    wget "$url" -c -O "$CACHE/${file}.tmp"
+    echo "Downloading: $file"
+    wget "$url" -c -O "$CACHE/${file}.tmp" --no-verbose
     mv "$CACHE/${file}.tmp" "$CACHE/$file"
   fi
 }
@@ -174,6 +175,14 @@ function main {
 }
 
 function initCflags {
+
+  # avoid interferences from environment
+  unset CC
+  unset CXX
+  unset CFLAGS
+  unset CXXFLAGS
+  unset LDFLAGS
+
   CFLAGS="-O2"
   CXXFLAGS="-O2"
   LDFLAGS="-s"
@@ -188,8 +197,10 @@ function initCflags {
   export CXXFLAGS
   export LDFLAGS
 
+  local cores=$(nproc)
+
   if [ -z "$MAKE" ]; then
-    MAKE="make"
+    MAKE="make -j$cores"
   fi
 
   export MAKE
@@ -226,7 +237,7 @@ function lazy_build {
     build $host $depName
   done
 
-  build_${name} $host
+  ${name}_build $host
 
   printMsg "$name: build OK"
   mark_as_built $host $name
@@ -267,6 +278,7 @@ function autoconf_build {
     popDir
   fi
 
+  rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
   ../../configure \
@@ -408,7 +420,7 @@ function checkForCommonBuildTools {
     echo "apt-get install make"
     exit 1
   fi
-  
+
   if isMissing "cmake"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S mingw-cmake"
@@ -462,7 +474,7 @@ function checkForCommonBuildTools {
     echo "apt-get install git"
     exit 1
   fi
-  
+
   if isMissing "hg" ; then
     echo "git not installed.  Please install with:"
     echo "pacman -S msys/mercurial"
@@ -470,7 +482,7 @@ function checkForCommonBuildTools {
     echo "apt-get install mercurial"
     exit 1
   fi
-  
+
   if isMissing "gperf" ; then
     echo "gperf not installed.  Please install with:"
     echo "pacman -S msys/gperf"

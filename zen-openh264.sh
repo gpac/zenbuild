@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Sebastien Alaiwan
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -15,22 +15,33 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function libtheora_build {
+function openh264_build {
+
   host=$1
   pushDir $WORK/src
+  local ARCH=$(get_arch $host)
+  local OS=$(get_os $host)
 
-  lazy_download "libtheora.tar.bz2" "http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2"
-  lazy_extract "libtheora.tar.bz2"
-  mkgit "libtheora"
+  lazy_download "openh264.tar.gz" "https://github.com/cisco/openh264/archive/v1.3.1.tar.gz"
+  lazy_extract "openh264.tar.gz"
+  mkgit "openh264"
 
-  autoconf_build $host "libtheora" \
-    --enable-static \
-    --disable-shared \
-    --disable-examples
+  pushDir openh264
+
+  sed -i "s@^PREFIX=.*@PREFIX=$PREFIX/$host@" Makefile
+  sed -i "s@^ARCH=.*@ARCH=$ARCH@" Makefile
+  sed -i "s@^OS=.*@OS=$OS@" Makefile
+  sed -i "s/gnu/linux/" Makefile
+  sed -i "s/mingw32/mingw_nt/" Makefile
+
+  $MAKE
+  $MAKE install
+
+  popDir
   popDir
 }
 
-function libtheora_get_deps {
-  echo "libogg"
+function openh264_get_deps {
+  local a=0
 }
 

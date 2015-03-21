@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Romain Bouqueau
+# Copyright (C) 2014 - Sebastien Alaiwan
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
@@ -14,21 +14,31 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function libass_build {
+function dbus_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libass.tar.xz" "https://github.com/libass/libass/releases/download/0.11.2/libass-0.11.2.tar.xz"
-  lazy_extract "libass.tar.xz"
+  lazy_download "dbus.tar.gz" "http://dbus.freedesktop.org/releases/dbus/dbus-1.8.8.tar.gz"
+  lazy_extract "dbus.tar.gz"
 
-  mkgit "libass"
+  mkdir -p dbus/build/$host
+  pushDir dbus/build/$host
+  CFLAGS+=" -I$PREFIX/$host/include " \
+  LDFLAGS+=" -L$PREFIX/$host/lib " \
+  ../../configure \
+    --host=$host \
+    --enable-static \
+    --enable-abstract-sockets \
+    --disable-shared \
+    --prefix=$PREFIX/$host
+  $MAKE
+  $MAKE install
+  popDir
 
-  autoconf_build $host "libass" --disable-shared
   popDir
 }
 
-function libass_get_deps {
-  echo freetype2
-  echo fribidi
-  echo fontconfig
+function dbus_get_deps {
+  echo "expat"
 }
+

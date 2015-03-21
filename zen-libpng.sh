@@ -15,16 +15,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_libpng {
+function libpng_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.6.10.tar.xz?download"
+  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.2.52.tar.xz?download"
   lazy_extract "libpng.tar.xz"
   mkgit "libpng"
 
   LDFLAGS+=" -L$WORK/release/$host/lib" \
   CFLAGS+=" -I$WORK/release/$host/include" \
+  CPPFLAGS+=" -I$WORK/release/$host/include" \
   autoconf_build $host "libpng"
   popDir
 }

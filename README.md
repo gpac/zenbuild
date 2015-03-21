@@ -1,6 +1,6 @@
 # ZenBuild
 
-ZenBuild is a one-shot component-level build-system, aimed at easing the build of free software projets.
+ZenBuild is a one-shot component-level build-system, aimed at easing the build of free software projects.
 It also aims at making cross-building seamless.
 
 Syntax
@@ -48,3 +48,9 @@ Authors
 
 - Sebastien Alaiwan <sebastien.alaiwan@gmail.com>
 - Romain Bouqueau <romain.bouqueau.pro@gmail.com>
+
+Contributors
+------------
+
+- badr-badri ( https://github.com/badr-badri )
+

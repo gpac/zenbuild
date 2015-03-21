@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_ffmpeg {
+function ffmpeg_build {
   host=$1
   pushDir $WORK/src
 
@@ -66,9 +66,9 @@ function build_ffmpeg {
 }
 
 function ffmpeg_get_deps {
+  echo libass
   echo fontconfig
   echo librtmp
-  echo libass
   echo libfdk-aac
   echo x264
   echo x265

@@ -15,11 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_gpac {
+function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5244
+  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5600
   pushDir gpac
   svn revert -R .
   popDir
@@ -35,22 +35,30 @@ function build_gpac {
   pushDir gpac/build/$host
   ../../configure \
     --target-os=$OS \
-    --prefix=$PREFIX/$host \
+    --cross-prefix="$crossPrefix" \
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-jack \
-    --cross-prefix="$crossPrefix"
+    --enable-amr \
+    --prefix=$PREFIX/$host
 
   $MAKE
-  $MAKE install-lib
+
+  # 'make install' is broken, ignore the following error.
+  # install: cannot stat ‘bin/gcc/libgpac.dll.a’: No such file or directory
+  # Makefile:174: recipe for target 'installdylib' failed
+  $MAKE install-lib -k || true
+
   popDir
 
   popDir
 }
 
 function gpac_get_deps {
+  echo opencore-amr
   echo zlib
-  #echo freetype2
+  echo libsdl
+  echo freetype2
   echo libvorbis
   echo libogg
 }
