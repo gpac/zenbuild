@@ -14,16 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_liba52 {
+function liba52_build {
   host=$1
   pushDir $WORK/src
 
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
   lazy_extract "liba52.tar.xz"
 
-  autoconf_build $host "liba52"
+  mkdir -p liba52/build/$host
+  pushDir liba52/build/$host
 
+  ../../configure \
+    --host=$host \
+    --prefix=$PREFIX/$host
+  $MAKE
+  $MAKE install
   popDir
+  popDir
+
 }
 
 function liba52_get_deps {

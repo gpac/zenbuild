@@ -19,7 +19,7 @@ function librtmp_get_deps {
   local a=0
 }
 
-function build_librtmp {
+function librtmp_build {
   host=$1
   pushDir $WORK/src
   lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
@@ -27,7 +27,6 @@ function build_librtmp {
 
   pushDir rtmpdump/librtmp
 
-  sed -i "s/^SYS=posix/SYS=mingw/" Makefile
   sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
   sed -i "s@^CRYPTO=.*@@" Makefile
 

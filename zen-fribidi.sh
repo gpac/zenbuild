@@ -16,9 +16,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-function build_fribidi {
+function fribidi_build {
   host=$1
-  pushDir $WORK/src  
+  pushDir $WORK/src
 
   lazy_download "fribidi.tar.xz" "http://fribidi.org/download/fribidi-0.19.6.tar.bz2"
   lazy_extract "fribidi.tar.xz"
@@ -30,5 +30,5 @@ function build_fribidi {
 }
 
 function fribidi_get_deps {
-  local a=0;
+  local a=0
 }

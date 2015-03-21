@@ -20,7 +20,7 @@ function openhevc_get_deps {
   local a=0
 }
 
-function build_openhevc {
+function openhevc_build {
   local host=$1
   pushDir $WORK/src
 

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_vlc {
+function vlc_build {
   host=$1
   pushDir $WORK/src
 
@@ -30,7 +30,6 @@ function build_vlc {
     --enable-fribidi \
     --disable-mad \
     --disable-lua \
-    --disable-libgcrypt \
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
@@ -43,5 +42,8 @@ function vlc_get_deps {
   echo "ffmpeg"
   echo "liba52"
   echo "fribidi"
+  echo "libgcrypt"
+  echo "libxcb"
+  echo "libalsa"
 }
 

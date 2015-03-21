@@ -21,7 +21,7 @@ function jack_get_deps {
   echo tre
 }
 
-function build_jack {
+function jack_build {
   host=$1
   pushDir $WORK/src
 

@@ -15,11 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function build_gpac {
+function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5244
+  svn co svn://svn.code.sf.net/p/gpac/code/trunk/gpac gpac -r 5600
   pushDir gpac
   svn revert -R .
   popDir
@@ -39,18 +39,21 @@ function build_gpac {
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
     --disable-jack \
+    --enable-amr \
     --cross-prefix="$crossPrefix"
 
   $MAKE
-  $MAKE install-lib
+  $MAKE install
   popDir
 
   popDir
 }
 
 function gpac_get_deps {
+  echo opencore-amr
   echo zlib
-  #echo freetype2
+  echo libsdl
+  echo freetype2
   echo libvorbis
   echo libogg
 }
