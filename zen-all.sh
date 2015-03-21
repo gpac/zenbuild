@@ -37,6 +37,7 @@ function all_get_deps {
   echo "libgcrypt"
   echo "libgpg-error"
   echo "libjpeg"
+  echo "libjpeg-turbo"
   echo "libmad"
   echo "libnettle"
   echo "libogg"
@@ -64,6 +65,7 @@ function all_get_deps {
   echo "tre"
 # #echo "utox" depends on xrender and other missing stuff, causing pkg-config to return nothing
 # #echo "vlc" requires ffmpeg -fPIC
+  echo "voaac-enc"
   echo "x264"
   echo "x265"
 # echo "xcb-proto"
