@@ -17,7 +17,7 @@
 
 function libxcb_get_deps {
   echo xcb-proto
-  echo libpthread
+  echo pthread
   echo libxau
 }
 
