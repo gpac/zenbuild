@@ -24,17 +24,12 @@ function expat_build {
   lazy_extract "expat.tar.xz"
   mkgit "expat"
 
-  mkdir -p expat/build/$host
-  pushDir expat/build/$host
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
-  ../../configure \
-    --host=$host \
-    --prefix=$PREFIX/$host
-  $MAKE
-  $MAKE install
+  autoconf_build $host "expat" \
+    --enable-static \
+    --disable-shared
 
-  popDir
   popDir
 }
 

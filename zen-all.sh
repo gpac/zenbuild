@@ -18,7 +18,7 @@ function all_build {
 }
 
 function all_get_deps {
-# echo "dbus"
+  echo "dbus"
   echo "expat"
 # echo "faad2" # error: "two or more data types in declaration specifiers"
 # echo "ffmpeg"
@@ -27,8 +27,8 @@ function all_get_deps {
   echo "fribidi"
   echo "gmplib"
 # echo "gnutls"
-# #echo "gpac" requires ffmpeg -fPIC
-# echo "jack"
+  echo "gpac"
+  echo "jack"
   echo "liba52"
 # echo "libalsa"
   echo "libass"
@@ -43,7 +43,7 @@ function all_get_deps {
   echo "libopenjpeg"
   echo "libpng"
 # echo "libpthread"
-# echo "librtmp" # link errors: "undefined reference to `__imp_htons'"
+  echo "librtmp"
   echo "libsamplerate"
   echo "libsdl"
   echo "libsndfile"
@@ -54,7 +54,7 @@ function all_get_deps {
 # echo "libxcb"
 # echo "libxvidcore"
   echo "opencore-amr"
-# echo "openh264"
+  echo "openh264"
 # echo "openhevc"
   echo "opus"
   echo "portaudio"
@@ -69,7 +69,7 @@ function all_get_deps {
 # echo "xcb-proto"
 # echo "xcbproto"
 # echo "xcbpthreadstubs"
-# echo "xproto"
+  echo "xproto"
   echo "zlib"
 }
 
