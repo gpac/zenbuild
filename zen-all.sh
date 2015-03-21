@@ -37,6 +37,7 @@ function all_get_deps {
   echo "libgcrypt"
   echo "libgpg-error"
   echo "libjpeg"
+  echo "libjpeg-turbo"
   echo "libmad"
   echo "libnettle"
   echo "libogg"
