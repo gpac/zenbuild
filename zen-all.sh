@@ -18,7 +18,7 @@ function all_build {
 }
 
 function all_get_deps {
-#  echo "dbus"
+#  echo "dbus" #could be used by sdl also
   echo "expat"
   echo "faad2"
   echo "ffmpeg"
@@ -34,6 +34,7 @@ function all_get_deps {
   echo "libfdk-aac"
 #  echo "libgcrypt"
   echo "libjpeg"
+  echo "libjpeg-turbo"
   echo "libmad"
   echo "libnettle"
   echo "libogg"
@@ -55,8 +56,9 @@ function all_get_deps {
   echo "sodium"
   echo "toxcore"
   echo "tre"
-  echo "utox" depends on xrender and other missing stuff, causing pkg-config to return nothing
+  echo "utox" #depends on xrender and other missing stuff, causing pkg-config to return nothing
   echo "vlc"
+  echo "voaac-enc"
   echo "x264"
   echo "x265"
   echo "zlib"
