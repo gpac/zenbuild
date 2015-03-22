@@ -24,11 +24,11 @@ function gmplib_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "gmplib.tar.lz" "https://gmplib.org/download/gmp/gmp-6.0.0a.tar.lz"
+  lazy_download "gmplib.tar.xz" "https://gmplib.org/download/gmp/gmp-6.0.0a.tar.xz"
   
-  lazy_extract "gmplib.tar.lz"
+  lazy_extract "gmplib.tar.xz"
 
-  autoconf_build $host "gmplib.tar.lz" 
+  autoconf_build $host "gmplib" 
 
   popDir
 
