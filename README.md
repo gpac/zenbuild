@@ -29,6 +29,11 @@ If your environment variable PATH also contains other Unix-like environments suc
 $ PATH='/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory libav x86_64-w64-mingw32
 ```
 
+MSys: Install Python2 for Windows, install it in a directory with no space, and make it first in the path:
+```
+$ PATH='/c/python27/:/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory libav x86_64-w64-mingw32
+```
+
 Create custom script build
 --------------------------
 
