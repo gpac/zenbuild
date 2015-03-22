@@ -42,8 +42,15 @@ function vlc_get_deps {
   echo "ffmpeg"
   echo "liba52"
   echo "fribidi"
-  echo "libgcrypt"
-  echo "libxcb"
-  echo "libalsa"
+  
+  case $host in
+    *mingw*)
+      ;;
+	*)
+      echo "libgcrypt"
+      echo "libxcb"
+      echo "libalsa"
+      ;;
+  esac
 }
 
