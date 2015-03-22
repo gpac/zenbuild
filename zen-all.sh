@@ -18,7 +18,7 @@ function all_build {
 }
 
 function all_get_deps {
-#  echo "dbus"
+#  echo "dbus" #could be used by sdl also
   echo "expat"
   echo "faad2"
   echo "ffmpeg"
