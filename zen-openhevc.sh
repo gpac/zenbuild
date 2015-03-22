@@ -46,5 +46,5 @@ function openhevc_build {
 }
 
 function openhevc_get_deps {
-  echo "pthread"
+  echo "libpthread"
 }

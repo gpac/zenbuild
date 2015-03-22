@@ -70,6 +70,7 @@ function ffmpeg_get_deps {
   echo fontconfig
   echo librtmp
   echo libfdk-aac
+  echo libpthread
   echo x264
   echo x265
   echo zlib
