@@ -414,7 +414,7 @@ function checkForCommonBuildTools {
     echo "libtool not installed.  Please install with:"
     echo "pacman -S msys/libtool"
     echo "or"
-    echo "apt-get install libtool"
+    echo "apt-get install libtool libtool-bin"
     exit 1
   fi
 
