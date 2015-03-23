@@ -23,11 +23,16 @@ function freetype2_build {
   lazy_extract "freetype2.tar.bz2"
   mkgit "freetype2"
 
-  autoconf_build $host "freetype2"
+  #LDFLAGS="-L$PREFIX/$host/lib -lpng" \
+  autoconf_build $host "freetype2" \
+    "--without-png" \
+    "--enable-shared" \
+    "--disable-static"
+
   popDir
 }
 
 function freetype2_get_deps {
-  echo "zlib"
+  echo zlib
 }
 

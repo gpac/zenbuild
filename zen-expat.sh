@@ -27,8 +27,8 @@ function expat_build {
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   autoconf_build $host "expat" \
-    --enable-static \
-    --disable-shared
+    --enable-shared \
+    --disable-static
 
   popDir
 }

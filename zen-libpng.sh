@@ -26,7 +26,9 @@ function libpng_build {
   LDFLAGS+=" -L$WORK/release/$host/lib" \
   CFLAGS+=" -I$WORK/release/$host/include" \
   CPPFLAGS+=" -I$WORK/release/$host/include" \
-  autoconf_build $host "libpng"
+  autoconf_build $host "libpng" \
+    --enable-shared \
+    --disable-static
   popDir
 }
 

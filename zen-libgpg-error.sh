@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Sebastien Alaiwan
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -8,39 +8,25 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+function libgpg-error_build {
+  local host=$1
+  pushDir $WORK/src
 
-function zlib_get_deps {
-  local a=0
+  lazy_download "libgpg-error.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.18.tar.bz2"
+  lazy_extract "libgpg-error.tar.gz"
+  autoconf_build $host "libgpg-error"
+
+  popDir
 }
 
-function zlib_build {
-
-  host=$1
-  pushDir $WORK/src
-  lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz"
-
-  lazy_extract "zlib-$host.tar.gz"
-  mkgit "zlib-$host"
-
-  pushDir zlib-$host
-
-  applyPatch $scriptDir/patches/zlib_01_nobypass.diff
-  chmod +x ./configure
-  CFLAGS="-w -fPIC" \
-  CHOST=$host \
-    ./configure \
-    --prefix=$PREFIX/$host
-  $MAKE
-  $MAKE install
-  popDir
-
-  popDir
+function libgpg-error_get_deps {
+  local a=0
 }
 
