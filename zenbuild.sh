@@ -481,10 +481,18 @@ function checkForCommonBuildTools {
   fi
 
   if isMissing "hg" ; then
-    echo "git not installed.  Please install with:"
+    echo "hg not installed.  Please install with:"
     echo "pacman -S msys/mercurial"
     echo "or"
     echo "apt-get install mercurial"
+    exit 1
+  fi
+
+  if isMissing "svn" ; then
+    echo "svn not installed.  Please install with:"
+    echo "pacman -S msys/subversion"
+    echo "or"
+    echo "apt-get install subversion"
     exit 1
   fi
 
