@@ -26,17 +26,15 @@ function libgcrypt_build {
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   autoconf_build $host "libgcrypt" \
-  --with-gpg-error-prefix=$PREFIX/$host \
-  --disable-asm \
-  --disable-optimization \
-  --disable-shared \
-  --enable-static
+    --with-gpg-error-prefix=$PREFIX/$host \
+    --enable-shared \
+    --disable-static
 
   popDir
 
 }
 
 function libgcrypt_get_deps {
-  local a=0
+  echo "libgpg-error"
 }
 

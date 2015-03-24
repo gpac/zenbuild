@@ -22,7 +22,10 @@ function liba52_build {
   
   lazy_extract "liba52.tar.xz"
 
-  autoconf_build $host "liba52"
+  CFLAGS="-w -fPIC" \
+  autoconf_build $host "liba52" \
+    --enable-shared \
+    --disable-static
   
   popDir
 }

@@ -24,8 +24,8 @@ function libtheora_build {
   mkgit "libtheora"
 
   autoconf_build $host "libtheora" \
-    --enable-static \
-    --disable-shared \
+    --enable-shared \
+    --disable-static \
     --disable-examples
   popDir
 }
