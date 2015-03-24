@@ -30,7 +30,7 @@ function opus_build {
   pushDir opus/build/$host
   ../../configure \
     --enable-shared \
-    --disable-static \
+    --enable-static \
     --host=$HOST \
     --prefix=$PREFIX/$host
   $MAKE

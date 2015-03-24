@@ -20,7 +20,7 @@ function libopenjpeg_build {
   local host=$1
   pushDir $WORK/src
   
-  svn co http://openjpeg.googlecode.com/svn/trunk/ libopenjpeg -r 2989
+  svn co http://openjpeg.googlecode.com/svn/trunk/ libopenjpeg -r 2997
   pushDir libopenjpeg
   svn revert -R .
   popDir

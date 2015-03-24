@@ -18,7 +18,6 @@ function all_build {
 }
 
 function all_get_deps {
-#  echo "dbus" #could be used by sdl also
   echo "expat"
   echo "faad2"
   echo "ffmpeg"
@@ -26,54 +25,54 @@ function all_get_deps {
   echo "freetype2"
   echo "fribidi"
   echo "gmplib"
-  echo "gpac"
-#  echo "jack"
+#  echo "gpac"
+  echo "jack"
   echo "liba52"
   echo "libass"
 #  echo "libav"
   echo "libfdk-aac"
-#  echo "libgcrypt"
+  echo "libgcrypt"
+  echo "libgpg-error"
   echo "libjpeg"
   echo "libjpeg-turbo"
   echo "libmad"
   echo "libnettle"
   echo "libogg"
-  echo "libopenjpeg"
+#  echo "libopenjpeg"
   echo "libpng"
   echo "librtmp"
   echo "libsamplerate"
   echo "libsdl2"
   echo "libsndfile"
-  echo "libtheora"
+#  echo "libtheora"
   echo "libvorbis"
-  echo "libvpx"
+#  echo "libvpx"
   echo "libxvidcore"
   echo "opencore-amr"
 #  echo "openh264"
-  echo "openhevc"
+#  echo "openhevc"
   echo "opus"
   echo "portaudio"
   echo "sodium"
-  echo "toxcore"
+#  echo "toxcore"
   echo "tre"
-  echo "utox" #depends on xrender and other missing stuff, causing pkg-config to return nothing
+#  echo "utox" #depends on xrender and other missing stuff, causing pkg-config to return nothing
   echo "vlc"
   echo "voaac-enc"
   echo "x264"
   echo "x265"
   echo "zlib"
-  
+
   case $host in
     *mingw*)
       echo "libpthread"
       ;;
     *)
+      echo "dbus"
       echo "libalsa"
       echo "libxau"
       echo "libxcb"
       echo "xcb-proto"
-      echo "xcbproto"
-      echo "xcbpthreadstubs"
       echo "xproto"
       ;;
   esac

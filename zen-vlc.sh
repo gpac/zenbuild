@@ -44,8 +44,8 @@ function vlc_get_deps {
   echo "fribidi"
   echo "liba52"
   echo "libmad"
-  echo "libtheora"
-  echo "libvpx"
+  #echo "libtheora"
+  #echo "libvpx"
   echo "opus"
  
   case $host in
