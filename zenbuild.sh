@@ -442,6 +442,14 @@ function checkForCommonBuildTools {
     exit 1
   fi
 
+  if isMissing "msgfmt"; then
+    echo "msgfmt not installed.  Please install with:"
+    echo "pacman -S gettext gettext-devel"
+    echo "or"
+    echo "apt-get install gettext"
+    exit 1
+  fi
+
   if isMissing "yasm"; then
     echo "yasm not installed.  Please install with:"
     echo "apt-get install yasm"

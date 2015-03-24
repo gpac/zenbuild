@@ -26,10 +26,24 @@ function tre_build {
 
   lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre 7365bba77910775047c2b349a6533e0da5e5bd80
 
-  autoconf_build $host "libtre" \
-      --disable-static \
-      --enable-shared
+  pushDir libtre
 
+  autoreconf -fiv
+
+  mkdir -p build/$host
+  pushDir build/$host
+
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    --enable-shared \
+    --disable-static \
+    --disable-adplug
+  $MAKE
+  $MAKE install
+
+  popDir
   popDir
 }
 
