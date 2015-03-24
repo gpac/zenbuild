@@ -29,6 +29,9 @@ function openhevc_build {
     *mingw*)
       echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
       ;;
+    *)
+      echo "SET(CMAKE_SYSTEM_NAME Linux)" >> config.cmake
+      ;;
   esac
   
   echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
