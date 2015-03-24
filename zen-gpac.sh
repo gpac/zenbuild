@@ -19,18 +19,20 @@ function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac 20ad3550
+  lazy_git_clone https://github.com/gpac/gpac.git gpac a672d89bbc90660
 
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 
   mkdir -p gpac/build/$host
   pushDir gpac/build/$host
+
   ../../configure \
     --target-os=$OS \
     --cross-prefix="$crossPrefix" \
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
     --extra-ldflags="-L$PREFIX/$host/lib" \
+    --sdl-cfg=":$PREFIX/$host/bin" \
     --disable-jack \
     --enable-amr \
     --prefix=$PREFIX/$host
