@@ -36,9 +36,7 @@ function gpac_mp4box_only_build {
     --static-mp4box \
     --use-zlib=no
 
-  LD_LIBRARY_PATH+="$PREFIX/$host/lib" \
   $MAKE
-
   $MAKE install
 
   popDir

@@ -37,9 +37,7 @@ function gpac_build {
     --enable-amr \
     --prefix=$PREFIX/$host
 
-  LD_LIBRARY_PATH+="$PREFIX/$host/lib" \
   $MAKE
-
   $MAKE install
 
   popDir
