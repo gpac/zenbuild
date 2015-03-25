@@ -19,7 +19,7 @@ function gpac_mp4box_only_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac 81b7a22dd1a0ff13
+  lazy_git_clone https://github.com/gpac/gpac.git gpac a1a3cf2dd187f
 
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
@@ -36,7 +36,9 @@ function gpac_mp4box_only_build {
     --static-mp4box \
     --use-zlib=no
 
+  LD_LIBRARY_PATH+="$PREFIX/$host/lib" \
   $MAKE
+
   $MAKE install
 
   popDir
