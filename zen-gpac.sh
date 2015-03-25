@@ -19,7 +19,7 @@ function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac a672d89bbc90660
+  lazy_git_clone https://github.com/gpac/gpac.git gpac 81b7a22dd1a0ff13
 
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
@@ -38,7 +38,7 @@ function gpac_build {
     --prefix=$PREFIX/$host
 
   $MAKE
-  $MAKE install-lib
+  $MAKE install
 
   popDir
   popDir
