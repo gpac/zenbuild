@@ -64,9 +64,9 @@ function all_get_deps {
   echo "zlib"
 
   case $host in
-    i*mingw*)
+    *mingw*)
       echo "libpthread"
-       ;;
+      ;;
     *)
       echo "dbus"
       echo "libalsa"
@@ -74,7 +74,7 @@ function all_get_deps {
       echo "libxcb"
       echo "xcb-proto"
       echo "xproto"
-       ;;
+      ;;
   esac
 }
 
