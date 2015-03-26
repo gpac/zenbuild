@@ -18,17 +18,18 @@ function vlc_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "vlc.tar.xz" "http://download.videolan.org/pub/videolan/vlc/2.1.5/vlc-2.1.5.tar.xz"
+  lazy_download "vlc.tar.xz" "http://download.videolan.org/pub/videolan/vlc/2.2.0/vlc-2.2.0.tar.xz"
   lazy_extract "vlc.tar.xz"
+  mkgit "vlc"
 
   mkdir -p vlc/build/$host
   pushDir vlc/build/$host
+  PATH+=":$PREFIX/$host/bin"
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   ../../configure \
     --host=$host \
     --enable-fribidi \
-    --disable-mad \
     --disable-lua \
     --prefix=$PREFIX/$host
   $MAKE
@@ -40,10 +41,21 @@ function vlc_build {
 
 function vlc_get_deps {
   echo "ffmpeg"
-  echo "liba52"
   echo "fribidi"
-  echo "libgcrypt"
-  echo "libxcb"
-  echo "libalsa"
+  echo "liba52"
+  echo "libmad"
+  #echo "libtheora"
+  #echo "libvpx"
+  echo "opus"
+ 
+  case $host in
+    *mingw*)
+      ;;
+    *)
+      echo "libgcrypt"
+      echo "libxcb"
+      echo "libalsa"
+      ;;
+  esac
 }
 

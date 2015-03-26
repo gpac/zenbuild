@@ -49,9 +49,9 @@ function jack_build {
   CC="$host-gcc $CFLAGS" \
   CXX="$host-g++ $CFLAGS" \
   PREFIX=$PREFIX/$host \
-  python2 ./waf configure $options
-  python2 ./waf build
-  python2 ./waf install
+  ./waf configure $options
+  ./waf build
+  ./waf install
   popDir
   popDir
 }

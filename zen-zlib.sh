@@ -36,8 +36,7 @@ function zlib_build {
   CFLAGS="-w -fPIC" \
   CHOST=$host \
     ./configure \
-    --prefix=$PREFIX/$host \
-    --static
+    --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
   popDir

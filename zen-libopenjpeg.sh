@@ -20,14 +20,28 @@ function libopenjpeg_build {
   local host=$1
   pushDir $WORK/src
   
-  svn co http://openjpeg.googlecode.com/svn/trunk/ libopenjpeg -r 2989
+  svn co http://openjpeg.googlecode.com/svn/trunk/ libopenjpeg -r 2997
   pushDir libopenjpeg
   svn revert -R .
   popDir
 
   mkdir -p libopenjpeg/build/$host
   pushDir libopenjpeg/build/$host
-  cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
+  
+  echo "" > config.cmake
+  case $host in
+    *mingw*)
+      echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
+      ;;
+  esac
+
+  echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
+  echo "SET(CMAKE_CXX_COMPILER $host-g++)" >> config.cmake
+  echo "SET(CMAKE_RC_COMPILER $host-windres)" >> config.cmake
+  echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
+  echo "SET(CMAKE_ASM_YASM_COMPILER yasm)" >> config.cmake
+
+  cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
   $MAKE
   $MAKE install
   popDir

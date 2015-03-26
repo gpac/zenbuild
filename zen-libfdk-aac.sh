@@ -23,7 +23,10 @@ function libfdk-aac_build {
 
   mkgit "fdk-aac"
 
-  autoconf_build $host "fdk-aac" --disable-shared
+  autoconf_build $host "fdk-aac" \
+    --enable-shared \
+    --disable-static
+
   popDir
 }
 

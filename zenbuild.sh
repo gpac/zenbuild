@@ -343,6 +343,11 @@ function checkForCrossChain {
     exit 1
   fi
 
+  if isMissing "${cross_prefix}ranlib" ; then
+    echo "No ${cross_prefix}ranlib was found in the PATH."
+    exit 1
+  fi
+
   if isMissing "${cross_prefix}strip" ; then
     echo "No ${cross_prefix}strip was found in the PATH."
     exit 1
@@ -409,7 +414,7 @@ function checkForCommonBuildTools {
     echo "libtool not installed.  Please install with:"
     echo "pacman -S msys/libtool"
     echo "or"
-    echo "apt-get install libtool"
+    echo "apt-get install libtool libtool-bin"
     exit 1
   fi
 
@@ -434,6 +439,14 @@ function checkForCommonBuildTools {
     echo "pacman -S gettext gettext-devel"
     echo "or"
     echo "apt-get install autopoint"
+    exit 1
+  fi
+
+  if isMissing "msgfmt"; then
+    echo "msgfmt not installed.  Please install with:"
+    echo "pacman -S gettext gettext-devel"
+    echo "or"
+    echo "apt-get install gettext"
     exit 1
   fi
 
@@ -476,10 +489,18 @@ function checkForCommonBuildTools {
   fi
 
   if isMissing "hg" ; then
-    echo "git not installed.  Please install with:"
+    echo "hg not installed.  Please install with:"
     echo "pacman -S msys/mercurial"
     echo "or"
     echo "apt-get install mercurial"
+    exit 1
+  fi
+
+  if isMissing "svn" ; then
+    echo "svn not installed.  Please install with:"
+    echo "pacman -S msys/subversion"
+    echo "or"
+    echo "apt-get install subversion"
     exit 1
   fi
 

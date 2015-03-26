@@ -15,24 +15,35 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-function libpng_build {
+function gpac_mp4box_only_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.2.52.tar.xz?download"
-  lazy_extract "libpng.tar.xz"
-  mkgit "libpng"
+  lazy_git_clone https://github.com/gpac/gpac.git gpac a1a3cf2dd187f
 
-  LDFLAGS+=" -L$WORK/release/$host/lib" \
-  CFLAGS+=" -I$WORK/release/$host/include" \
-  CPPFLAGS+=" -I$WORK/release/$host/include" \
-  autoconf_build $host "libpng" \
-    --enable-shared \
-    --disable-static
+  local OS=$(get_os $host)
+  local crossPrefix=$(get_cross_prefix $BUILD $host)
+
+  mkdir -p gpac/build/$host
+  pushDir gpac/build/$host
+
+  ../../configure \
+    --target-os=$OS \
+    --cross-prefix="$crossPrefix" \
+    --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
+    --extra-ldflags="-L$PREFIX/$host/lib" \
+    --prefix=$PREFIX/$host \
+    --static-mp4box \
+    --use-zlib=no
+
+  $MAKE
+  $MAKE install
+
+  popDir
   popDir
 }
 
-function libpng_get_deps {
-  echo "zlib"
+function gpac_mp4box_only_get_deps {
+  local a=0
 }
 

@@ -66,6 +66,7 @@ function libav_get_deps {
   echo jack
   echo librtmp
   echo libfdk-aac
+  echo libpthread
   echo x264
   echo x265
   echo zlib

@@ -25,7 +25,10 @@ function fribidi_build {
 
   mkgit "fribidi"
 
-  autoconf_build $host "fribidi" --disable-shared
+  autoconf_build $host "fribidi" \
+    --enable-shared \
+    --disable-static
+
   popDir
 }
 

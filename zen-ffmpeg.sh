@@ -19,7 +19,7 @@ function ffmpeg_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg c2eb668617555cb8b8bcfb9796241ada9471ac65
+  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg 1b99667005156cadc8d3ae0099ef5d244e598ac5 
 
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
@@ -70,6 +70,7 @@ function ffmpeg_get_deps {
   echo fontconfig
   echo librtmp
   echo libfdk-aac
+  echo libpthread
   echo x264
   echo x265
   echo zlib

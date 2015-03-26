@@ -22,6 +22,10 @@ function faad2_build {
   lazy_download "faad2.tar.bz2" "http://downloads.sourceforge.net/faac/faad2-2.7.tar.bz2"
   lazy_extract "faad2.tar.bz2"
   mkgit "faad2"
+  
+  pushDir "faad2"
+  applyPatch $scriptDir/patches/faad2_01_ErrorDeclSpecifier.diff
+  popDir
 
   autoconf_build $host "faad2"
   popDir

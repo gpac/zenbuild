@@ -23,10 +23,23 @@ function libtheora_build {
   lazy_extract "libtheora.tar.bz2"
   mkgit "libtheora"
 
-  autoconf_build $host "libtheora" \
-    --enable-static \
-    --disable-shared \
+
+  mkdir -p libtheora/build/$host
+  pushDir libtheora/build/$host
+
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    --enable-shared \
+    --disable-static \
     --disable-examples
+  $MAKE || true
+  sed -i 's/\(1q \\$export_symbols\)/\1|tr -d \\\\\\\"\\r\\\\\\\"/' libtool
+  $MAKE
+  $MAKE install
+
+  popDir
   popDir
 }
 

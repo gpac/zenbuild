@@ -19,19 +19,15 @@ function liba52_build {
   pushDir $WORK/src
 
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
+  
   lazy_extract "liba52.tar.xz"
 
-  mkdir -p liba52/build/$host
-  pushDir liba52/build/$host
-
-  ../../configure \
-    --host=$host \
-    --prefix=$PREFIX/$host
-  $MAKE
-  $MAKE install
+  CFLAGS="-w -fPIC" \
+  autoconf_build $host "liba52" \
+    --enable-shared \
+    --disable-static
+  
   popDir
-  popDir
-
 }
 
 function liba52_get_deps {

@@ -28,11 +28,13 @@ function libvpx_build {
 # CFLAGS+=" -I$PREFIX/$host/include " \
 # LDFLAGS+=" -L$PREFIX/$host/lib " \
   ../../configure \
-   --target=$host2 \
-   --disable-examples \
-   --disable-unit-tests \
-   --disable-docs \
-  --prefix=$PREFIX/$host
+    --target=$host2 \
+    --disable-examples \
+    --disable-unit-tests \
+    --disable-docs \
+    --enable-shared \
+    --disable-static \
+    --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
   popDir

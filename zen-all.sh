@@ -18,21 +18,18 @@ function all_build {
 }
 
 function all_get_deps {
-  echo "dbus"
   echo "expat"
-# echo "faad2" # error: "two or more data types in declaration specifiers"
-# echo "ffmpeg"
+  echo "faad2"
+  echo "ffmpeg"
   echo "fontconfig"
   echo "freetype2"
   echo "fribidi"
   echo "gmplib"
-# echo "gnutls"
   echo "gpac"
   echo "jack"
   echo "liba52"
-# echo "libalsa"
   echo "libass"
-# echo "libav"
+#  echo "libav"
   echo "libfdk-aac"
   echo "libgcrypt"
   echo "libgpg-error"
@@ -43,35 +40,41 @@ function all_get_deps {
   echo "libogg"
   echo "libopenjpeg"
   echo "libpng"
-# echo "libpthread"
   echo "librtmp"
   echo "libsamplerate"
-  echo "libsdl"
+  echo "libsdl2"
   echo "libsndfile"
   echo "libtheora"
   echo "libvorbis"
-  echo "libvpx"
-# echo "libxau"
-# echo "libxcb"
-# echo "libxvidcore"
+#  echo "libvpx"
+  echo "libxvidcore"
   echo "opencore-amr"
-  echo "openh264"
-# echo "openhevc"
+#  echo "openh264"
+#  echo "openhevc"
   echo "opus"
   echo "portaudio"
-# #echo "pthreads" can only be built for windows
   echo "sodium"
-  echo "toxcore"
+#  echo "toxcore"
   echo "tre"
-# #echo "utox" depends on xrender and other missing stuff, causing pkg-config to return nothing
-# #echo "vlc" requires ffmpeg -fPIC
+#  echo "utox" #depends on xrender and other missing stuff, causing pkg-config to return nothing
+  echo "vlc"
   echo "voaac-enc"
   echo "x264"
   echo "x265"
-# echo "xcb-proto"
-# echo "xcbproto"
-# echo "xcbpthreadstubs"
-  echo "xproto"
   echo "zlib"
+
+  case $host in
+    *mingw*)
+      echo "libpthread"
+      ;;
+    *)
+      echo "dbus"
+      echo "libalsa"
+      echo "libxau"
+      echo "libxcb"
+      echo "xcb-proto"
+      echo "xproto"
+      ;;
+  esac
 }
 

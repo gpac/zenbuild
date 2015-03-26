@@ -24,16 +24,28 @@ function fontconfig_build {
   lazy_extract "fontconfig.tar.bz2"
   mkgit "fontconfig"
 
-  LDFLAGS+=" -L$WORK/release/$host/lib" \
-  autoconf_build $host "fontconfig" \
-    --enable-static \
-    --disable-shared
+  pushDir fontconfig
+
+  autoreconf -fiv
+
+  mkdir -p build/$host
+  pushDir build/$host
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    --enable-shared \
+    --disable-static
+  $MAKE
+  $MAKE install || true #avoid error: /usr/bin/install: cannot stat
+  popDir
+  popDir
+
   popDir
 }
 
 function fontconfig_get_deps {
   echo "expat"
   echo "freetype2"
-  echo "libpng"
 }
 
