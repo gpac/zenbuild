@@ -25,7 +25,7 @@ function all_get_deps {
   echo "freetype2"
   echo "fribidi"
   echo "gmplib"
-#  echo "gpac"
+  echo "gpac"
   echo "jack"
   echo "liba52"
   echo "libass"
@@ -38,13 +38,13 @@ function all_get_deps {
   echo "libmad"
   echo "libnettle"
   echo "libogg"
-#  echo "libopenjpeg"
+  echo "libopenjpeg"
   echo "libpng"
   echo "librtmp"
   echo "libsamplerate"
   echo "libsdl2"
   echo "libsndfile"
-#  echo "libtheora"
+  echo "libtheora"
   echo "libvorbis"
 #  echo "libvpx"
   echo "libxvidcore"
@@ -64,9 +64,9 @@ function all_get_deps {
   echo "zlib"
 
   case $host in
-    *mingw*)
+    i*mingw*)
       echo "libpthread"
-      ;;
+       ;;
     *)
       echo "dbus"
       echo "libalsa"
@@ -74,7 +74,7 @@ function all_get_deps {
       echo "libxcb"
       echo "xcb-proto"
       echo "xproto"
-      ;;
+       ;;
   esac
 }
 

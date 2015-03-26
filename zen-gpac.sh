@@ -52,10 +52,10 @@ function gpac_get_deps {
   echo libjpeg
   echo libmad
   echo libogg
-  #echo libopenjpeg
+  echo libopenjpeg
   echo libpng
   echo libsdl2
-  #echo libtheora
+  echo libtheora
   echo libvorbis
   echo libxvidcore
   echo libogg
