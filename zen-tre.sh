@@ -45,5 +45,6 @@ function tre_build {
 
   popDir
   popDir
+  popDir
 }
 
