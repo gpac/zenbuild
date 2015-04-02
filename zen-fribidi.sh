@@ -22,8 +22,11 @@ function fribidi_build {
 
   lazy_download "fribidi.tar.xz" "http://fribidi.org/download/fribidi-0.19.6.tar.bz2"
   lazy_extract "fribidi.tar.xz"
-
   mkgit "fribidi"
+  
+  pushDir "fribidi"
+  applyPatch $scriptDir/patches/fribidi_01_ExportSymbolsDup.diff
+  popDir
 
   autoconf_build $host "fribidi" \
     --enable-shared \
