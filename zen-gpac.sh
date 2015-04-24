@@ -19,7 +19,7 @@ function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac a1a3cf2dd187f
+  lazy_git_clone https://github.com/gpac/gpac.git gpac 35b16b3f336
 
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
@@ -31,7 +31,7 @@ function gpac_build {
     --target-os=$OS \
     --cross-prefix="$crossPrefix" \
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
+    --extra-ldflags="-L$PREFIX/$host/lib -Wl,-rpath-link=$PREFIX/$host/lib" \
     --sdl-cfg=":$PREFIX/$host/bin" \
     --disable-jack \
     --enable-amr \
@@ -45,6 +45,7 @@ function gpac_build {
 }
 
 function gpac_get_deps {
+  echo libpthread
   echo faad2
   echo ffmpeg
   echo freetype2

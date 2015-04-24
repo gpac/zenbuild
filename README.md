@@ -39,8 +39,6 @@ MSys: Install Python2 for Windows, install it in a directory with no space, and 
 $ PATH='/c/python27/:/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
 
-When building from Linux to Linux, your ld.conf.so may be incorrectly set up for ZenBuild. Add ```LD_LIBRARY_PATH=/workingDirectory/release/platform/lib```. Take care to use an absolute path.
-
 Create custom script build
 --------------------------
 
