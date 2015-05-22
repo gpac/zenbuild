@@ -29,7 +29,10 @@ The environment variable MAKE is influential, you can achieve parallel builds th
 $ MAKE='make -j8' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
 
-If your environment variable PATH also contains other Unix-like environments such as Cygwin, you may want to restrict the environment PATH this way:
+If your environment variable PATH also contains
+ - other Unix-like environments such as Cygwin,
+ - or spaces,
+you may want to restrict the environment PATH this way:
 ```
 $ PATH='/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
