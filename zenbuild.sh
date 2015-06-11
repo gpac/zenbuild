@@ -136,8 +136,9 @@ function main {
   local hostPlatform=$3
 
   if [ -z "$1" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
-    echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
+    echo "Usage: $0 <workDir> <packageName> <hostPlatform|->"
     echo "Example: $0 /tmp/work libav i686-w64-mingw32"
+    echo "Example: $0 /tmp/work gpac -"
     exit 1
   fi
 
@@ -310,7 +311,9 @@ function popDir {
 function get_cross_prefix {
   local build=$1
   local host=$2
-  if [ ! "$build" = "$host" ] ; then
+  if [ "$host" = "-" ] ; then
+    echo ""
+  elif [ ! "$build" = "$host" ] ; then
     echo "$host-"
   fi
 }
