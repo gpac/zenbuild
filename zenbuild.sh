@@ -411,6 +411,8 @@ function checkForCommonBuildTools {
     echo "pacman -S python2"
     echo "or"
     echo "apt-get install python2"
+    echo "or"
+    echo "port install python27 && ln -s /opt/local/bin/python2.7 /opt/local/bin/python2"
     echo ""
     error="1"
   fi
@@ -420,8 +422,11 @@ function checkForCommonBuildTools {
     echo "pacman -S autoconf"
     echo "or"
     echo "apt-get install autoconf"
+    echo "or"
+    echo "port install autoconf"
     echo ""
     error="1"
+    exit 1
   fi
 
   if isMissing "libtool"; then
@@ -481,6 +486,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/wget"
     echo "or"
     echo "apt-get install wget"
+    echo "or"
+    echo "sudo port install wget"
     echo ""
     error="1"
   fi
