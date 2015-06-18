@@ -19,8 +19,7 @@ function gpac_mp4box_only_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac d91c31d24a21
-
+  lazy_git_clone https://github.com/gpac/gpac.git gpac 473def563d54b
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 
