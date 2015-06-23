@@ -318,72 +318,80 @@ function get_cross_prefix {
 function checkForCrossChain {
   local build=$1
   local host=$2
+  local error="0"
 
   local cross_prefix=$(get_cross_prefix $build $host)
 
   # ------------- GCC -------------
   if isMissing "${cross_prefix}g++" ; then
     echo "No ${cross_prefix}g++ was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}gcc" ; then
     echo "No ${cross_prefix}gcc was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   # ------------- Binutils -------------
   if isMissing "${cross_prefix}nm" ; then
     echo "No ${cross_prefix}nm was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}ar" ; then
     echo "No ${cross_prefix}ar was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}ranlib" ; then
     echo "No ${cross_prefix}ranlib was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}strip" ; then
     echo "No ${cross_prefix}strip was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}strings" ; then
     echo "No ${cross_prefix}strings was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}as" ; then
     echo "No ${cross_prefix}as was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   local os=$(get_os "$host")
   if [ $os = "mingw32" ] ; then
     if isMissing "${cross_prefix}dlltool" ; then
       echo "No ${cross_prefix}dlltool was found in the PATH."
-      exit 1
+      error="1"
     fi
 
     if isMissing "${cross_prefix}windres" ; then
       echo "No ${cross_prefix}windres was found in the PATH."
-      exit 1
+      error="1"
     fi
+  fi
+
+  if [ $error="1" ] ; then
+    exit 1
   fi
 }
 
 function checkForCommonBuildTools {
+  local error="0"
+
   if isMissing "pkg-config"; then
     echo "pkg-config not installed.  Please install with:"
     echo "pacman -S pkgconfig"
     echo "or"
     echo "apt-get install pkg-config"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "patch"; then
@@ -391,7 +399,8 @@ function checkForCommonBuildTools {
     echo "pacman -S patch"
     echo "or"
     echo "apt-get install patch"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "python2"; then
@@ -399,7 +408,8 @@ function checkForCommonBuildTools {
     echo "pacman -S python2"
     echo "or"
     echo "apt-get install python2"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "autoreconf"; then
@@ -407,7 +417,8 @@ function checkForCommonBuildTools {
     echo "pacman -S autoconf"
     echo "or"
     echo "apt-get install autoconf"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "libtool"; then
@@ -415,7 +426,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/libtool"
     echo "or"
     echo "apt-get install libtool libtool-bin"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "make"; then
@@ -423,7 +435,8 @@ function checkForCommonBuildTools {
     echo "pacman -S make"
     echo "or"
     echo "apt-get install make"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "cmake"; then
@@ -431,7 +444,8 @@ function checkForCommonBuildTools {
     echo "pacman -S mingw-cmake"
     echo "or"
     echo "apt-get install cmake"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "autopoint"; then
@@ -439,7 +453,8 @@ function checkForCommonBuildTools {
     echo "pacman -S gettext gettext-devel"
     echo "or"
     echo "apt-get install autopoint"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "msgfmt"; then
@@ -447,13 +462,15 @@ function checkForCommonBuildTools {
     echo "pacman -S gettext gettext-devel"
     echo "or"
     echo "apt-get install gettext"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "yasm"; then
     echo "yasm not installed.  Please install with:"
     echo "apt-get install yasm"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "wget"; then
@@ -461,7 +478,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/wget"
     echo "or"
     echo "apt-get install wget"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "sed"; then
@@ -469,7 +487,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/sed"
     echo "or"
     echo "apt-get install sed"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "tar"; then
@@ -477,7 +496,8 @@ function checkForCommonBuildTools {
     echo "mingw-get install tar"
     echo "or"
     echo "apt-get install tar"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "git" ; then
@@ -485,7 +505,8 @@ function checkForCommonBuildTools {
     echo "pacman -S mingw-git"
     echo "or"
     echo "apt-get install git"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "hg" ; then
@@ -493,7 +514,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/mercurial"
     echo "or"
     echo "apt-get install mercurial"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "svn" ; then
@@ -501,7 +523,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/subversion"
     echo "or"
     echo "apt-get install subversion"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "gperf" ; then
@@ -509,6 +532,11 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/gperf"
     echo "or"
     echo "apt-get install gperf"
+    echo ""
+    error="1"
+  fi
+
+  if [ $error="1" ] ; then
     exit 1
   fi
 }
