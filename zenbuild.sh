@@ -377,7 +377,7 @@ function checkForCrossChain {
     fi
   fi
 
-  if [ $error="1" ] ; then
+  if [ $error == "1" ] ; then
     exit 1
   fi
 }
@@ -536,7 +536,7 @@ function checkForCommonBuildTools {
     error="1"
   fi
 
-  if [ $error="1" ] ; then
+  if [ $error == "1" ] ; then
     exit 1
   fi
 }
