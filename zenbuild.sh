@@ -368,7 +368,7 @@ function checkForCrossChain {
   fi
 
   local os=$(get_os "$host")
-  if [ $os = "mingw32" ] ; then
+  if [ $os == "mingw32" ] ; then
     if isMissing "${cross_prefix}dlltool" ; then
       echo "No ${cross_prefix}dlltool was found in the PATH."
       error="1"
