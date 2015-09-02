@@ -131,7 +131,11 @@ function mkgit {
 function applyPatch {
   local patchFile=$1
   printMsg "Patching $patchFile"
-  patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  if [ $(uname -s) == "Darwin" ]; then 
+    patch  --no-backup-if-mismatch -p1 -i $patchFile
+  else
+    patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  fi
 }
 
 function main {
