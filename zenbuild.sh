@@ -72,12 +72,17 @@ function lazy_extract
   name=$(basename $name .tar.bz2)
   name=$(basename $name .tar.xz)
 
+  local tar_cmd="tar"
+  if [ $(uname -s) == "Darwin" ]; then
+    tar_cmd="gtar"
+  fi
+
   if [ -d $name ]; then
     echo "already extracted"
   else
     rm -rf ${name}.tmp
     mkdir ${name}.tmp
-    tar -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
+    $tar_cmd -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
     mv ${name}.tmp $name
     echo "ok"
   fi
@@ -501,13 +506,24 @@ function checkForCommonBuildTools {
     error="1"
   fi
 
-  if isMissing "tar"; then
-    echo "tar not installed.  Please install with:"
-    echo "mingw-get install tar"
-    echo "or"
-    echo "apt-get install tar"
-    echo ""
-    error="1"
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gtar"; then
+      echo "gnu-tar not installed.  Please install with:"
+      echo "brew install gnu-tar"
+      echo "or"
+      echo "port install gnutar"
+      echo ""
+      error="1"
+    fi
+  else
+    if isMissing "tar"; then
+      echo "tar not installed.  Please install with:"
+      echo "mingw-get install tar"
+      echo "or"
+      echo "apt-get install tar"
+      echo ""
+      error="1"
+    fi
   fi
 
   if isMissing "git" ; then
