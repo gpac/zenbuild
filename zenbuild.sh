@@ -200,8 +200,10 @@ function initCflags {
   CFLAGS+=" -w"
   CXXFLAGS+=" -w"
 
-  LDFLAGS+=" -static-libgcc"
-  LDFLAGS+=" -static-libstdc++"
+  if [ $(uname -s) != "Darwin" ]; then
+    LDFLAGS+=" -static-libgcc"
+    LDFLAGS+=" -static-libstdc++"
+  fi
 
   export CFLAGS
   export CXXFLAGS
