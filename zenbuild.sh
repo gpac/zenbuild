@@ -448,6 +448,17 @@ function checkForCommonBuildTools {
     echo ""
     error="1"
   fi
+  
+  # We still need to check that on Mac OS
+  if isMissing "glibtool"; then
+    echo "libtool is not installed. Please install with:"
+    echo "brew install libtool"
+    echo "or"
+    echo "port install glibtool"
+    echo ""
+    error="1"
+  fi
+  
 
   if isMissing "make"; then
     echo "make not installed.  Please install with:"
