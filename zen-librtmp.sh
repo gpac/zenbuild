@@ -34,8 +34,14 @@ function librtmp_build {
       ;;
   esac
 
-  sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
-  sed -i "s@^CRYPTO=.*@@" Makefile
+  local sed_cmd="sed"
+
+  if [ $(uname -s) == "Darwin" ]; then
+    sed_cmd="gsed"
+  fi
+
+  $sed_cmd -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
+  $sed_cmd -i "s@^CRYPTO=.*@@" Makefile
 
   $MAKE CROSS_COMPILE="$host-"
   $MAKE CROSS_COMPILE="$host-" install

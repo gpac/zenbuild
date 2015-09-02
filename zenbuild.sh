@@ -297,11 +297,18 @@ function autoconf_build {
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
-  ../../configure \
-    --build=$BUILD \
-    --host=$host \
-    --prefix=$PREFIX/$host \
-    "$@"
+  if [ $host == "-" ]; then
+    ../../configure \
+      --build=$BUILD \
+      --prefix=$PREFIX/$host \
+      "$@"
+  else
+    ../../configure \
+      --build=$BUILD \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      "$@"
+  fi
   $MAKE
   $MAKE install
   popDir
@@ -454,13 +461,15 @@ function checkForCommonBuildTools {
   fi
   
   # We still need to check that on Mac OS
-  if isMissing "glibtool"; then
-    echo "libtool is not installed. Please install with:"
-    echo "brew install libtool"
-    echo "or"
-    echo "port install glibtool"
-    echo ""
-    error="1"
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "glibtool"; then
+      echo "libtool is not installed. Please install with:"
+      echo "brew install libtool"
+      echo "or"
+      echo "port install glibtool"
+      echo ""
+      error="1"
+    fi
   fi
   
 
@@ -545,6 +554,26 @@ function checkForCommonBuildTools {
       echo ""
       error="1"
     fi
+  fi
+
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gsed"; then
+      echo "gsed not installed. Please install with:"
+      echo "brew install gnu-sed"
+      echo "or"
+      echo "port install gsed"
+      echo ""
+      error="1"
+    fi
+  fi
+
+  if isMissing "xz"; then
+    echo "xz is not installed. Please install with:"
+    echo "apt-get install xz"
+    echo "or"
+    echo "brew install xz"
+    echo ""
+    error="1"
   fi
 
   if isMissing "git" ; then
