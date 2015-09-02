@@ -209,7 +209,11 @@ function initCflags {
   export CXXFLAGS
   export LDFLAGS
 
-  local cores=$(nproc)
+  if [ $(uname -s) == "Darwin" ]; then
+    local cores=$(sysctl -n hw.logicalcpu)
+  else
+    local cores=$(nproc)
+  fi
 
   if [ -z "$MAKE" ]; then
     MAKE="make -j$cores"
