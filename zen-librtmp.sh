@@ -26,6 +26,7 @@ function librtmp_build {
 
 
   pushDir rtmpdump/librtmp
+  applyPatch $scriptDir/patches/librtmp_01_dylib_install_name.diff
 
   case $host in
     *mingw*)
