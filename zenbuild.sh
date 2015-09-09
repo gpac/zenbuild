@@ -167,6 +167,22 @@ function main {
   printMsg "Build platform: $BUILD"
   printMsg "Target platform: $hostPlatform"
 
+  if [ $hostPlatform = "-" ]; then
+    hostPlatform=$BUILD
+  fi
+
+  local symlink_dir=$WORK/symlinks
+  mkdir -p $symlink_dir
+  for tool in "gcc" "g++" "ar" "as" "nm" "strings" "strip" "ranlib"
+  do
+    local dest=$symlink_dir/$hostPlatform-$tool
+    if [ ! -f $dest ]; then
+      ln -s $(which $tool) $dest
+    fi
+  done
+  export PATH=$PATH:$symlink_dir
+
+
   checkForCrossChain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
@@ -175,6 +191,10 @@ function main {
   mkdir -p $WORK/src
 
   export PREFIX="$WORK/release"
+  for dir in "lib" "bin" "include" 
+  do
+    mkdir -p "$PREFIX/${hostPlatform}/${dir}"
+  done
 
   initCflags
   installErrorHandler
@@ -297,18 +317,11 @@ function autoconf_build {
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
-  if [ $host == "-" ]; then
-    ../../configure \
-      --build=$BUILD \
-      --prefix=$PREFIX/$host \
-      "$@"
-  else
-    ../../configure \
-      --build=$BUILD \
-      --host=$host \
-      --prefix=$PREFIX/$host \
-      "$@"
-  fi
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    "$@"
   $MAKE
   $MAKE install
   popDir
@@ -335,7 +348,8 @@ function get_cross_prefix {
   local host=$2
   if [ "$host" = "-" ] ; then
     echo ""
-  elif [ ! "$build" = "$host" ] ; then
+  else
+#if [ ! "$build" = "$host" ] ; then
     echo "$host-"
   fi
 }
