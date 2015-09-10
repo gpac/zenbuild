@@ -25,7 +25,7 @@ function ffmpeg_build {
   local OS=$(get_os $host)
 
   # remove stupid dependency
-  sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  gsed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
 
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
@@ -47,7 +47,6 @@ function ffmpeg_build {
     --enable-nonfree \
     --enable-libfdk_aac \
     --enable-libx264 \
-    --enable-libx265 \
     --enable-zlib \
     --disable-gnutls \
     --disable-openssl \
@@ -72,7 +71,6 @@ function ffmpeg_get_deps {
   echo libfdk-aac
   echo libpthread
   echo x264
-  echo x265
   echo zlib
 }
 
