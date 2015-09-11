@@ -27,7 +27,12 @@ function gmplib_build {
   lazy_download "gmplib.tar.xz" "https://gmplib.org/download/gmp/gmp-6.0.0a.tar.xz"
   
   lazy_extract "gmplib.tar.xz"
-
+ 
+  if [ $(uname -s) == "Darwin" ]; then
+    pushDir gmplib/
+    applyPatch $scriptDir/patches/gmplib_01_mac_asm.diff
+    popDir
+  fi
   autoconf_build $host "gmplib" 
 
   popDir
