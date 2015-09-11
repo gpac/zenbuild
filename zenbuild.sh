@@ -153,6 +153,7 @@ function main {
 
   mkdir -p "$1"
   WORK=$(get_abs_dir "$1")
+  CROSS_COMPILING=1
 
   if echo $PATH | grep " " ; then
     echo "Your PATH contain spaces, this may cause build issues."
@@ -169,6 +170,7 @@ function main {
 
   if [ $hostPlatform = "-" ]; then
     hostPlatform=$BUILD
+    CROSS_COMPILING=0
   fi
 
   local symlink_dir=$WORK/symlinks
