@@ -25,38 +25,51 @@ function ffmpeg_build {
   local OS=$(get_os $host)
 
   # remove stupid dependency
-  gsed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  if [ $(uname -s) == "Darwin" ]; then
+    gsed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  else
+    sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  fi
+  
+  case $OS in
+    darwin*)
+      OS="darwin"
+      ;;
+  esac
 
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
-  ../../configure \
-    --arch=$ARCH \
-    --target-os=$OS \
-    --prefix=$PREFIX/$host \
-    --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
-    --enable-pthreads \
-    --disable-w32threads \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
-    --disable-debug \
-    --disable-static \
-    --enable-shared \
-    --enable-libass \
-    --enable-fontconfig \
-    --enable-librtmp \
-    --enable-gpl \
-    --enable-nonfree \
-    --enable-libfdk_aac \
-    --enable-libx264 \
-    --enable-zlib \
-    --disable-gnutls \
-    --disable-openssl \
-    --disable-gnutls \
-    --disable-openssl \
-    --disable-iconv \
-    --disable-bzlib \
-    --enable-avresample \
-    --pkg-config=pkg-config \
-    --cross-prefix=$host-
+  local configure="../../configure \
+      --prefix=$PREFIX/$host \
+      --enable-pthreads \
+      --disable-w32threads \
+      --disable-debug \
+      --disable-static \
+      --enable-shared \
+      --enable-libass \
+      --enable-fontconfig \
+      --enable-librtmp \
+      --enable-gpl \
+      --enable-nonfree \
+      --enable-libfdk_aac \
+      --enable-libx264 \
+      --enable-zlib \
+      --disable-gnutls \
+      --disable-openssl \
+      --disable-gnutls \
+      --disable-openssl \
+      --disable-iconv \
+      --disable-bzlib \
+      --enable-avresample \
+      --pkg-config=pkg-config"
+  if [ $CROSS_COMPILING -eq 1 ]; then
+    configure="$configure \
+      --target-os=$OS \
+      --arch=$ARCH \
+      --cross-prefix=$host-"
+  fi
+  echo $configure
+  $configure
   $MAKE
   $MAKE install
   popDir
