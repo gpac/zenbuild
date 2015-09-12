@@ -315,15 +315,21 @@ function autoconf_build {
     autoreconf -i
     popDir
   fi
-
+  
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
-  ../../configure \
-    --build=$BUILD \
-    --host=$host \
-    --prefix=$PREFIX/$host \
-    "$@"
+  if [ $(uname -s) == "Darwin" ] && [ $CROSS_COMPILING -eq 0 ]; then
+    CFLAGS="-fPIC" ../../configure \
+      --prefix=$PREFIX/$host \
+      "$@"
+  else
+    ../../configure \
+      --build=$BUILD \
+      --host=$host \
+      --prefix=$PREFIX/$host \
+      "$@"
+  fi
   $MAKE
   $MAKE install
   popDir
