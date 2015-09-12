@@ -27,9 +27,19 @@ function libmad_build {
   lazy_download "libmad.tar.gz" "http://sourceforge.net/projects/mad/files/libmad/0.15.1b/libmad-0.15.1b.tar.gz"
   lazy_extract "libmad.tar.gz"
 
-  sed -i "s/-fforce-mem//" libmad/configure
- 
-  autoconf_build $host "libmad" --with-pic
+  
+  if [ $(uname -s) == "Darwin" ]; then
+    gsed -i "s/-fforce-mem//" libmad/configure
+    gsed -i "s/-fthread-jumps//" libmad/configure
+    gsed -i "s/-fcse-follow-jumps//" libmad/configure
+    gsed -i "s/-fcse-skip-blocks//" libmad/configure
+    gsed -i "s/-fregmove//" libmad/configure
+    gsed -i "s/-march=i486//" libmad/configure
+  else
+    sed -i "s/-fforce-mem//" libmad/configure
+  fi
+
+  autoconf_build $host "libmad"
 
   popDir
 
