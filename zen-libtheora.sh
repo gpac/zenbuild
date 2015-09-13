@@ -35,7 +35,11 @@ function libtheora_build {
     --disable-static \
     --disable-examples
   $MAKE || true
-  sed -i 's/\(1q \\$export_symbols\)/\1|tr -d \\\\\\\"\\r\\\\\\\"/' libtool
+  if [ $(uname -s) == "Darwin" ]; then
+    gsed -i 's/\(1q \\$export_symbols\)/\1|tr -d \\\\\\\"\\r\\\\\\\"/' libtool
+  else
+    sed -i 's/\(1q \\$export_symbols\)/\1|tr -d \\\\\\\"\\r\\\\\\\"/' libtool
+  fi 
   $MAKE
   $MAKE install
 
