@@ -549,13 +549,25 @@ function checkForCommonBuildTools {
     error="1"
   fi
 
-  if isMissing "sed"; then
-    echo "sed not installed.  Please install with:"
-    echo "pacman -S msys/sed"
-    echo "or"
-    echo "apt-get install sed"
-    echo ""
-    error="1"
+
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gsed"; then
+      echo "gsed not installed. Please install with:"
+      echo "brew install gnu-sed"
+      echo "or"
+      echo "port install gsed"
+      echo ""
+      error="1"
+    fi
+  else
+    if isMissing "sed"; then
+      echo "sed not installed.  Please install with:"
+      echo "pacman -S msys/sed"
+      echo "or"
+      echo "apt-get install sed"
+      echo ""
+      error="1"
+    fi
   fi
 
   if [ $(uname -s) == "Darwin" ]; then
@@ -573,17 +585,6 @@ function checkForCommonBuildTools {
       echo "mingw-get install tar"
       echo "or"
       echo "apt-get install tar"
-      echo ""
-      error="1"
-    fi
-  fi
-
-  if [ $(uname -s) == "Darwin" ]; then
-    if isMissing "gsed"; then
-      echo "gsed not installed. Please install with:"
-      echo "brew install gnu-sed"
-      echo "or"
-      echo "port install gsed"
       echo ""
       error="1"
     fi
