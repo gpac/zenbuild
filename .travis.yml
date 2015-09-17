@@ -1,0 +1,18 @@
+language: c
+compiler: gcc
+before_install: 
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install build-essential fakeroot dpkg-dev devscripts ccache debhelper pkg-config g++
+  - sudo apt-get install pkg-config patch python2 autoconf libtool libtool-bin libtool make cmake autopoint gettext yasm wget sed tar xz git mercurial subversion gperf 
+  - sudo apt-get install -y gcc-mingw-w64-i686 g++-mingw-w64-i686 binutils-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 binutils-mingw-w64-x86-64 mingw-w64-dev
+ 
+script: 
+  - ./zenbuild.sh tmp- all -
+  - ./zenbuild.sh tmp-i686-w64-mingw32 all i686-w64-mingw32
+  - ./zenbuild.sh tmp-x86_64-w64-mingw32 all x86_64-w64-mingw32
+
+notifications:
+  email:
+    recipients:
+      - zenbuild@gpac.io
