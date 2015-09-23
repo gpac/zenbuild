@@ -26,7 +26,9 @@ function librtmp_build {
 
 
   pushDir rtmpdump/librtmp
-  applyPatch $scriptDir/patches/librtmp_01_dylib_install_name.diff
+  if [ $(uname -s) == "Darwin" ]; then
+    applyPatch $scriptDir/patches/librtmp_01_dylib_install_name.diff
+  fi
 
   case $host in
     *mingw*)
