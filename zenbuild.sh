@@ -575,7 +575,7 @@ function checkForCommonBuildTools {
       echo "gnu-tar not installed.  Please install with:"
       echo "brew install gnu-tar"
       echo "or"
-      echo "port install gnutar"
+      echo "port install gnutar && sudo ln -s /opt/local/bin/gnutar /opt/local/bin/gtar"
       echo ""
       error="1"
     fi
