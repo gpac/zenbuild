@@ -18,7 +18,7 @@ function vlc_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "vlc.tar.xz" "http://download.videolan.org/pub/videolan/vlc/2.2.0/vlc-2.2.0.tar.xz"
+  lazy_download "vlc.tar.xz" "http://download.videolan.org/pub/videolan/vlc/2.2.1/vlc-2.2.1.tar.xz"
   lazy_extract "vlc.tar.xz"
   mkgit "vlc"
 
@@ -42,6 +42,7 @@ function vlc_build {
 function vlc_get_deps {
   echo "ffmpeg"
   echo "fribidi"
+  echo "jack"
   echo "liba52"
   echo "libmad"
   #echo "libtheora"
