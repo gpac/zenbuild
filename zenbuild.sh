@@ -488,7 +488,7 @@ function checkForCommonBuildTools {
       echo "libtool is not installed. Please install with:"
       echo "brew install libtool"
       echo "or"
-      echo "port install glibtool"
+      echo "port install libtool"
       echo ""
       error="1"
     fi
