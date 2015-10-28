@@ -30,6 +30,16 @@ function printMsg
   echo -n "[0m"
 }
 
+function sed_cmd
+{
+  local sed_="sed"
+  if [ $(uname -s) == "Darwin" ]; then
+    sed_="gsed"
+  fi
+  
+  $sed_ $@
+}
+
 function isMissing
 {
   progName=$1
@@ -175,7 +185,7 @@ function main {
 
   local symlink_dir=$WORK/symlinks
   mkdir -p $symlink_dir
-  for tool in "gcc" "g++" "ar" "as" "nm" "strings" "strip" "ranlib"
+  for tool in "gcc" "g++" "ar" "as" "nm" "strings" "strip"
   do
     local dest=$symlink_dir/$hostPlatform-$tool
     if [ ! -f $dest ]; then
@@ -207,7 +217,6 @@ function main {
 }
 
 function initCflags {
-
   # avoid interferences from environment
   unset CC
   unset CXX
@@ -354,6 +363,7 @@ function popDir {
 function get_cross_prefix {
   local build=$1
   local host=$2
+
   if [ "$host" = "-" ] ; then
     echo ""
   else
@@ -506,7 +516,6 @@ function checkForCommonBuildTools {
     fi
   fi
   
-
   if isMissing "make"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S make"
