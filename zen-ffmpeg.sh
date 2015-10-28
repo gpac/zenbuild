@@ -25,11 +25,7 @@ function ffmpeg_build {
   local OS=$(get_os $host)
 
   # remove stupid dependency
-  if [ $(uname -s) == "Darwin" ]; then
-    gsed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
-  else
-    sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
-  fi
+  sed_cmd -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
   
   case $OS in
     darwin*)
