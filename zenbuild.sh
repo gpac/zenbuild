@@ -473,6 +473,18 @@ function checkForCommonBuildTools {
     exit 1
   fi
 
+  if isMissing "aclocal"; then
+    echo "aclocal not installed. Please install with:"
+    echo "pacman -S automake"
+    echo "or"
+    echo "apt-get install automake"
+    echo "or"
+    echo "port install automake"
+    echo ""
+    error="1"
+    exit 1
+  fi
+
   if isMissing "libtool"; then
     echo "libtool not installed.  Please install with:"
     echo "pacman -S msys/libtool"
