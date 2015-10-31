@@ -66,4 +66,4 @@ Contributors
 ------------
 
 - badr-badri ( https://github.com/badr-badri )
-
+- Rodolphe Fouquet ( https://github.com/RodolpheFouquet )
