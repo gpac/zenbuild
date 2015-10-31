@@ -36,7 +36,8 @@ function sed_cmd
   if [ $(uname -s) == "Darwin" ]; then
     sed_="gsed"
   fi
-  
+
+echo "$sed_" $@  
   $sed_ $@
 }
 
@@ -163,7 +164,6 @@ function main {
 
   mkdir -p "$1"
   WORK=$(get_abs_dir "$1")
-  CROSS_COMPILING=1
 
   if echo $PATH | grep " " ; then
     echo "Your PATH contain spaces, this may cause build issues."
@@ -180,21 +180,9 @@ function main {
 
   if [ $hostPlatform = "-" ]; then
     hostPlatform=$BUILD
-    CROSS_COMPILING=0
   fi
 
-  local symlink_dir=$WORK/symlinks
-  mkdir -p $symlink_dir
-  for tool in "gcc" "g++" "ar" "as" "nm" "strings" "strip"
-  do
-    local dest=$symlink_dir/$hostPlatform-$tool
-    if [ ! -f $dest ]; then
-      ln -s $(which $tool) $dest
-    fi
-  done
-  export PATH=$PATH:$symlink_dir
-
-
+  initSymlinks
   checkForCrossChain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
@@ -214,6 +202,28 @@ function main {
   build ${hostPlatform} ${packageName}
 
   uninstallErrorHandler
+}
+
+function initSymlinks {
+  local symlink_dir=$WORK/symlinks
+  mkdir -p $symlink_dir
+  local tools="gcc g++ ar as nm strings strip"
+  case $hostPlatform in
+    *darwin*)
+      echo "Detected new Darwin host ($host): disabling ranlib"
+      ;;
+    *)
+      tools="$tools ranlib"
+      ;;
+  esac
+  for tool in $tools
+  do
+    local dest=$symlink_dir/$hostPlatform-$tool
+    if [ ! -f $dest ]; then
+      ln -s $(which $tool) $dest
+    fi
+  done
+  export PATH=$PATH:$symlink_dir
 }
 
 function initCflags {
@@ -328,17 +338,11 @@ function autoconf_build {
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
-  if [ $(uname -s) == "Darwin" ] && [ $CROSS_COMPILING -eq 0 ]; then
-    CFLAGS="-fPIC" ../../configure \
-      --prefix=$PREFIX/$host \
-      "$@"
-  else
-    ../../configure \
-      --build=$BUILD \
-      --host=$host \
-      --prefix=$PREFIX/$host \
-      "$@"
-  fi
+  ../../configure \
+    --build=$BUILD \
+    --host=$host \
+    --prefix=$PREFIX/$host \
+    "$@"
   $MAKE
   $MAKE install
   popDir
@@ -401,9 +405,11 @@ function checkForCrossChain {
     error="1"
   fi
 
-  if isMissing "${cross_prefix}ranlib" ; then
-    echo "No ${cross_prefix}ranlib was found in the PATH."
-    error="1"
+  if [ $(uname -s) != "Darwin" ]; then
+    if isMissing "${cross_prefix}ranlib" ; then
+      echo "No ${cross_prefix}ranlib was found in the PATH."
+       error="1"
+    fi
   fi
 
   if isMissing "${cross_prefix}strip" ; then
@@ -579,6 +585,8 @@ function checkForCommonBuildTools {
       echo "port install gsed"
       echo ""
       error="1"
+    else
+      sed=gsed
     fi
   else
     if isMissing "sed"; then
@@ -588,6 +596,8 @@ function checkForCommonBuildTools {
       echo "apt-get install sed"
       echo ""
       error="1"
+    else
+      sed=sed
     fi
   fi
 

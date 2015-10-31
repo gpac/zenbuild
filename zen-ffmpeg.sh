@@ -24,18 +24,20 @@ function ffmpeg_build {
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
 
-  # remove stupid dependency
-  sed_cmd -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
-  
+  local os=$OS
   case $OS in
     darwin*)
-      OS="darwin"
+      os="darwin"
       ;;
   esac
 
+  # remove stupid dependency
+  $sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
-  local configure="../../configure \
+
+  ../../configure \
       --prefix=$PREFIX/$host \
       --enable-pthreads \
       --disable-w32threads \
@@ -57,15 +59,10 @@ function ffmpeg_build {
       --disable-iconv \
       --disable-bzlib \
       --enable-avresample \
-      --pkg-config=pkg-config"
-  if [ $CROSS_COMPILING -eq 1 ]; then
-    configure="$configure \
-      --target-os=$OS \
+      --pkg-config=pkg-config \
+      --target-os=$os \
       --arch=$ARCH \
-      --cross-prefix=$host-"
-  fi
-  echo $configure
-  $configure
+      --cross-prefix=$host-
   $MAKE
   $MAKE install
   popDir
