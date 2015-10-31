@@ -26,7 +26,6 @@ function all_get_deps {
   echo "fribidi"
   echo "gmplib"
   echo "gpac"
-  echo "jack"
   echo "liba52"
   echo "libass"
 #  echo "libav"
@@ -34,7 +33,6 @@ function all_get_deps {
   echo "libgcrypt"
   echo "libgpg-error"
   echo "libjpeg"
-  echo "libjpeg-turbo"
   echo "libmad"
 #  echo "libnettle"
   echo "libogg"
@@ -52,7 +50,6 @@ function all_get_deps {
 #  echo "openh264"
 #  echo "openhevc"
   echo "opus"
-  echo "portaudio"
   echo "sodium"
 #  echo "toxcore"
   echo "tre"
@@ -65,15 +62,24 @@ function all_get_deps {
 
   case $host in
     *mingw*)
+      echo "jack"
+      echo "libjpeg-turbo"
+      echo "portaudio"
       echo "libpthread"
       ;;
-    *)
+    *linux*)
+      echo "jack"
+      echo "libjpeg-turbo"
+      echo "portaudio"
       echo "dbus"
       echo "libalsa"
       echo "libxau"
       echo "libxcb"
       echo "xcb-proto"
       echo "xproto"
+      ;;
+    *darwin*)
+      echo "dbus"
       ;;
   esac
 }
