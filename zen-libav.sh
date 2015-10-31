@@ -25,7 +25,7 @@ function libav_build {
   local OS=$(get_os $host)
 
   # remove stupid dependency
-  sed_cmd -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
+  $sed -i "s/jack_jack_h pthreads/jack_jack_h/" libav/configure
 
   mkdir -p libav/build/$host
   pushDir libav/build/$host

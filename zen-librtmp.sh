@@ -31,13 +31,13 @@ function librtmp_build {
 
   case $host in
     *mingw*)
-      sed_cmd -i "s/^SYS=posix/SYS=mingw/" Makefile
+      $sed -i "s/^SYS=posix/SYS=mingw/" Makefile
       echo "# YO" >> Makefile
       ;;
   esac
 
-  sed_cmd -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
-  sed_cmd -i "s@^CRYPTO=.*@@" Makefile
+  $sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
+  $sed -i "s@^CRYPTO=.*@@" Makefile
 
   $MAKE CROSS_COMPILE="$host-"
   $MAKE CROSS_COMPILE="$host-" install

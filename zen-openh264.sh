@@ -28,11 +28,11 @@ function openh264_build {
 
   pushDir openh264
 
-  sed_cmd -i "s@^PREFIX=.*@PREFIX=$PREFIX/$host@" Makefile
-  sed_cmd -i "s@^ARCH=.*@ARCH=$ARCH@" Makefile
-  sed_cmd -i "s@^OS=.*@OS=$OS@" Makefile
-  sed_cmd -i "s/gnu/linux/" Makefile
-  sed_cmd -i "s/mingw32/mingw_nt/" Makefile
+  $sed -i "s@^PREFIX=.*@PREFIX=$PREFIX/$host@" Makefile
+  $sed -i "s@^ARCH=.*@ARCH=$ARCH@" Makefile
+  $sed -i "s@^OS=.*@OS=$OS@" Makefile
+  $sed -i "s/gnu/linux/" Makefile
+  $sed -i "s/mingw32/mingw_nt/" Makefile
 
   $MAKE
   $MAKE install

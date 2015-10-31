@@ -30,17 +30,6 @@ function printMsg
   echo -n "[0m"
 }
 
-function sed_cmd
-{
-  local sed_="sed"
-  if [ $(uname -s) == "Darwin" ]; then
-    sed_="gsed"
-  fi
-
-echo "$sed_" $@  
-  $sed_ $@
-}
-
 function isMissing
 {
   progName=$1

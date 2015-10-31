@@ -28,14 +28,14 @@ function libmad_build {
   lazy_extract "libmad.tar.gz"
   
   if [ $(uname -s) == "Darwin" ]; then
-    sed_cmd -i "s/-fforce-mem//" libmad/configure
-    sed_cmd -i "s/-fthread-jumps//" libmad/configure
-    sed_cmd -i "s/-fcse-follow-jumps//" libmad/configure
-    sed_cmd -i "s/-fcse-skip-blocks//" libmad/configure
-    sed_cmd -i "s/-fregmove//" libmad/configure
-    sed_cmd -i "s/-march=i486//" libmad/configure
+    $sed -i "s/-fforce-mem//" libmad/configure
+    $sed -i "s/-fthread-jumps//" libmad/configure
+    $sed -i "s/-fcse-follow-jumps//" libmad/configure
+    $sed -i "s/-fcse-skip-blocks//" libmad/configure
+    $sed -i "s/-fregmove//" libmad/configure
+    $sed -i "s/-march=i486//" libmad/configure
   else
-    sed_cmd -i "s/-fforce-mem//" libmad/configure
+    $sed -i "s/-fforce-mem//" libmad/configure
   fi
 
   autoconf_build $host "libmad"

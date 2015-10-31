@@ -34,8 +34,8 @@ function jack_build {
   applyPatch $scriptDir/patches/jack_01_OptionalPortAudio.diff
   applyPatch $scriptDir/patches/jack_03_NoExamples.diff
   applyPatch $scriptDir/patches/jack_04_OptionalSampleRate.diff
-  sed_cmd -i "s/.*tests.*//" wscript
-  sed_cmd -i "s/.*example-clients.*//" wscript
+  $sed -i "s/.*tests.*//" wscript
+  $sed -i "s/.*example-clients.*//" wscript
 
   local options=""
 
