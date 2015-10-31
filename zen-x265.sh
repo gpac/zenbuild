@@ -32,7 +32,6 @@ function x265_build {
 
   pushDir x265/
   applyPatch $scriptDir/patches/x265_02_version.diff
-  applyPatch $scriptDir/patches/x265_03_cmakeVersion.diff
 
   mkdir -p bin/$host
   pushDir bin/$host
