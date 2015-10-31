@@ -68,7 +68,7 @@ function all_get_deps {
       echo "libpthread"
       ;;
     *linux*)
-      echo "jack"
+      #echo "jack"
       echo "libjpeg-turbo"
       echo "portaudio"
       echo "dbus"
