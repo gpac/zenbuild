@@ -26,6 +26,9 @@ function libsndfile_build {
   lazy_download "libsndfile.tar.gz" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
   lazy_extract "libsndfile.tar.gz"
   mkgit "libsndfile"
+  pushDir "libsndfile"
+  applyPatch $scriptDir/patches/libsndfile_01_noCarbon.diff
+  popDir
 
   autoconf_build $host "libsndfile" \
       --disable-static \
