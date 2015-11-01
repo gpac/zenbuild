@@ -19,8 +19,7 @@ function gpac_mp4box_only_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac a1a3cf2dd187f
-
+  lazy_git_clone https://github.com/gpac/gpac.git gpac 473def563d54b
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 
@@ -31,19 +30,20 @@ function gpac_mp4box_only_build {
     --target-os=$OS \
     --cross-prefix="$crossPrefix" \
     --extra-cflags="-I$PREFIX/$host/include -w -fPIC" \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
+    --extra-ldflags="-L$PREFIX/$host/lib -Wl,-rpath-link=$PREFIX/$host/lib" \
     --prefix=$PREFIX/$host \
     --static-mp4box \
     --use-zlib=no
 
   $MAKE
   $MAKE install
+  $MAKE install-lib
 
   popDir
   popDir
 }
 
 function gpac_mp4box_only_get_deps {
-  local a=0
+  echo libpthread
 }
 

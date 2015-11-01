@@ -1,0 +1,13 @@
+diff --git a/programs/sndfile-play.c b/programs/sndfile-play.c
+index f2a32d7..80a83f2 100644
+--- a/programs/sndfile-play.c
++++ b/programs/sndfile-play.c
+@@ -58,7 +58,7 @@
+ 	#include 	<sys/soundcard.h>
+ 
+ #elif (defined (__MACH__) && defined (__APPLE__))
+-	#include <Carbon.h>
++	//#include <Carbon.h>
+ 	#include <CoreAudio/AudioHardware.h>
+ 
+ #elif defined (HAVE_SNDIO_H)

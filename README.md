@@ -29,7 +29,10 @@ The environment variable MAKE is influential, you can achieve parallel builds th
 $ MAKE='make -j8' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
 
-If your environment variable PATH also contains other Unix-like environments such as Cygwin, you may want to restrict the environment PATH this way:
+If your environment variable PATH also contains
+ - other Unix-like environments such as Cygwin,
+ - or spaces,
+you may want to restrict the environment PATH this way:
 ```
 $ PATH='/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
@@ -38,8 +41,6 @@ MSys: Install Python2 for Windows, install it in a directory with no space, and 
 ```
 $ PATH='/c/python27/:/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin' ./zenbuild.sh /tmp/myWorkDirectory gpac x86_64-w64-mingw32
 ```
-
-When building from Linux to Linux, your ld.conf.so may be incorrectly set up for ZenBuild. Add ```LD_LIBRARY_PATH=/workingDirectory/release/platform/lib```. Take care to use an absolute path.
 
 Create custom script build
 --------------------------
@@ -65,4 +66,4 @@ Contributors
 ------------
 
 - badr-badri ( https://github.com/badr-badri )
-
+- Rodolphe Fouquet ( https://github.com/RodolpheFouquet )

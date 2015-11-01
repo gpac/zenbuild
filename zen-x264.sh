@@ -23,7 +23,7 @@ function x264_build {
   pushDir $WORK/src
   lazy_git_clone "git://git.videolan.org/x264.git" x264 40bb56814e56ed342040bdbf30258aab39ee9e89
 
-  autoconf_build $host "x264" \
+  local build="autoconf_build $host x264 \
     --enable-static \
     --enable-pic \
     --disable-gpl \
@@ -36,7 +36,16 @@ function x264_build {
     --disable-ffms \
     --disable-gpac \
     --disable-opencl \
-    --cross-prefix="$crossPrefix"
+    --cross-prefix=$crossPrefix"
+  case $host in
+    *darwin*)
+      RANLIB="" $build
+      ;;
+    *)
+      $build
+      ;;
+  esac
+
 
   popDir
 }

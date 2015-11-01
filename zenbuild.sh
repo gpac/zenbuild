@@ -72,12 +72,17 @@ function lazy_extract
   name=$(basename $name .tar.bz2)
   name=$(basename $name .tar.xz)
 
+  local tar_cmd="tar"
+  if [ $(uname -s) == "Darwin" ]; then
+    tar_cmd="gtar"
+  fi
+
   if [ -d $name ]; then
     echo "already extracted"
   else
     rm -rf ${name}.tmp
     mkdir ${name}.tmp
-    tar -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
+    $tar_cmd -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
     mv ${name}.tmp $name
     echo "ok"
   fi
@@ -126,7 +131,11 @@ function mkgit {
 function applyPatch {
   local patchFile=$1
   printMsg "Patching $patchFile"
-  patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  if [ $(uname -s) == "Darwin" ]; then 
+    patch  --no-backup-if-mismatch -p1 -i $patchFile
+  else
+    patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  fi
 }
 
 function main {
@@ -136,8 +145,9 @@ function main {
   local hostPlatform=$3
 
   if [ -z "$1" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
-    echo "Usage: $0 <workDir> <packageName> <hostPlatform>"
+    echo "Usage: $0 <workDir> <packageName> <hostPlatform|->"
     echo "Example: $0 /tmp/work libav i686-w64-mingw32"
+    echo "Example: $0 /tmp/work gpac -"
     exit 1
   fi
 
@@ -157,6 +167,11 @@ function main {
   printMsg "Build platform: $BUILD"
   printMsg "Target platform: $hostPlatform"
 
+  if [ $hostPlatform = "-" ]; then
+    hostPlatform=$BUILD
+  fi
+
+  initSymlinks
   checkForCrossChain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
@@ -165,6 +180,10 @@ function main {
   mkdir -p $WORK/src
 
   export PREFIX="$WORK/release"
+  for dir in "lib" "bin" "include" 
+  do
+    mkdir -p "$PREFIX/${hostPlatform}/${dir}"
+  done
 
   initCflags
   installErrorHandler
@@ -174,8 +193,29 @@ function main {
   uninstallErrorHandler
 }
 
-function initCflags {
+function initSymlinks {
+  local symlink_dir=$WORK/symlinks
+  mkdir -p $symlink_dir
+  local tools="gcc g++ ar as nm strings strip"
+  case $hostPlatform in
+    *darwin*)
+      echo "Detected new Darwin host ($host): disabling ranlib"
+      ;;
+    *)
+      tools="$tools ranlib"
+      ;;
+  esac
+  for tool in $tools
+  do
+    local dest=$symlink_dir/$hostPlatform-$tool
+    if [ ! -f $dest ]; then
+      ln -s $(which $tool) $dest
+    fi
+  done
+  export PATH=$PATH:$symlink_dir
+}
 
+function initCflags {
   # avoid interferences from environment
   unset CC
   unset CXX
@@ -190,14 +230,20 @@ function initCflags {
   CFLAGS+=" -w"
   CXXFLAGS+=" -w"
 
-  LDFLAGS+=" -static-libgcc"
-  LDFLAGS+=" -static-libstdc++"
+  if [ $(uname -s) != "Darwin" ]; then
+    LDFLAGS+=" -static-libgcc"
+    LDFLAGS+=" -static-libstdc++"
+  fi
 
   export CFLAGS
   export CXXFLAGS
   export LDFLAGS
 
-  local cores=$(nproc)
+  if [ $(uname -s) == "Darwin" ]; then
+    local cores=$(sysctl -n hw.logicalcpu)
+  else
+    local cores=$(nproc)
+  fi
 
   if [ -z "$MAKE" ]; then
     MAKE="make -j$cores"
@@ -277,7 +323,7 @@ function autoconf_build {
     autoreconf -i
     popDir
   fi
-
+  
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
@@ -310,7 +356,11 @@ function popDir {
 function get_cross_prefix {
   local build=$1
   local host=$2
-  if [ ! "$build" = "$host" ] ; then
+
+  if [ "$host" = "-" ] ; then
+    echo ""
+  else
+#if [ ! "$build" = "$host" ] ; then
     echo "$host-"
   fi
 }
@@ -318,72 +368,82 @@ function get_cross_prefix {
 function checkForCrossChain {
   local build=$1
   local host=$2
+  local error="0"
 
   local cross_prefix=$(get_cross_prefix $build $host)
 
   # ------------- GCC -------------
   if isMissing "${cross_prefix}g++" ; then
     echo "No ${cross_prefix}g++ was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}gcc" ; then
     echo "No ${cross_prefix}gcc was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   # ------------- Binutils -------------
   if isMissing "${cross_prefix}nm" ; then
     echo "No ${cross_prefix}nm was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}ar" ; then
     echo "No ${cross_prefix}ar was found in the PATH."
-    exit 1
+    error="1"
   fi
 
-  if isMissing "${cross_prefix}ranlib" ; then
-    echo "No ${cross_prefix}ranlib was found in the PATH."
-    exit 1
+  if [ $(uname -s) != "Darwin" ]; then
+    if isMissing "${cross_prefix}ranlib" ; then
+      echo "No ${cross_prefix}ranlib was found in the PATH."
+       error="1"
+    fi
   fi
 
   if isMissing "${cross_prefix}strip" ; then
     echo "No ${cross_prefix}strip was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}strings" ; then
     echo "No ${cross_prefix}strings was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   if isMissing "${cross_prefix}as" ; then
     echo "No ${cross_prefix}as was found in the PATH."
-    exit 1
+    error="1"
   fi
 
   local os=$(get_os "$host")
-  if [ $os = "mingw32" ] ; then
+  if [ $os == "mingw32" ] ; then
     if isMissing "${cross_prefix}dlltool" ; then
       echo "No ${cross_prefix}dlltool was found in the PATH."
-      exit 1
+      error="1"
     fi
 
     if isMissing "${cross_prefix}windres" ; then
       echo "No ${cross_prefix}windres was found in the PATH."
-      exit 1
+      error="1"
     fi
+  fi
+
+  if [ $error == "1" ] ; then
+    exit 1
   fi
 }
 
 function checkForCommonBuildTools {
+  local error="0"
+
   if isMissing "pkg-config"; then
     echo "pkg-config not installed.  Please install with:"
     echo "pacman -S pkgconfig"
     echo "or"
     echo "apt-get install pkg-config"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "patch"; then
@@ -391,7 +451,8 @@ function checkForCommonBuildTools {
     echo "pacman -S patch"
     echo "or"
     echo "apt-get install patch"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "python2"; then
@@ -399,7 +460,10 @@ function checkForCommonBuildTools {
     echo "pacman -S python2"
     echo "or"
     echo "apt-get install python2"
-    exit 1
+    echo "or"
+    echo "port install python27 && ln -s /opt/local/bin/python2.7 /opt/local/bin/python2"
+    echo ""
+    error="1"
   fi
 
   if isMissing "autoreconf"; then
@@ -407,6 +471,22 @@ function checkForCommonBuildTools {
     echo "pacman -S autoconf"
     echo "or"
     echo "apt-get install autoconf"
+    echo "or"
+    echo "port install autoconf"
+    echo ""
+    error="1"
+    exit 1
+  fi
+
+  if isMissing "aclocal"; then
+    echo "aclocal not installed. Please install with:"
+    echo "pacman -S automake"
+    echo "or"
+    echo "apt-get install automake"
+    echo "or"
+    echo "port install automake"
+    echo ""
+    error="1"
     exit 1
   fi
 
@@ -415,15 +495,29 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/libtool"
     echo "or"
     echo "apt-get install libtool libtool-bin"
-    exit 1
+    echo ""
+    error="1"
   fi
-
+  
+  # We still need to check that on Mac OS
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "glibtool"; then
+      echo "libtool is not installed. Please install with:"
+      echo "brew install libtool"
+      echo "or"
+      echo "port install libtool"
+      echo ""
+      error="1"
+    fi
+  fi
+  
   if isMissing "make"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S make"
     echo "or"
     echo "apt-get install make"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "cmake"; then
@@ -431,7 +525,8 @@ function checkForCommonBuildTools {
     echo "pacman -S mingw-cmake"
     echo "or"
     echo "apt-get install cmake"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "autopoint"; then
@@ -439,7 +534,8 @@ function checkForCommonBuildTools {
     echo "pacman -S gettext gettext-devel"
     echo "or"
     echo "apt-get install autopoint"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "msgfmt"; then
@@ -447,13 +543,15 @@ function checkForCommonBuildTools {
     echo "pacman -S gettext gettext-devel"
     echo "or"
     echo "apt-get install gettext"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "yasm"; then
     echo "yasm not installed.  Please install with:"
     echo "apt-get install yasm"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "wget"; then
@@ -461,23 +559,64 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/wget"
     echo "or"
     echo "apt-get install wget"
-    exit 1
+    echo "or"
+    echo "sudo port install wget"
+    echo ""
+    error="1"
   fi
 
-  if isMissing "sed"; then
-    echo "sed not installed.  Please install with:"
-    echo "pacman -S msys/sed"
-    echo "or"
-    echo "apt-get install sed"
-    exit 1
+
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gsed"; then
+      echo "gsed not installed. Please install with:"
+      echo "brew install gnu-sed"
+      echo "or"
+      echo "port install gsed"
+      echo ""
+      error="1"
+    else
+      sed=gsed
+    fi
+  else
+    if isMissing "sed"; then
+      echo "sed not installed.  Please install with:"
+      echo "pacman -S msys/sed"
+      echo "or"
+      echo "apt-get install sed"
+      echo ""
+      error="1"
+    else
+      sed=sed
+    fi
   fi
 
-  if isMissing "tar"; then
-    echo "tar not installed.  Please install with:"
-    echo "mingw-get install tar"
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gtar"; then
+      echo "gnu-tar not installed.  Please install with:"
+      echo "brew install gnu-tar"
+      echo "or"
+      echo "port install gnutar && sudo ln -s /opt/local/bin/gnutar /opt/local/bin/gtar"
+      echo ""
+      error="1"
+    fi
+  else
+    if isMissing "tar"; then
+      echo "tar not installed.  Please install with:"
+      echo "mingw-get install tar"
+      echo "or"
+      echo "apt-get install tar"
+      echo ""
+      error="1"
+    fi
+  fi
+
+  if isMissing "xz"; then
+    echo "xz is not installed. Please install with:"
+    echo "apt-get install xz"
     echo "or"
-    echo "apt-get install tar"
-    exit 1
+    echo "brew install xz"
+    echo ""
+    error="1"
   fi
 
   if isMissing "git" ; then
@@ -485,7 +624,8 @@ function checkForCommonBuildTools {
     echo "pacman -S mingw-git"
     echo "or"
     echo "apt-get install git"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "hg" ; then
@@ -493,7 +633,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/mercurial"
     echo "or"
     echo "apt-get install mercurial"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "svn" ; then
@@ -501,7 +642,8 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/subversion"
     echo "or"
     echo "apt-get install subversion"
-    exit 1
+    echo ""
+    error="1"
   fi
 
   if isMissing "gperf" ; then
@@ -509,6 +651,11 @@ function checkForCommonBuildTools {
     echo "pacman -S msys/gperf"
     echo "or"
     echo "apt-get install gperf"
+    echo ""
+    error="1"
+  fi
+
+  if [ $error == "1" ] ; then
     exit 1
   fi
 }
