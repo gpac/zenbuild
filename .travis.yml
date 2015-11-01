@@ -2,6 +2,7 @@ language: c
 compiler: gcc
 
 before_install: 
+  - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo apt-get update -qq
 install:
   - sudo apt-get install build-essential fakeroot dpkg-dev devscripts ccache debhelper pkg-config g++

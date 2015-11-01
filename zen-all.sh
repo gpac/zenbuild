@@ -57,7 +57,7 @@ function all_get_deps {
 #  echo "vlc"
   echo "voaac-enc"
   echo "x264"
-#  echo "x265"
+  echo "x265"
   echo "zlib"
 
   case $host in
