@@ -49,13 +49,21 @@ function x265_build {
   echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
   echo "SET(CMAKE_ASM_YASM_COMPILER yasm)" >> config.cmake
   echo "" >> config.cmake
-  echo "SET(CMAKE_CXX_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
-  echo "SET(CMAKE_C_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
-  echo "SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
-  echo "SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
-  echo "SET(CMAKE_SHARED_LINKER_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+  
+  if [ $(uname -s) != "Darwin" ]; then
+    echo "SET(CMAKE_CXX_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+    echo "SET(CMAKE_C_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+    echo "SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+    echo "SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+    echo "SET(CMAKE_SHARED_LINKER_FLAGS \"-static-libgcc -static-libstdc++ -static -O3 -s\")" >> config.cmake
+  fi
 
-  cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
+  if [ $(uname -s) == "Darwin" ]; then
+    LDFLAGS="" cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
+  else
+    cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../source
+  fi
+
   $MAKE x265-shared
   $MAKE install
 

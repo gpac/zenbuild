@@ -72,12 +72,17 @@ function lazy_extract
   name=$(basename $name .tar.bz2)
   name=$(basename $name .tar.xz)
 
+  local tar_cmd="tar"
+  if [ $(uname -s) == "Darwin" ]; then
+    tar_cmd="gtar"
+  fi
+
   if [ -d $name ]; then
     echo "already extracted"
   else
     rm -rf ${name}.tmp
     mkdir ${name}.tmp
-    tar -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
+    $tar_cmd -C ${name}.tmp -xlf "$CACHE/$archive"  --strip-components=1
     mv ${name}.tmp $name
     echo "ok"
   fi
@@ -126,7 +131,11 @@ function mkgit {
 function applyPatch {
   local patchFile=$1
   printMsg "Patching $patchFile"
-  patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  if [ $(uname -s) == "Darwin" ]; then 
+    patch  --no-backup-if-mismatch -p1 -i $patchFile
+  else
+    patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
+  fi
 }
 
 function main {
@@ -158,6 +167,11 @@ function main {
   printMsg "Build platform: $BUILD"
   printMsg "Target platform: $hostPlatform"
 
+  if [ $hostPlatform = "-" ]; then
+    hostPlatform=$BUILD
+  fi
+
+  initSymlinks
   checkForCrossChain "$BUILD" "$hostPlatform"
   checkForCommonBuildTools
 
@@ -166,6 +180,10 @@ function main {
   mkdir -p $WORK/src
 
   export PREFIX="$WORK/release"
+  for dir in "lib" "bin" "include" 
+  do
+    mkdir -p "$PREFIX/${hostPlatform}/${dir}"
+  done
 
   initCflags
   installErrorHandler
@@ -175,8 +193,29 @@ function main {
   uninstallErrorHandler
 }
 
-function initCflags {
+function initSymlinks {
+  local symlink_dir=$WORK/symlinks
+  mkdir -p $symlink_dir
+  local tools="gcc g++ ar as nm strings strip"
+  case $hostPlatform in
+    *darwin*)
+      echo "Detected new Darwin host ($host): disabling ranlib"
+      ;;
+    *)
+      tools="$tools ranlib"
+      ;;
+  esac
+  for tool in $tools
+  do
+    local dest=$symlink_dir/$hostPlatform-$tool
+    if [ ! -f $dest ]; then
+      ln -s $(which $tool) $dest
+    fi
+  done
+  export PATH=$PATH:$symlink_dir
+}
 
+function initCflags {
   # avoid interferences from environment
   unset CC
   unset CXX
@@ -191,14 +230,20 @@ function initCflags {
   CFLAGS+=" -w"
   CXXFLAGS+=" -w"
 
-  LDFLAGS+=" -static-libgcc"
-  LDFLAGS+=" -static-libstdc++"
+  if [ $(uname -s) != "Darwin" ]; then
+    LDFLAGS+=" -static-libgcc"
+    LDFLAGS+=" -static-libstdc++"
+  fi
 
   export CFLAGS
   export CXXFLAGS
   export LDFLAGS
 
-  local cores=$(nproc)
+  if [ $(uname -s) == "Darwin" ]; then
+    local cores=$(sysctl -n hw.logicalcpu)
+  else
+    local cores=$(nproc)
+  fi
 
   if [ -z "$MAKE" ]; then
     MAKE="make -j$cores"
@@ -278,7 +323,7 @@ function autoconf_build {
     autoreconf -i
     popDir
   fi
-
+  
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
@@ -311,9 +356,11 @@ function popDir {
 function get_cross_prefix {
   local build=$1
   local host=$2
+
   if [ "$host" = "-" ] ; then
     echo ""
-  elif [ ! "$build" = "$host" ] ; then
+  else
+#if [ ! "$build" = "$host" ] ; then
     echo "$host-"
   fi
 }
@@ -347,9 +394,11 @@ function checkForCrossChain {
     error="1"
   fi
 
-  if isMissing "${cross_prefix}ranlib" ; then
-    echo "No ${cross_prefix}ranlib was found in the PATH."
-    error="1"
+  if [ $(uname -s) != "Darwin" ]; then
+    if isMissing "${cross_prefix}ranlib" ; then
+      echo "No ${cross_prefix}ranlib was found in the PATH."
+       error="1"
+    fi
   fi
 
   if isMissing "${cross_prefix}strip" ; then
@@ -429,6 +478,18 @@ function checkForCommonBuildTools {
     exit 1
   fi
 
+  if isMissing "aclocal"; then
+    echo "aclocal not installed. Please install with:"
+    echo "pacman -S automake"
+    echo "or"
+    echo "apt-get install automake"
+    echo "or"
+    echo "port install automake"
+    echo ""
+    error="1"
+    exit 1
+  fi
+
   if isMissing "libtool"; then
     echo "libtool not installed.  Please install with:"
     echo "pacman -S msys/libtool"
@@ -437,7 +498,19 @@ function checkForCommonBuildTools {
     echo ""
     error="1"
   fi
-
+  
+  # We still need to check that on Mac OS
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "glibtool"; then
+      echo "libtool is not installed. Please install with:"
+      echo "brew install libtool"
+      echo "or"
+      echo "port install libtool"
+      echo ""
+      error="1"
+    fi
+  fi
+  
   if isMissing "make"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S make"
@@ -492,20 +565,56 @@ function checkForCommonBuildTools {
     error="1"
   fi
 
-  if isMissing "sed"; then
-    echo "sed not installed.  Please install with:"
-    echo "pacman -S msys/sed"
-    echo "or"
-    echo "apt-get install sed"
-    echo ""
-    error="1"
+
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gsed"; then
+      echo "gsed not installed. Please install with:"
+      echo "brew install gnu-sed"
+      echo "or"
+      echo "port install gsed"
+      echo ""
+      error="1"
+    else
+      sed=gsed
+    fi
+  else
+    if isMissing "sed"; then
+      echo "sed not installed.  Please install with:"
+      echo "pacman -S msys/sed"
+      echo "or"
+      echo "apt-get install sed"
+      echo ""
+      error="1"
+    else
+      sed=sed
+    fi
   fi
 
-  if isMissing "tar"; then
-    echo "tar not installed.  Please install with:"
-    echo "mingw-get install tar"
+  if [ $(uname -s) == "Darwin" ]; then
+    if isMissing "gtar"; then
+      echo "gnu-tar not installed.  Please install with:"
+      echo "brew install gnu-tar"
+      echo "or"
+      echo "port install gnutar && sudo ln -s /opt/local/bin/gnutar /opt/local/bin/gtar"
+      echo ""
+      error="1"
+    fi
+  else
+    if isMissing "tar"; then
+      echo "tar not installed.  Please install with:"
+      echo "mingw-get install tar"
+      echo "or"
+      echo "apt-get install tar"
+      echo ""
+      error="1"
+    fi
+  fi
+
+  if isMissing "xz"; then
+    echo "xz is not installed. Please install with:"
+    echo "apt-get install xz"
     echo "or"
-    echo "apt-get install tar"
+    echo "brew install xz"
     echo ""
     error="1"
   fi

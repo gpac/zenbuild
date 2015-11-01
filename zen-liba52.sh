@@ -22,7 +22,7 @@ function liba52_build {
   
   lazy_extract "liba52.tar.xz"
 
-  CFLAGS="-w -fPIC" \
+  CFLAGS="-w -fPIC -std=gnu89" \
   autoconf_build $host "liba52" \
     --enable-shared \
     --disable-static
