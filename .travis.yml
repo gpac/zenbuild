@@ -1,5 +1,6 @@
 language: c
 compiler: gcc
+
 before_install: 
   - sudo apt-get update -qq
 install:
@@ -10,11 +11,13 @@ install:
   - tar -xzvf yasm-1.2.0.tar.gz
   - cd yasm-1.2.0 && ./configure --prefix=/usr && make && sudo make install
   - cd - 
+
+env:
+  - TOOLCHAIN="-"
+  - TOOLCHAIN=i686-w64-mingw32
+  - TOOLCHAIN=x86_64-w64-mingw32
  
-script: 
-  - ./zenbuild.sh tmp- all -
-  - ./zenbuild.sh tmp-i686-w64-mingw32 all i686-w64-mingw32
-  - ./zenbuild.sh tmp-x86_64-w64-mingw32 all x86_64-w64-mingw32
+script: "./zenbuild.sh tmp-$TOOLCHAIN all $TOOLCHAIN"
 
 notifications:
   email:
