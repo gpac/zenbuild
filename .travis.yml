@@ -1,26 +1,37 @@
 language: c
 compiler: gcc
 
+os:
+  - linux
+  - osx
+
 before_install: 
-  - sudo add-apt-repository --yes ppa:kalakris/cmake
-  - sudo apt-get update -qq
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo add-apt-repository --yes ppa:kalakris/cmake; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
 install:
-  - sudo apt-get install build-essential fakeroot dpkg-dev devscripts ccache debhelper pkg-config g++
-  - sudo apt-get install pkg-config patch python2.7 autoconf libtool make cmake autopoint gettext wget sed tar git mercurial subversion gperf xutils-dev
-  - sudo apt-get install -y gcc-mingw-w64-i686 g++-mingw-w64-i686 binutils-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 binutils-mingw-w64-x86-64 mingw-w64-dev
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install build-essential fakeroot dpkg-dev devscripts ccache debhelper pkg-config g++; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install pkg-config patch python2.7 autoconf libtool make cmake autopoint gettext wget sed tar git mercurial subversion gperf xutils-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y gcc-mingw-w64-i686 g++-mingw-w64-i686 binutils-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 binutils-mingw-w64-x86-64 mingw-w64-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo brew install libtool gnu-sed gnu-tar xz; fi
   - wget http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz
   - tar -xzvf yasm-1.2.0.tar.gz
   - cd yasm-1.2.0 && ./configure --prefix=/usr && make && sudo make install
-  - cd - 
+  - cd -
 
 env:
   - TOOLCHAIN="-"
   - TOOLCHAIN=i686-w64-mingw32
   - TOOLCHAIN=x86_64-w64-mingw32
  
-script: "./zenbuild.sh tmp-$TOOLCHAIN all $TOOLCHAIN"
+script:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then "./zenbuild.sh tmp-$TOOLCHAIN all $TOOLCHAIN"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then "./zenbuild.sh tmp-- all -"; fi
 
 notifications:
   email:
     recipients:
       - zenbuild@gpac.io
+      
+matrix:
+  allow_failures:
+    - os: osx
