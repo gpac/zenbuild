@@ -26,8 +26,13 @@ function libsdl2_build {
 
   lazy_download "libsdl2.tar.gz" "https://www.libsdl.org/release/SDL2-2.0.3.tar.gz"
   lazy_extract "libsdl2.tar.gz" 
+  mkgit "libsdl2"
 
- autoconf_build $host "libsdl2" 
+  pushDir "libsdl2"
+  applyPatch $scriptDir/patches/libsdl2_01_D3D11Declarations.diff
+  popDir
 
- popDir
+  autoconf_build $host "libsdl2"
+
+  popDir
 }  
