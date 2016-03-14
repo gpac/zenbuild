@@ -28,6 +28,7 @@ function libxvidcore_build {
   
   pushDir libxvidcore/build/generic
   
+  cp $scriptDir/config.guess .
   ./configure \
      --host=$host \
      --prefix=$PREFIX/$host
