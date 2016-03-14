@@ -19,19 +19,23 @@ function libgcrypt_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "libgcrypt.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.6.2.tar.gz"
-
+  lazy_download "libgcrypt.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.6.4.tar.gz"
   lazy_extract  "libgcrypt.tar.gz"
+  mkgit libgcrypt
+
+  pushDir libgcrypt
+  applyPatch $scriptDir/patches/libgcrypt_01_Asm64bitMov.diff
+  popDir
 
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   autoconf_build $host "libgcrypt" \
     --with-gpg-error-prefix=$PREFIX/$host \
     --enable-shared \
-    --disable-static
+    --disable-static \
+    --disable-asm #needed for cross-compiling from Linux to Windows 64 bits
 
   popDir
-
 }
 
 function libgcrypt_get_deps {

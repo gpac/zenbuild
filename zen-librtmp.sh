@@ -24,18 +24,20 @@ function librtmp_build {
   pushDir $WORK/src
   lazy_git_clone "git://git.ffmpeg.org/rtmpdump" rtmpdump 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
 
-
   pushDir rtmpdump/librtmp
+  if [ $(uname -s) == "Darwin" ]; then
+    applyPatch $scriptDir/patches/librtmp_01_dylib_install_name.diff
+  fi
 
   case $host in
     *mingw*)
-      sed -i "s/^SYS=posix/SYS=mingw/" Makefile
+      $sed -i "s/^SYS=posix/SYS=mingw/" Makefile
       echo "# YO" >> Makefile
       ;;
   esac
 
-  sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
-  sed -i "s@^CRYPTO=.*@@" Makefile
+  $sed -i "s@^prefix=.*@prefix=$PREFIX/$host@" Makefile
+  $sed -i "s@^CRYPTO=.*@@" Makefile
 
   $MAKE CROSS_COMPILE="$host-"
   $MAKE CROSS_COMPILE="$host-" install

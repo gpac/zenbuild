@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gpac/zenbuild.svg?branch=master)](https://travis-ci.org/gpac/zenbuild)
+
 # ZenBuild
 
 ZenBuild is a one-shot component-level build-system, aimed at easing the build of free software projects.
@@ -66,4 +68,4 @@ Contributors
 ------------
 
 - badr-badri ( https://github.com/badr-badri )
-
+- Rodolphe Fouquet ( https://github.com/RodolpheFouquet )

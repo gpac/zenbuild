@@ -24,40 +24,45 @@ function ffmpeg_build {
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
 
-  # remove stupid dependency
-  sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  local os=$OS
+  case $OS in
+    darwin*)
+      os="darwin"
+      ;;
+  esac
 
+  # remove stupid dependency
+  $sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
+  
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
+
   ../../configure \
-    --arch=$ARCH \
-    --target-os=$OS \
-    --prefix=$PREFIX/$host \
-    --extra-cflags="-DWIN32=1 -I$PREFIX/$host/include" \
-    --enable-pthreads \
-    --disable-w32threads \
-    --extra-ldflags="-L$PREFIX/$host/lib" \
-    --disable-debug \
-    --disable-static \
-    --enable-shared \
-    --enable-libass \
-    --enable-fontconfig \
-    --enable-librtmp \
-    --enable-gpl \
-    --enable-nonfree \
-    --enable-libfdk_aac \
-    --enable-libx264 \
-    --enable-libx265 \
-    --enable-zlib \
-    --disable-gnutls \
-    --disable-openssl \
-    --disable-gnutls \
-    --disable-openssl \
-    --disable-iconv \
-    --disable-bzlib \
-    --enable-avresample \
-    --pkg-config=pkg-config \
-    --cross-prefix=$host-
+      --prefix=$PREFIX/$host \
+      --enable-pthreads \
+      --disable-w32threads \
+      --disable-debug \
+      --disable-static \
+      --enable-shared \
+      --enable-libass \
+      --enable-fontconfig \
+      --enable-librtmp \
+      --enable-gpl \
+      --enable-nonfree \
+      --enable-libfdk_aac \
+      --enable-libx264 \
+      --enable-zlib \
+      --disable-gnutls \
+      --disable-openssl \
+      --disable-gnutls \
+      --disable-openssl \
+      --disable-iconv \
+      --disable-bzlib \
+      --enable-avresample \
+      --pkg-config=pkg-config \
+      --target-os=$os \
+      --arch=$ARCH \
+      --cross-prefix=$host-
   $MAKE
   $MAKE install
   popDir
@@ -72,7 +77,6 @@ function ffmpeg_get_deps {
   echo libfdk-aac
   echo libpthread
   echo x264
-  echo x265
   echo zlib
 }
 
