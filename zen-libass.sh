@@ -18,7 +18,7 @@ function libass_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libass.tar.xz" "https://github.com/libass/libass/releases/download/0.11.2/libass-0.11.2.tar.xz"
+  lazy_download "libass.tar.xz" "https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.xz"
   lazy_extract "libass.tar.xz"
 
   mkgit "libass"

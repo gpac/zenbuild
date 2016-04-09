@@ -19,11 +19,14 @@ function freetype2_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "freetype2.tar.bz2" "http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.bz2"
+  lazy_download "freetype2.tar.bz2" "http://download.savannah.gnu.org/releases/freetype/freetype-2.6.3.tar.bz2"
   lazy_extract "freetype2.tar.bz2"
   mkgit "freetype2"
 
-  #LDFLAGS="-L$PREFIX/$host/lib -lpng" \
+  pushDir "freetype2"
+  applyPatch $scriptDir/patches/freetype2_01_pkgconfig.diff
+  popDir
+
   autoconf_build $host "freetype2" \
     "--without-png" \
     "--enable-shared" \
