@@ -19,7 +19,7 @@ function ffmpeg_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg n2.8.6
+  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg n3.0.1
 
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
@@ -37,6 +37,7 @@ function ffmpeg_build {
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
 
+  LDFLAGS="-L$PREFIX/$host/lib -lz" \
   ../../configure \
       --prefix=$PREFIX/$host \
       --enable-pthreads \
