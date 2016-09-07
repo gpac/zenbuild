@@ -42,8 +42,6 @@ function libav_build {
     --enable-libfontconfig \
     --enable-librtmp \
     --enable-gpl \
-    --enable-nonfree \
-    --enable-libfdk_aac \
     --enable-libx264 \
     --enable-libx265 \
     --enable-zlib \
@@ -65,7 +63,6 @@ function libav_get_deps {
   echo fontconfig
   echo jack
   echo librtmp
-  echo libfdk-aac
   echo libpthread
   echo x264
   echo x265

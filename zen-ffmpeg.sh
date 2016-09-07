@@ -49,8 +49,6 @@ function ffmpeg_build {
       --enable-fontconfig \
       --enable-librtmp \
       --enable-gpl \
-      --enable-nonfree \
-      --enable-libfdk_aac \
       --enable-libx264 \
       --enable-zlib \
       --disable-gnutls \
@@ -75,7 +73,6 @@ function ffmpeg_get_deps {
   echo libass
   echo fontconfig
   echo librtmp
-  echo libfdk-aac
   echo libpthread
   echo x264
   echo zlib

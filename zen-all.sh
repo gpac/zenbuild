@@ -29,7 +29,6 @@ function all_get_deps {
   echo "liba52"
   echo "libass"
 #  echo "libav"
-  echo "libfdk-aac"
   echo "libgcrypt"
   echo "libgpg-error"
   echo "libjpeg"
