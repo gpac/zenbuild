@@ -47,10 +47,10 @@ $ PATH='/c/python27/:/mingw64/bin:/mingw32/bin:/usr/local/bin:/usr/bin:/opt/bin'
 Create custom script build
 --------------------------
 
-You can also create a standalone build script for a particular package (and
-its dependencies) to integrate in your project:
+You can also create a standalone build script for a particular set of packages (and
+their dependencies) to integrate in your project:
 ```
-$ ./make-extra.sh gpac > build_gpac.sh
+$ ./make-extra.sh gpac ffmpeg libsdl2 > build_gpac.sh
 ```
 
 You can now integrate build_gpac.sh in your project, and invoke it this way:
