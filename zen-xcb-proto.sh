@@ -20,17 +20,12 @@ function xcb-proto_get_deps {
 }
 
 function xcb-proto_build {
-  
   local host=$1
   pushDir $WORK/src
-
-
   lazy_download "xcb-proto.tar.gz" "http://xcb.freedesktop.org/dist/xcb-proto-1.11.tar.gz"
-
   lazy_extract "xcb-proto.tar.gz"
 
   autoconf_build $host "xcb-proto"
 
   popDir
-
 }

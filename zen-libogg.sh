@@ -30,4 +30,3 @@ function libogg_build {
 function libogg_get_deps {
   echo ""
 }
-

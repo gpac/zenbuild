@@ -19,16 +19,13 @@ function libalsa_get_deps {
 }
 
 function libalsa_build {
-
   host=$1
   pushDir $WORK/src
 
   lazy_download "libalsa.tar.gz" "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.0.28.tar.bz2"
-
   lazy_extract "libalsa.tar.gz"
 
   autoconf_build $host "libalsa"
 
   popDir
-
 }

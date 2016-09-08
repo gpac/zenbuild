@@ -15,7 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
 function fontconfig_build {
   host=$1
   pushDir $WORK/src
@@ -23,7 +22,6 @@ function fontconfig_build {
   lazy_download "fontconfig.tar.bz2" "http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.92.tar.bz2"
   lazy_extract "fontconfig.tar.bz2"
   mkgit "fontconfig"
-
   pushDir fontconfig
 
   autoreconf -fiv
@@ -39,8 +37,8 @@ function fontconfig_build {
   $MAKE
   $MAKE install || true #avoid error: /usr/bin/install: cannot stat
   popDir
-  popDir
 
+  popDir
   popDir
 }
 
@@ -48,4 +46,3 @@ function fontconfig_get_deps {
   echo "expat"
   echo "freetype2"
 }
-

@@ -20,7 +20,6 @@ function libmad_get_deps {
 }
 
 function libmad_build {
-
   local host=$1
   pushDir $WORK/src
 
@@ -41,5 +40,4 @@ function libmad_build {
   autoconf_build $host "libmad"
 
   popDir
-
 }

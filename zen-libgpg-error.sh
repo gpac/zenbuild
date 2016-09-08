@@ -29,4 +29,3 @@ function libgpg-error_build {
 function libgpg-error_get_deps {
   local a=0
 }
-

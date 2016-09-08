@@ -20,7 +20,6 @@ function libass_build {
 
   lazy_download "libass.tar.xz" "https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.xz"
   lazy_extract "libass.tar.xz"
-
   mkgit "libass"
 
   autoconf_build $host "libass" \

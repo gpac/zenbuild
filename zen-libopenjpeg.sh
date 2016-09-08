@@ -16,7 +16,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 function libopenjpeg_build {
-
   local host=$1
   pushDir $WORK/src
   
@@ -42,10 +41,9 @@ function libopenjpeg_build {
   cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host -DCMAKE_BUILD_TYPE=Release ../../
   $MAKE
   $MAKE install
+  
   popDir
-
   popDir
-
 }
 
 function libopenjpeg_get_deps {

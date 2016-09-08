@@ -15,7 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
 function tre_get_deps {
   local a=0
 }
@@ -25,7 +24,6 @@ function tre_build {
   pushDir $WORK/src
 
   lazy_git_clone "https://github.com/GerHobbelt/libtre.git" libtre 7365bba77910775047c2b349a6533e0da5e5bd80
-
   pushDir libtre
 
   autoreconf -fiv
@@ -47,4 +45,3 @@ function tre_build {
   popDir
   popDir
 }
-

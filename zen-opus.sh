@@ -43,4 +43,3 @@ function opus_build {
 function opus_get_deps {
   echo sodium
 }
-

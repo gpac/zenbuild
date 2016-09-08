@@ -20,16 +20,13 @@ function libxau_get_deps {
 }
 
 function libxau_build {
-
   local host=$1
   pushDir $WORK/src
 
   lazy_download "libxau.tar.gz" "http://www.x.org/releases/individual/lib/libXau-1.0.8.tar.gz"
-
   lazy_extract "libxau.tar.gz"
 
   autoconf_build $host "libxau"
 
   popDir
-
 }

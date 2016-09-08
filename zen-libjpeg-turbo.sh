@@ -19,20 +19,19 @@ function libjpeg-turbo_build {
   local host=$1
   pushDir $WORK/src
   
-  svn co svn://svn.code.sf.net/p/libjpeg-turbo/code/branches/1.3.x libjpeg_turbo_1.3.x -r 1397 
-  
+  svn co svn://svn.code.sf.net/p/libjpeg-turbo/code/branches/1.3.x libjpeg_turbo_1.3.x -r 1397   
   pushDir libjpeg_turbo_1.3.x
+
   autoreconf -fiv
   
   mkdir -p build/$host
   pushDir build/$host
-  
   ../../configure \
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
-  
   popDir
+
   popDir
   popDir
 }

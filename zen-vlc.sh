@@ -45,8 +45,8 @@ function vlc_build {
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
+  
   popDir
-
   popDir
 }
 
@@ -70,4 +70,3 @@ function vlc_get_deps {
       ;;
   esac
 }
-

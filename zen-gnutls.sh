@@ -15,25 +15,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
 function gnutls_get_deps {
   echo "gmplib"
   echo "libnettle"
 }
 
 function gnutls_build {
-
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "gnutls.tar.lz" "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/gnutls-3.3.12.tar.lz"
-  
+  lazy_download "gnutls.tar.lz" "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/gnutls-3.3.12.tar.lz"  
   lazy_extract "gnutls.tar.lz"
 
   autoconf_build $host "gnutls.tar.lz"
 
   popDir
 
-}  
-
-
+}

@@ -77,4 +77,3 @@ function ffmpeg_get_deps {
   echo x264
   echo zlib
 }
-

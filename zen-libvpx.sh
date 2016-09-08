@@ -45,4 +45,3 @@ function libvpx_build {
 function libvpx_get_deps {
   local a=0
 }
-

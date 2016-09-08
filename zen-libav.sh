@@ -53,7 +53,7 @@ function libav_build {
     --pkg-config=pkg-config \
     --cross-prefix=$host-
   $MAKE
-  #$MAKE install
+  $MAKE install
   popDir
 
   popDir
@@ -68,4 +68,3 @@ function libav_get_deps {
   echo x265
   echo zlib
 }
-

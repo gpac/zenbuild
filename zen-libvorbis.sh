@@ -24,10 +24,10 @@ function libvorbis_build {
   mkgit "libvorbis"
 
   autoconf_build $host "libvorbis"
+
   popDir
 }
 
 function libvorbis_get_deps {
   echo "libogg"
 }
-

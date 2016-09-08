@@ -15,7 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
 function x264_build {
   local host=$1
   local crossPrefix=$(get_cross_prefix $BUILD $host)
@@ -46,11 +45,9 @@ function x264_build {
       ;;
   esac
 
-
   popDir
 }
 
 function x264_get_deps {
   local a=0
 }
-

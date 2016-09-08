@@ -40,4 +40,3 @@ function libxvidcore_build {
   popDir 
   popDir
 }
-

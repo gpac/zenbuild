@@ -23,7 +23,6 @@ function libtheora_build {
   lazy_extract "libtheora.tar.bz2"
   mkgit "libtheora"
 
-
   mkdir -p libtheora/build/$host
   pushDir libtheora/build/$host
 
@@ -46,4 +45,3 @@ function libtheora_build {
 function libtheora_get_deps {
   echo "libogg"
 }
-

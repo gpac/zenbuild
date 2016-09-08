@@ -22,12 +22,9 @@ function libxcb_get_deps {
 }
 
 function libxcb_build {
-
   local host=$1
   pushDir $WORK/src
-
   lazy_download "libxcb.tar.gz" "http://xcb.freedesktop.org/dist/libxcb-1.11.tar.gz"
-
   lazy_extract "libxcb.tar.gz"
 
   autoconf_build $host "libxcb"
@@ -35,5 +32,3 @@ function libxcb_build {
   popDir
 
 }
-
-

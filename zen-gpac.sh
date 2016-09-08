@@ -72,4 +72,3 @@ function gpac_get_deps {
 #  echo openhevc
   echo zlib
 }
-

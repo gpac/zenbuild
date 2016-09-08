@@ -46,4 +46,3 @@ function gpac_mp4box_only_build {
 function gpac_mp4box_only_get_deps {
   echo libpthread
 }
-

@@ -20,7 +20,6 @@ function opencore-amr_get_deps {
 }
 
 function opencore-amr_build {
-
   local host=$1
   pushDir $WORK/src
 
@@ -30,5 +29,4 @@ function opencore-amr_build {
   autoconf_build $host "opencore-amr" --enable-shared
 
   popDir
-
 } 

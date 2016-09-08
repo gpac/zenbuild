@@ -19,7 +19,6 @@ function liba52_build {
   pushDir $WORK/src
 
   lazy_download "liba52.tar.xz" "http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz"
-  
   lazy_extract "liba52.tar.xz"
 
   CFLAGS="-w -fPIC -std=gnu89" \
@@ -33,4 +32,3 @@ function liba52_build {
 function liba52_get_deps {
   local a=0
 }
-

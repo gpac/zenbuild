@@ -45,4 +45,3 @@ function sodium_build {
 function sodium_get_deps {
   local a=0
 }
-

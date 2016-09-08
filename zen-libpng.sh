@@ -29,10 +29,10 @@ function libpng_build {
   autoconf_build $host "libpng" \
     --enable-shared \
     --disable-static
+
   popDir
 }
 
 function libpng_get_deps {
   echo "zlib"
 }
-

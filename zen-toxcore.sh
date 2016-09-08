@@ -28,6 +28,7 @@ function toxcore_build {
 
   mkdir -p toxcore/build/$host
   pushDir toxcore/build/$host
+
   CFLAGS+=" -I$PREFIX/$host/include " \
   LDFLAGS+=" -L$PREFIX/$host/lib " \
   ../../configure \
@@ -36,10 +37,11 @@ function toxcore_build {
     --enable-av \
     --host=$host \
     --prefix=$PREFIX/$host
+
   $MAKE
   $MAKE install
-  popDir
 
+  popDir
   popDir
 }
 
@@ -48,4 +50,3 @@ function toxcore_get_deps {
   echo opus
   echo libvpx
 }
-

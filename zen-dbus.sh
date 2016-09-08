@@ -41,4 +41,3 @@ function dbus_build {
 function dbus_get_deps {
   echo "expat"
 }
-

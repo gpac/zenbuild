@@ -16,7 +16,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 function openh264_build {
-
   host=$1
   pushDir $WORK/src
   local ARCH=$(get_arch $host)
@@ -44,4 +43,3 @@ function openh264_build {
 function openh264_get_deps {
   local a=0
 }
-

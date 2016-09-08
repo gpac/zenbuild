@@ -18,19 +18,17 @@
 function utox_build {
   host=$1
   pushDir $WORK/src
-
   lazy_git_clone https://github.com/notsecure/uTox.git utox-$host
-
   mkdir -p utox-$host
   pushDir utox-$host
+
   $MAKE
   $MAKE install
-  popDir
 
+  popDir
   popDir
 }
 
 function utox_get_deps {
   echo toxcore
 }
-

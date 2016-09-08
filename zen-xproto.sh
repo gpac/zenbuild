@@ -17,14 +17,13 @@
 function xproto_build {
   host=$1
   pushDir $WORK/src
-
   lazy_git_clone "git://anongit.freedesktop.org/xorg/proto/xproto" xproto
 
   autoconf_build $host "xproto"
+
   popDir
 }
 
 function xproto_get_deps {
   local a=0
 }
-

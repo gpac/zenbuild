@@ -20,12 +20,10 @@ function libnettle_get_deps {
 }
 
 function libnettle_build {
-
   local host=$1
   pushDir $WORK/src
 
   lazy_download "libnettle.tar.gz" "https://ftp.gnu.org/gnu/nettle/nettle-2.7.1.tar.gz"
-
   lazy_extract "libnettle.tar.gz" 
 
   autoconf_build $host "libnettle" 
