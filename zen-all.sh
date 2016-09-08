@@ -54,7 +54,6 @@ function all_get_deps {
   echo "tre"
 #  echo "utox" #depends on xrender and other missing stuff, causing pkg-config to return nothing
 #  echo "vlc"
-  echo "voaac-enc"
   echo "x264"
   echo "x265"
   echo "zlib"
