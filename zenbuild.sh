@@ -139,11 +139,6 @@ function applyPatch {
 }
 
 function main {
-  if [ ! -e "$scriptDir/config.guess" ]; then
-    wget -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
-  fi
-  BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
-
   local packageName=$2
   local hostPlatform=$3
 
@@ -164,6 +159,11 @@ function main {
     echo "$ PATH=/mingw32/bin:/bin:/usr/bin ./zenbuild.sh <options>"
     exit 3
   fi
+
+  if [ ! -e "$scriptDir/config.guess" ]; then
+    wget -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+  fi
+  BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
 
   printMsg "Building in: $WORK"
 
