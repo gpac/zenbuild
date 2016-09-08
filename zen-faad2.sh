@@ -24,10 +24,11 @@ function faad2_build {
   mkgit "faad2"
   
   pushDir "faad2"
-  applyPatch $scriptDir/patches/faad2_01_ErrorDeclSpecifier.diff
+  faad2_patches
   popDir
 
   autoconf_build $host "faad2"
+
   popDir
 }
 
@@ -35,3 +36,23 @@ function faad2_get_deps {
   echo ""
 }
 
+function faad2_patches {
+  local patchFile=$scriptDir/patches/faad2_01_ErrorDeclSpecifier.diff
+  cat << 'EOF' > $patchFile
+diff --git a/frontend/main.c b/frontend/main.c
+--- a/frontend/main.c
++++ b/frontend/main.c
+@@ -31,7 +31,9 @@
+ #ifdef _WIN32
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
++#ifndef __MINGW32__
+ #define off_t __int64
++#endif
+ #else
+ #include <time.h>
+ #endif
+EOF
+
+  applyPatch $patchFile
+}

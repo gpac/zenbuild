@@ -24,7 +24,7 @@ function libgcrypt_build {
   mkgit libgcrypt
 
   pushDir libgcrypt
-  applyPatch $scriptDir/patches/libgcrypt_01_Asm64bitMov.diff
+  libgcrypt_patches
   popDir
 
   CFLAGS+=" -I$PREFIX/$host/include " \
@@ -42,3 +42,33 @@ function libgcrypt_get_deps {
   echo "libgpg-error"
 }
 
+function libgcrypt_patches {
+  local patchFile=$scriptDir/patches/libgcrypt_01_Asm64bitMov.diff
+  cat << 'EOF' > $patchFile
+diff --git a/random/rndhw.c b/random/rndhw.c
+index e625512..d5d5078 100644
+--- a/random/rndhw.c
++++ b/random/rndhw.c
+@@ -69,7 +69,7 @@ poll_padlock (void (*add)(const void*, size_t, enum random_origins),
+   nbytes = 0;
+   while (nbytes < 64)
+     {
+-#if defined(__x86_64__) && defined(__LP64__)
++#if defined(__x86_64__)// && defined(__LP64__)
+       asm volatile
+         ("movq %1, %%rdi\n\t"         /* Set buffer.  */
+          "xorq %%rdx, %%rdx\n\t"      /* Request up to 8 bytes.  */
+@@ -123,7 +123,7 @@ poll_padlock (void (*add)(const void*, size_t, enum random_origins),
+ #ifdef USE_DRNG
+ # define RDRAND_RETRY_LOOPS	10
+ # define RDRAND_INT	".byte 0x0f,0xc7,0xf0"
+-# if defined(__x86_64__) && defined(__LP64__)
++# if defined(__x86_64__) //&& defined(__LP64__)
+ #  define RDRAND_LONG	".byte 0x48,0x0f,0xc7,0xf0"
+ # else
+ #  define RDRAND_LONG	RDRAND_INT
+
+EOF
+
+  applyPatch $patchFile
+}

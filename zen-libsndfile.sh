@@ -27,7 +27,7 @@ function libsndfile_build {
   lazy_extract "libsndfile.tar.gz"
   mkgit "libsndfile"
   pushDir "libsndfile"
-  applyPatch $scriptDir/patches/libsndfile_01_noCarbon.diff
+  libsndfile_patches
   popDir
 
   autoconf_build $host "libsndfile" \
@@ -38,3 +38,23 @@ function libsndfile_build {
   popDir
 }
 
+function libsndfile_patches {
+  local patchFile=$scriptDir/patches/libsndfile_01_noCarbon.diff
+  cat << 'EOF' > $patchFile
+diff --git a/programs/sndfile-play.c b/programs/sndfile-play.c
+index f2a32d7..80a83f2 100644
+--- a/programs/sndfile-play.c
++++ b/programs/sndfile-play.c
+@@ -58,7 +58,7 @@
+ 	#include 	<sys/soundcard.h>
+ 
+ #elif (defined (__MACH__) && defined (__APPLE__))
+-	#include <Carbon.h>
++	//#include <Carbon.h>
+ 	#include <CoreAudio/AudioHardware.h>
+ 
+ #elif defined (HAVE_SNDIO_H)
+EOF
+
+  applyPatch $patchFile
+}

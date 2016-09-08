@@ -19,8 +19,9 @@ function libgpg-error_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "libgpg-error.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.18.tar.bz2"
+  lazy_download "libgpg-error.tar.gz" "ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.24.tar.bz2"
   lazy_extract "libgpg-error.tar.gz"
+
   autoconf_build $host "libgpg-error"
 
   popDir

@@ -139,7 +139,7 @@ function main {
 
   if [ -z "$1" ] || [ -z "$packageName" ] || [ -z "$hostPlatform" ] ; then
     echo "Usage: $0 <workDir> <packageName> <hostPlatform|->"
-    echo "Example: $0 /tmp/work libav i686-w64-mingw32"
+    echo "Example: $0 /tmp/work libav x86_64-w64-mingw32"
     echo "Example: $0 /tmp/work gpac -"
     exit 1
   fi
@@ -151,7 +151,7 @@ function main {
     echo "Your PATH contain spaces, this may cause build issues."
     echo "Please clean-up your PATH and retry."
     echo "Example:"
-    echo "$ PATH=/mingw32/bin:/bin:/usr/bin ./zenbuild.sh <options>"
+    echo "$ PATH=/mingw64/bin:/bin:/usr/bin ./zenbuild.sh <options>"
     exit 3
   fi
 
@@ -159,6 +159,7 @@ function main {
     wget -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
   fi
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
+  mkdir -p patches
 
   printMsg "Building in: $WORK"
 

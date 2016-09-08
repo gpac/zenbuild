@@ -26,7 +26,7 @@ function librtmp_build {
 
   pushDir rtmpdump/librtmp
   if [ $(uname -s) == "Darwin" ]; then
-    applyPatch $scriptDir/patches/librtmp_01_dylib_install_name.diff
+    librtmp_patches
   fi
 
   case $host in
@@ -43,7 +43,24 @@ function librtmp_build {
   $MAKE CROSS_COMPILE="$host-" install
 
   popDir
-
   popDir
 }
 
+function librtmp_patches {
+  local patchFile=$scriptDir/patches/librtmp_01_dylib_install_name.diff
+  cat << 'EOF' > $patchFile
+--- a/Makefile	2015-09-09 13:29:23.000000000 +0200
++++ b/Makefile	2015-09-09 13:30:34.000000000 +0200
+@@ -53,7 +53,7 @@
+ SODIR_mingw=$(BINDIR)
+ SODIR=$(SODIR_$(SYS))
+ 
+-SO_LDFLAGS_posix=-shared -Wl,-soname,$@
++SO_LDFLAGS_posix=-shared -Wl,-dylib_install_name,$@
+ SO_LDFLAGS_darwin=-dynamiclib -twolevel_namespace -undefined dynamic_lookup \
+ 	-fno-common -headerpad_max_install_names -install_name $(libdir)/$@
+ SO_LDFLAGS_mingw=-shared -Wl,--out-implib,librtmp.dll.a
+EOF
+
+  applyPatch $patchFile
+}

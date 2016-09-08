@@ -15,23 +15,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
 function zlib_get_deps {
   local a=0
 }
 
 function zlib_build {
-
   host=$1
   pushDir $WORK/src
   lazy_download "zlib-$host.tar.gz" "http://zlib.net/zlib-1.2.8.tar.gz"
-
   lazy_extract "zlib-$host.tar.gz"
   mkgit "zlib-$host"
-
   pushDir zlib-$host
 
-  applyPatch $scriptDir/patches/zlib_01_nobypass.diff
+  zlib_patches
+  
   chmod +x ./configure
   CFLAGS="-w -fPIC" \
   CHOST=$host \
@@ -39,8 +36,30 @@ function zlib_build {
     --prefix=$PREFIX/$host
   $MAKE
   $MAKE install
+  
   popDir
-
   popDir
 }
 
+function zlib_patches {
+  local patchFile=$scriptDir/patches/zlib_01_nobypass.diff
+  cat << 'EOF' > $patchFile
+diff --git a/configure b/configure
+index b77a8a8..c82aea1 100644
+--- a/configure
++++ b/configure
+@@ -191,10 +191,6 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
+   CYGWIN* | Cygwin* | cygwin* | OS/2*)
+         EXE='.exe' ;;
+   MINGW* | mingw*)
+-# temporary bypass
+-        rm -f $test.[co] $test $test$shared_ext
+-        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
+-        leave 1
+         LDSHARED=${LDSHARED-"$cc -shared"}
+         LDSHAREDLIBC=""
+         EXE='.exe' ;;
+EOF
+
+  applyPatch $patchFile
+}
