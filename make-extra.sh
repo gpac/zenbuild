@@ -3,8 +3,7 @@
 set -euo pipefail
 trap "echo Failure" EXIT
 
-function main
-{
+function main {
   readonly targetPackages="$@"
 
   echo "#!/bin/bash"
@@ -36,8 +35,7 @@ function main
   done
 }
 
-function get_deps
-{
+function get_deps {
   local pkg=$1
   if [ ! -f "zen-$pkg.sh" ] ; then
     echo "Package '$pkg' does not have a zenbuild script."
@@ -52,8 +50,7 @@ function get_deps
   done | sort -u
 }
 
-function get_all_needed_packages
-{
+function get_all_needed_packages {
   local packages=$*
   for pkg in $packages ; do
     echo $pkg
@@ -64,4 +61,3 @@ function get_all_needed_packages
 main "$@"
 
 trap - EXIT
-

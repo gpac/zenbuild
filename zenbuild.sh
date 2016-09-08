@@ -23,15 +23,13 @@ function prefixLog {
   "$@" 2>&1 | sed -u "s/^.*$/$pfx&/"
 }
 
-function printMsg
-{
+function printMsg {
   echo -n "[32m"
   echo $*
   echo -n "[0m"
 }
 
-function isMissing
-{
+function isMissing {
   progName=$1
   echo -n "Checking for $progName ... "
   if which $progName 1>/dev/null 2>/dev/null; then
@@ -42,18 +40,15 @@ function isMissing
   fi
 }
 
-function installErrorHandler
-{
+function installErrorHandler {
   trap "printMsg 'Spawning a rescue shell in current build directory'; PS1='\\w: rescue$ ' bash --norc" EXIT
 }
 
-function uninstallErrorHandler
-{
+function uninstallErrorHandler {
   trap - EXIT
 }
 
-function lazy_download
-{
+function lazy_download {
   local file="$1"
   local url="$2"
 
@@ -64,8 +59,7 @@ function lazy_download
   fi
 }
 
-function lazy_extract
-{
+function lazy_extract {
   local archive="$1"
   echo -n "Extracting $archive ... "
   local name=$(basename $archive .tar.gz)
@@ -107,6 +101,7 @@ function lazy_git_clone {
   git checkout -q $rev
   popDir
 }
+
 # Create or restore a directory content
 function mkgit {
   dir="$1"
@@ -684,4 +679,3 @@ function get_abs_dir {
 scriptDir=$(get_abs_dir $(dirname $0))
 
 main "$@"
-
