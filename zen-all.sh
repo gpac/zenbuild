@@ -29,8 +29,6 @@ function all_get_deps {
   echo "liba52"
   echo "libass"
 #  echo "libav"
-  echo "libgcrypt"
-  echo "libgpg-error"
   echo "libjpeg"
   echo "libmad"
 #  echo "libnettle"
@@ -60,12 +58,14 @@ function all_get_deps {
 
   case $host in
     *mingw*)
-      echo "jack"
+      #echo "jack"
       echo "libjpeg-turbo"
       echo "portaudio"
       echo "libpthread"
       ;;
     *linux*)
+      echo "libgcrypt"
+      echo "libgpg-error"
       #echo "jack"
       echo "libjpeg-turbo"
       echo "portaudio"
@@ -77,6 +77,8 @@ function all_get_deps {
       echo "xproto"
       ;;
     *darwin*)
+      echo "libgcrypt"
+      echo "libgpg-error"
       echo "dbus"
       ;;
   esac
