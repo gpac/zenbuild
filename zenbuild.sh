@@ -139,6 +139,9 @@ function applyPatch {
 }
 
 function main {
+  if [ ! -e "$scriptDir/config.guess" ]; then
+    wget -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+  fi
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
 
   local packageName=$2
