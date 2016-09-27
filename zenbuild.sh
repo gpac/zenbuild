@@ -156,7 +156,8 @@ function main {
   fi
 
   if [ ! -e "$scriptDir/config.guess" ]; then
-    wget -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+    wget -O "$scriptDir/config.guess" 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+    chmod +x "$scriptDir/config.guess"
   fi
   BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
   mkdir -p patches
