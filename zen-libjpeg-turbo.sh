@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Badr BADRI
+# Copyright (C) 2014 - Badr BADRI, 2016 Romain Bouqueau
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -19,8 +19,8 @@ function libjpeg-turbo_build {
   local host=$1
   pushDir $WORK/src
   
-  svn co svn://svn.code.sf.net/p/libjpeg-turbo/code/branches/1.3.x libjpeg_turbo_1.3.x -r 1397   
-  pushDir libjpeg_turbo_1.3.x
+  lazy_git_clone https://github.com/libjpeg-turbo/libjpeg-turbo.git libjpeg_turbo 1.3.1   
+  pushDir libjpeg_turbo
 
   autoreconf -fiv
   
