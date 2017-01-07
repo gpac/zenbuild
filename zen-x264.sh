@@ -27,7 +27,7 @@ function x264_build {
     --enable-pic \
     --disable-gpl \
     --disable-cli \
-    --enable-win32thread \
+    $THREADING \
     --enable-strip \
     --disable-avs \
     --disable-swscale \
@@ -40,6 +40,9 @@ function x264_build {
     *darwin*)
       RANLIB="" $build
       ;;
+    *mingw*)
+      THREADING="--enable-win32thread" $build
+      ;;
     *)
       $build
       ;;
@@ -49,5 +52,5 @@ function x264_build {
 }
 
 function x264_get_deps {
-  local a=0
+  echo "libpthread"
 }
