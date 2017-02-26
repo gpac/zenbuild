@@ -19,7 +19,7 @@ function freetype2_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "freetype2.tar.bz2" "http://download.savannah.gnu.org/releases/freetype/freetype-2.6.3.tar.bz2"
+  lazy_download "freetype2.tar.bz2" "http://download.savannah.gnu.org/releases/freetype/freetype-2.7.1.tar.bz2"
   lazy_extract "freetype2.tar.bz2"
   mkgit "freetype2"
 
