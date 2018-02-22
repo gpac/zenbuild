@@ -20,7 +20,7 @@ function fribidi_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "fribidi.tar.xz" "http://pkgs.fedoraproject.org/repo/pkgs/fribidi/fribidi-0.19.6.tar.bz2/ce93d862344991173dabb609bf93ca1d/fribidi-0.19.6.tar.bz2"
+  lazy_download "fribidi.tar.xz" "https://ftp.osuosl.org/pub/blfs/conglomeration/fribidi/fribidi-0.19.6.tar.bz2"
   lazy_extract "fribidi.tar.xz"
   mkgit "fribidi"
   
