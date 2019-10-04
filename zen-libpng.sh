@@ -19,9 +19,11 @@ function libpng_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.2.52.tar.xz?download"
-  lazy_extract "libpng.tar.xz"
-  mkgit "libpng"
+  # lazy_download "libpng.tar.xz" "http://prdownloads.sourceforge.net/libpng/libpng-1.2.52.tar.xz?download"
+  # lazy_extract "libpng.tar.xz"
+  # mkgit "libpng"
+
+  lazy_git_clone https://github.com/gpac-buildbot/libpng.git libpng master
 
   LDFLAGS+=" -L$WORK/release/$host/lib" \
   CFLAGS+=" -I$WORK/release/$host/include" \

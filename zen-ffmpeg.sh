@@ -19,7 +19,7 @@ function ffmpeg_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg n3.0.1
+  lazy_git_clone git://source.ffmpeg.org/ffmpeg.git ffmpeg n4.1.4
 
   local ARCH=$(get_arch $host)
   local OS=$(get_os $host)
@@ -30,10 +30,10 @@ function ffmpeg_build {
       os="darwin"
       ;;
   esac
-
+  set -x
   # remove stupid dependency
   $sed -i "s/jack_jack_h pthreads/jack_jack_h/" ffmpeg/configure
-  
+
   mkdir -p ffmpeg/build/$host
   pushDir ffmpeg/build/$host
 
@@ -45,7 +45,6 @@ function ffmpeg_build {
       --disable-debug \
       --disable-static \
       --enable-shared \
-      --enable-libass \
       --enable-fontconfig \
       --enable-librtmp \
       --enable-gpl \
@@ -57,23 +56,27 @@ function ffmpeg_build {
       --disable-openssl \
       --disable-iconv \
       --disable-bzlib \
-      --enable-avresample \
+      --disable-lzma \
+      --disable-programs \
+      --enable-libaom  \
       --pkg-config=pkg-config \
       --target-os=$os \
       --arch=$ARCH \
       --cross-prefix=$host-
   $MAKE
   $MAKE install
+  set +x
   popDir
 
   popDir
 }
 
 function ffmpeg_get_deps {
-  echo libass
+  #echo libass
   echo fontconfig
   echo librtmp
   echo libpthread
+  echo aom
   echo x264
   echo zlib
 }

@@ -126,7 +126,7 @@ function mkgit {
 function applyPatch {
   local patchFile=$1
   printMsg "Patching $patchFile"
-  if [ $(uname -s) == "Darwin" ]; then 
+  if [ $(uname -s) == "Darwin" ]; then
     patch  --no-backup-if-mismatch -p1 -i $patchFile
   else
     patch  --no-backup-if-mismatch --merge -p1 -i $patchFile
@@ -159,7 +159,7 @@ function main {
     wget -O "$scriptDir/config.guess" 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
     chmod +x "$scriptDir/config.guess"
   fi
-  BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/')
+  BUILD=$($scriptDir/config.guess | sed 's/-unknown//' | sed 's/-msys$/-mingw32/' | sed 's/-mingw64/-mingw32/' | sed 's/-pc-mingw/-w64-mingw/' )
   mkdir -p patches
 
   printMsg "Building in: $WORK"
@@ -180,7 +180,7 @@ function main {
   mkdir -p $WORK/src
 
   export PREFIX="$WORK/release"
-  for dir in "lib" "bin" "include" 
+  for dir in "lib" "bin" "include"
   do
     mkdir -p "$PREFIX/${hostPlatform}/${dir}"
   done
@@ -200,6 +200,9 @@ function initSymlinks {
   case $hostPlatform in
     *darwin*)
       echo "Detected new Darwin host ($host): disabling ranlib"
+      ;;
+    *mingw*)
+      tools="$tools dlltool ranlib"
       ;;
     *)
       tools="$tools ranlib"
@@ -323,7 +326,7 @@ function autoconf_build {
     autoreconf -i
     popDir
   fi
-  
+
   rm -rf $name/build/$host
   mkdir -p $name/build/$host
   pushDir $name/build/$host
@@ -423,10 +426,10 @@ function checkForCrossChain {
       error="1"
     fi
 
-    if isMissing "${cross_prefix}windres" ; then
-      echo "No ${cross_prefix}windres was found in the PATH."
-      error="1"
-    fi
+    # if isMissing "${cross_prefix}windres" ; then
+    #   echo "No ${cross_prefix}windres was found in the PATH."
+    #   error="1"
+    # fi
   fi
 
   if [ $error == "1" ] ; then
@@ -498,7 +501,7 @@ function checkForCommonBuildTools {
     echo ""
     error="1"
   fi
-  
+
   # We still need to check that on Mac OS
   if [ $(uname -s) == "Darwin" ]; then
     if isMissing "glibtool"; then
@@ -510,7 +513,7 @@ function checkForCommonBuildTools {
       error="1"
     fi
   fi
-  
+
   if isMissing "make"; then
     echo "make not installed.  Please install with:"
     echo "pacman -S make"

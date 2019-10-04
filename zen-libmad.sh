@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Badr BADRI 
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -25,7 +25,7 @@ function libmad_build {
 
   lazy_download "libmad.tar.gz" "http://sourceforge.net/projects/mad/files/libmad/0.15.1b/libmad-0.15.1b.tar.gz"
   lazy_extract "libmad.tar.gz"
-  
+
   if [ $(uname -s) == "Darwin" ]; then
     $sed -i "s/-fforce-mem//" libmad/configure
     $sed -i "s/-fthread-jumps//" libmad/configure
@@ -37,7 +37,9 @@ function libmad_build {
     $sed -i "s/-fforce-mem//" libmad/configure
   fi
 
+
   autoconf_build $host "libmad"
+
 
   popDir
 }

@@ -19,37 +19,26 @@ function openhevc_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_git_clone "https://github.com/rbouqueau/openHEVC" openhevc 8807ac40
+  lazy_git_clone https://github.com/OpenHEVC/openHEVC.git openhevc ffmpeg_update
 
-  mkdir -p openhevc/build/$host
-  pushDir openhevc/build/$host
+  pushDir openhevc
 
-  echo "" > config.cmake
-  case $host in
-    *mingw*)
-      echo "SET(CMAKE_SYSTEM_NAME Windows)" >> config.cmake
-      ;;
-    *)
-      echo "SET(CMAKE_SYSTEM_NAME Linux)" >> config.cmake
-      ;;
-  esac
+  set -x
 
-  echo "SET(CMAKE_C_COMPILER $host-gcc)" >> config.cmake
-  echo "SET(CMAKE_CXX_COMPILER $host-g++)" >> config.cmake
-  echo "SET(CMAKE_RC_COMPILER $host-windres)" >> config.cmake
-  echo "SET(CMAKE_RANLIB $host-ranlib)" >> config.cmake
-  echo "SET(CMAKE_ASM_YASM_COMPILER yasm)" >> config.cmake
-  echo "SET(SDL2_INCLUDE_DIR $PREFIX/$host/include/SDL2)" >> config.cmake
+  local ARCH=$(get_arch $host)
+  local OS=$(get_os $host)
 
-  cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=config.cmake -DCMAKE_INSTALL_PREFIX=$PREFIX/$host ../../
-  $MAKE
-  $MAKE install
 
+  ./configure --disable-debug --disable-iconv --enable-pic --prefix=$PREFIX/$host --pkg-config=pkg-config --target-os=$OS --arch=$ARCH --cross-prefix=$host-
+  make openhevc-static
+  cp -av libopenhevc/libopenhevc.a $PREFIX/$host/lib/
+
+
+  set +x
   popDir
   popDir
 }
 
 function openhevc_get_deps {
-  echo "libpthread"
-  echo "libsdl2"
+  local a=0
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - Badr BADRI 
+# Copyright (C) 2014 - Badr BADRI
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 3
@@ -23,20 +23,22 @@ function libxvidcore_build {
   local host=$1
   pushDir $WORK/src
 
-  lazy_download "libxvidcore.tar.gz" "http://downloads.xvid.org/downloads/xvidcore-1.3.3.tar.gz" 
+  lazy_download "libxvidcore.tar.gz" "http://downloads.xvid.org/downloads/xvidcore-1.3.3.tar.gz"
   lazy_extract "libxvidcore.tar.gz"
-  
+
+  #lazy_git_clone https://github.com/gpac-buildbot/xvidcore.git libxvidcore master
+
   pushDir libxvidcore/build/generic
-  
+
   cp $scriptDir/config.guess .
   ./configure \
      --host=$host \
      --prefix=$PREFIX/$host
-  
-  $MAKE
-  $MAKE install 
- 
 
-  popDir 
+  $MAKE
+  $MAKE install
+
+
+  popDir
   popDir
 }

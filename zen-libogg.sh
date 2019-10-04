@@ -19,9 +19,11 @@ function libogg_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_download "libogg.tar.gz" "http://downloads.xiph.org/releases/ogg/libogg-1.3.1.tar.gz"
-  lazy_extract "libogg.tar.gz"
-  mkgit "libogg"
+  # lazy_download "libogg.tar.gz" "http://downloads.xiph.org/releases/ogg/libogg-1.3.1.tar.gz"
+  # lazy_extract "libogg.tar.gz"
+  # mkgit "libogg"
+
+  lazy_git_clone https://github.com/gpac-buildbot/libogg.git libogg master
 
   autoconf_build $host "libogg"
   popDir

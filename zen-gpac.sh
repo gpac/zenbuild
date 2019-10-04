@@ -19,7 +19,7 @@ function gpac_build {
   host=$1
   pushDir $WORK/src
 
-  lazy_git_clone https://github.com/gpac/gpac.git gpac de208f520909
+  lazy_git_clone https://github.com/gpac/gpac.git gpac master
 
   local OS=$(get_os $host)
   local crossPrefix=$(get_cross_prefix $BUILD $host)
@@ -41,8 +41,12 @@ function gpac_build {
     --extra-ldflags="-L$PREFIX/$host/lib -Wl,-rpath-link=$PREFIX/$host/lib" \
     --sdl-cfg=":$PREFIX/$host/bin" \
     --disable-jack \
-    --enable-amr \
+    --enable-amr \
+    --enable-amr-nb-fixed \
     --prefix=$PREFIX/$host
+
+  exit 1
+
 
   $MAKE
   $MAKE install
@@ -53,22 +57,45 @@ function gpac_build {
 }
 
 function gpac_get_deps {
-  echo libpthread
-  echo faad2
+#   echo libpthread
+#   echo faad2
+#   echo ffmpeg
+#   echo freetype2
+#   echo liba52
+#   echo libjpeg
+#   echo libmad
+#   echo libogg
+# #  echo libopenjpeg
+#   echo libpng
+#   echo libsdl2
+#   echo libtheora
+#   echo libvorbis
+#   echo libxvidcore
+#   echo libogg
+#   echo opencore-amr
+# #  echo openhevc
+#   echo zlib
+
+  echo zlib
   echo ffmpeg
-  echo freetype2
+  echo openssl
+  echo opencore-amr
+  echo libopenjpeg
+  echo platinum
   echo liba52
+  echo faad2
+  echo freetype2
   echo libjpeg
   echo libmad
   echo libogg
-#  echo libopenjpeg
   echo libpng
-  echo libsdl2
   echo libtheora
   echo libvorbis
   echo libxvidcore
-  echo libogg
-  echo opencore-amr
-#  echo openhevc
-  echo zlib
+  echo libsdl2
+  echo js
+  echo opensvc
+  echo openhevc
+
+
 }
