@@ -20,7 +20,7 @@ function x264_build {
   local crossPrefix=$(get_cross_prefix $BUILD $host)
 
   pushDir $WORK/src
-  lazy_git_clone "git://git.videolan.org/x264.git" x264 40bb56814e56ed342040bdbf30258aab39ee9e89
+  lazy_git_clone "https://code.videolan.org/videolan/x264.git" x264 40bb56814e56ed342040bdbf30258aab39ee9e89
 
   local build="autoconf_build $host x264 \
     --enable-static \
